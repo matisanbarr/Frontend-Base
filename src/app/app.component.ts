@@ -16,12 +16,14 @@ export class AppComponent {
   title = 'Frontend App';
   isLoggedIn: boolean = false;
   hasAdminRole: boolean = false;
+  hasUserRole: boolean = false;
 
   constructor(private authService: AuthService) {
     // Suscribirse a los cambios de autenticación
     this.authService.isAuthenticated$.subscribe(auth => {
       this.isLoggedIn = this.authService.isLoggedIn();
       this.hasAdminRole = this.authService.hasAnyRole(['Administrador']);
+      this.hasUserRole = this.authService.hasAnyRole(['Usuario']);
     });
   }
 
@@ -30,5 +32,6 @@ export class AppComponent {
     // Actualizar estado inmediatamente después de logout
     this.isLoggedIn = this.authService.isLoggedIn();
     this.hasAdminRole = this.authService.hasAnyRole(['Administrador']);
+    this.hasUserRole = this.authService.hasAnyRole(['Usuario']);
   }
 }

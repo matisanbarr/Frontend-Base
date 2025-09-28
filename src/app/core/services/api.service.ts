@@ -80,10 +80,8 @@ export class ApiService {
    */
   private getHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'x-api-key': this.apiKey // Según tu especificación: x-api-key (minúscula)
+      'Content-Type': 'application/json'
     });
-
     return headers;
   }
 

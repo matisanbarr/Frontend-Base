@@ -1,123 +1,81 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RoleService } from '../../../core/services/role.service';
+import { RolService, Rol } from '../../../core/services/rol.service';
 
 @Component({
   selector: 'app-admin-roles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmModalComponent],
   templateUrl: './admin-roles.component.html',
   styleUrl: './admin-roles.component.scss'
 })
 export class AdminRolesComponent {
-  roleForm: FormGroup;
-  roles: any[] = [];
-  permissions: string[] = [];
-  selectedRole: any = null;
+  rolForm: FormGroup;
+  roles: Rol[] = [];
+  loading = false;
+  showConfirmModal = false;
+  rolAEliminar: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private roleService: RoleService
-  ) {
-    this.roleForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required]],
-      color: ['primary', [Validators.required]],
-      permissions: [[]]
+  readonly rolService = inject(RolService);
+  readonly fb = inject(FormBuilder);
+
+  constructor() {
+    this.rolForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]]
     });
-    
-    this.loadRoles();
-    this.loadPermissions();
+    this.cargarRoles();
   }
 
-  loadRoles(): void {
-    // Simulación de datos de roles
-    this.roles = [
-      { 
-        id: 1, 
-        name: 'Super Administrador', 
-        description: 'Acceso completo al sistema', 
-        color: 'warning',
-        permissions: ['users.create', 'users.read', 'users.update', 'users.delete', 'roles.manage'],
-        userCount: 2,
-        active: true
+  cargarRoles(): void {
+    this.loading = true;
+    this.rolService.listarRoles().subscribe({
+      next: (roles) => {
+        this.roles = roles;
+        this.loading = false;
       },
-      { 
-        id: 2, 
-        name: 'Administrador', 
-        description: 'Gestión de usuarios y configuración', 
-        color: 'primary',
-        permissions: ['users.read', 'users.update', 'roles.read'],
-        userCount: 8,
-        active: true
-      },
-      { 
-        id: 3, 
-        name: 'Moderador', 
-        description: 'Moderación de contenido y usuarios', 
-        color: 'secondary',
-        permissions: ['content.moderate', 'users.read', 'reports.view'],
-        userCount: 15,
-        active: true
-      },
-      { 
-        id: 4, 
-        name: 'Usuario', 
-        description: 'Acceso básico al sistema', 
-        color: 'success',
-        permissions: ['profile.read', 'profile.update', 'dashboard.access'],
-        userCount: 131,
-        active: true
+      error: () => {
+        this.loading = false;
       }
-    ];
+    });
   }
 
-  loadPermissions(): void {
-    this.permissions = [
-      'users.create', 'users.read', 'users.update', 'users.delete',
-      'roles.create', 'roles.read', 'roles.update', 'roles.delete',
-      'content.create', 'content.read', 'content.update', 'content.delete', 'content.moderate',
-      'reports.view', 'reports.create',
-      'system.config', 'system.logs', 'system.backup',
-      'profile.read', 'profile.update',
-      'dashboard.access'
-    ];
+  crearRol(): void {
+    if (this.rolForm.invalid) return;
+    const nuevoRol: Rol = { nombre: this.rolForm.value.nombre };
+    this.rolService.crearRol(nuevoRol).subscribe({
+      next: () => {
+        this.cargarRoles();
+        this.rolForm.reset();
+      },
+      error: (err) => {
+        alert(err?.error?.mensaje || 'Error al crear el rol');
+      }
+    });
   }
 
-  onSubmit(): void {
-    if (this.roleForm.valid) {
-      console.log('Nuevo rol:', this.roleForm.value);
-      this.roleForm.reset();
+  eliminarRol(nombre: string): void {
+      this.rolAEliminar = nombre;
+      this.showConfirmModal = true;
     }
-  }
 
-  editRole(role: any): void {
-    this.selectedRole = role;
-    console.log('Editar rol:', role);
-  }
+    confirmarEliminacion(): void {
+      if (!this.rolAEliminar) return;
+      this.rolService.eliminarRol(this.rolAEliminar).subscribe({
+        next: () => {
+          this.cargarRoles();
+          this.cerrarModal();
+        },
+        error: (err) => {
+          alert(err?.error?.mensaje || 'Error al eliminar el rol');
+          this.cerrarModal();
+        }
+      });
+    }
 
-  viewRole(role: any): void {
-    console.log('Ver rol:', role);
-  }
-
-  duplicateRole(role: any): void {
-    console.log('Duplicar rol:', role);
-  }
-
-  deleteRole(role: any): void {
-    console.log('Eliminar rol:', role);
-  }
-
-  syncPermissions(): void {
-    console.log('Sincronizando permisos...');
-  }
-
-  verifyRoleSecurity(): void {
-    console.log('Verificando seguridad de roles...');
-  }
-
-  exportConfiguration(): void {
-    console.log('Exportando configuración...');
+    cerrarModal(): void {
+      this.showConfirmModal = false;
+      this.rolAEliminar = null;
   }
 }

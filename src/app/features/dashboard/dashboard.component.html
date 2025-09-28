@@ -1,27 +1,26 @@
-
 <div class="container py-5">
   <!-- Dashboard para Admin -->
   <div *ngIf="hasAdminRole; else userDashboard">
-    <div class="row mb-4">
-      <div class="col-md-6 mb-3">
-        <div class="card h-100 border-primary">
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card card-hover shadow-sm border-0 h-100">
           <div class="card-body text-center">
             <i class="bi bi-people fs-1 text-primary mb-3"></i>
-            <h5 class="card-title">Administrar Usuarios</h5>
-            <p class="card-text text-muted">Gestiona los usuarios del sistema.</p>
-            <a href="/admin/users" class="btn btn-primary btn-sm">
+            <h5 class="card-title fw-bold">Administrar Usuarios</h5>
+            <p class="card-text text-muted mb-4">Gestiona los usuarios del sistema.</p>
+            <a href="/admin/users" class="btn btn-outline-primary btn-sm px-4">
               <i class="bi bi-arrow-right me-1"></i>Ir a Usuarios
             </a>
           </div>
         </div>
       </div>
-      <div class="col-md-6 mb-3">
-        <div class="card h-100 border-info">
+      <div class="col-md-6">
+        <div class="card card-hover shadow-sm border-0 h-100">
           <div class="card-body text-center">
             <i class="bi bi-shield-lock fs-1 text-info mb-3"></i>
-            <h5 class="card-title">Administrar Roles</h5>
-            <p class="card-text text-muted">Gestiona los roles y permisos.</p>
-            <a href="/admin/roles" class="btn btn-info btn-sm">
+            <h5 class="card-title fw-bold">Administrar Roles</h5>
+            <p class="card-text text-muted mb-4">Gestiona los roles y permisos.</p>
+            <a href="/admin/roles" class="btn btn-outline-info btn-sm px-4">
               <i class="bi bi-arrow-right me-1"></i>Ir a Roles
             </a>
           </div>
@@ -29,31 +28,31 @@
       </div>
     </div>
     <!-- Estadísticas -->
-    <div class="row">
-      <div class="col-md-4 mb-3">
-        <div class="card bg-primary text-white text-center">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card card-hover shadow-sm border-0 bg-primary text-white text-center">
           <div class="card-body">
             <i class="bi bi-people fs-2 mb-2"></i>
-            <h4 class="mb-0"></h4>
-            <p class="mb-0">Usuarios Activos</p>
+            <h4 class="mb-1 fw-bold"></h4>
+            <small>Usuarios Activos</small>
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-3">
-        <div class="card bg-info text-white text-center">
+      <div class="col-md-4">
+        <div class="card card-hover shadow-sm border-0 bg-info text-white text-center">
           <div class="card-body">
             <i class="bi bi-award fs-2 mb-2"></i>
-            <h4 class="mb-0"></h4>
-            <p class="mb-0">Roles Asignados</p>
+            <h4 class="mb-1 fw-bold"></h4>
+            <small>Roles Asignados</small>
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-3">
-        <div class="card bg-success text-white text-center">
+      <div class="col-md-4">
+        <div class="card card-hover shadow-sm border-0 bg-success text-white text-center">
           <div class="card-body">
             <i class="bi bi-clock fs-2 mb-2"></i>
-            <h4 class="mb-0"></h4>
-            <p class="mb-0">Sesiones Activas</p>
+            <h4 class="mb-1 fw-bold"></h4>
+            <small>Sesiones Activas</small>
           </div>
         </div>
       </div>
@@ -64,10 +63,10 @@
   <ng-template #userDashboard>
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="card border-secondary text-center">
+        <div class="card card-hover shadow-sm border-0 text-center">
           <div class="card-body">
             <i class="bi bi-person fs-1 text-secondary mb-3"></i>
-            <h5 class="card-title">Panel de Usuario</h5>
+            <h5 class="card-title fw-bold">Panel de Usuario</h5>
             <p class="card-text text-muted">Ejemplo de tarjeta para usuarios estándar.</p>
           </div>
         </div>

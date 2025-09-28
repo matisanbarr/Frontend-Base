@@ -24,9 +24,7 @@ export class AuthService {
 	// --- Sesión y autenticación ---
 
 	login(credentials: LoginRequest): Observable<LoginResponse> {
-		return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials, {
-			headers: { 'x-api-key': environment.apiKey }
-		}).pipe(
+			return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
 			tap(response => this.setSession(response)),
 			catchError(error => {
 				console.error('Error en login:', error);
@@ -36,9 +34,7 @@ export class AuthService {
 	}
 
 	register(userData: RegisterRequest): Observable<User> {
-		return this.http.post<User>(`${environment.apiUrl}/usuarios`, userData, {
-			headers: { 'x-api-key': environment.apiKey }
-		}).pipe(
+			return this.http.post<User>(`${environment.apiUrl}/usuarios`, userData).pipe(
 			catchError(error => {
 				console.error('Error en registro:', error);
 				throw error;
@@ -57,9 +53,7 @@ export class AuthService {
 			this.logout();
 			return of();
 		}
-		return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken }, {
-			headers: { 'x-api-key': environment.apiKey }
-		}).pipe(
+			return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken }).pipe(
 			tap(response => this.setSession(response)),
 			catchError(error => {
 				console.error('Error al refrescar token:', error);

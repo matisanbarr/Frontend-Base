@@ -1,486 +1,84 @@
 <div class="admin-roles-container">
-  <div class="container-fluid py-4">
-    <!-- Header -->
+  <app-confirm-modal
+    *ngIf="showConfirmModal"
+    [message]="'¿Seguro que deseas eliminar el rol \'' + rolAEliminar + '\'?'"
+    [confirmText]="'Eliminar'"
+    [cancelText]="'Cancelar'"
+    (confirm)="confirmarEliminacion()"
+    (cancel)="cerrarModal()"
+  ></app-confirm-modal>
+  <div class="container-fluid py-4">  
     <div class="row mb-4">
-      <div class="col-12">
-        <div class="admin-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 class="mb-1">
-                <i class="fas fa-user-shield me-2 text-primary"></i>
-                Administración de Roles
-              </h2>
-              <p class="text-muted mb-0">Gestiona roles y permisos del sistema</p>
-            </div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addRoleModal">
-                <i class="fas fa-plus me-1"></i>
-                Nuevo Rol
-              </button>
-              <button class="btn btn-outline-primary">
-                <i class="fas fa-cog me-1"></i>
-                Configurar Permisos
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Estadísticas de Roles -->
-    <div class="row mb-4">
-      <div class="col-md-3">
-        <div class="card stat-card bg-primary text-white">
+      <div class="col-md-12">
+        <div class="card stat-card bg-light text-dark">
           <div class="card-body">
             <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">5</h4>
-                <p class="mb-0">Total Roles</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-user-shield fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-success text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">4</h4>
-                <p class="mb-0">Activos</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-check-circle fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-warning text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">25</h4>
-                <p class="mb-0">Permisos</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-key fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-info text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">156</h4>
-                <p class="mb-0">Usuarios Asignados</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-users fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <!-- Lista de Roles -->
-      <div class="col-md-8">
-        <div class="card shadow-sm">
-          <div class="card-header bg-white">
-            <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Roles del Sistema</h5>
-              <div class="input-group" style="width: 300px;">
-                <span class="input-group-text">
-                  <i class="fas fa-search"></i>
-                </span>
-                <input type="text" class="form-control" placeholder="Buscar roles...">
-              </div>
-            </div>
-          </div>
-          <div class="card-body p-0">
-            <!-- Rol Administrador -->
-            <div class="role-item">
-              <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                <div class="d-flex align-items-center">
-                  <div class="role-icon me-3">
-                    <i class="fas fa-crown text-warning fa-2x"></i>
+              <div class="container py-4">
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h2 class="mb-1">
+                      <i class="fas fa-user-shield me-2 text-primary"></i>
+                      Administración de Roles
+                    </h2>
+                    <p class="text-muted mb-0">Gestiona los roles del sistema</p>
                   </div>
-                  <div>
-                    <h6 class="mb-1 fw-bold">Super Administrador</h6>
-                    <p class="text-muted mb-1 small">Acceso completo al sistema</p>
-                    <div class="d-flex gap-2">
-                      <span class="badge bg-success">Activo</span>
-                      <span class="badge bg-info">2 usuarios</span>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-lg-7 col-md-10 mb-4">
+                    <div class="card shadow-sm">
+                      <div class="card-header bg-white">
+                        <h5 class="mb-0">Roles registrados</h5>
+                      </div>
+                      <div class="card-body p-0">
+                        <div *ngIf="loading" class="text-center py-4">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                          </div>
+                        </div>
+                        <ul class="list-group list-group-flush" *ngIf="!loading">
+                          <li *ngFor="let rol of roles" class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="fs-5">
+                              <i class="fas fa-user-tag text-primary me-2"></i>
+                              {{ rol.nombre }}
+                            </span>
+                            <button class="btn btn-outline-danger btn-sm" (click)="eliminarRol(rol.nombre)">
+                              <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                          </li>
+                          <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted py-4">
+                            No hay roles registrados.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-5 col-md-8">
+                    <div class="card shadow-sm">
+                      <div class="card-header bg-white">
+                        <h5 class="mb-0">Crear Nuevo Rol</h5>
+                      </div>
+                      <div class="card-body">
+                        <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
+                          <div class="mb-3">
+                            <label for="rolNombre" class="form-label">Nombre del Rol</label>
+                            <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Administrador" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
+                            <div *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched" class="invalid-feedback">
+                              El nombre es requerido (3-50 caracteres).
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-success w-100" [disabled]="rolForm.invalid || loading">
+                            <i class="fas fa-save me-1"></i>
+                            Crear Rol
+                          </button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="role-actions">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" title="Editar">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-info" title="Ver Permisos">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-warning" title="Duplicar">
-                      <i class="fas fa-copy"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="permissions-preview p-3 bg-light">
-                <small class="text-muted">Permisos principales:</small>
-                <div class="mt-2">
-                  <span class="badge bg-primary me-1">users.create</span>
-                  <span class="badge bg-primary me-1">users.read</span>
-                  <span class="badge bg-primary me-1">users.update</span>
-                  <span class="badge bg-primary me-1">users.delete</span>
-                  <span class="badge bg-secondary">+21 más</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Rol Administrador -->
-            <div class="role-item">
-              <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                <div class="d-flex align-items-center">
-                  <div class="role-icon me-3">
-                    <i class="fas fa-user-tie text-primary fa-2x"></i>
-                  </div>
-                  <div>
-                    <h6 class="mb-1 fw-bold">Administrador</h6>
-                    <p class="text-muted mb-1 small">Gestión de usuarios y configuración</p>
-                    <div class="d-flex gap-2">
-                      <span class="badge bg-success">Activo</span>
-                      <span class="badge bg-info">8 usuarios</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="role-actions">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" title="Editar">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-info" title="Ver Permisos">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-warning" title="Duplicar">
-                      <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" title="Eliminar">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="permissions-preview p-3 bg-light">
-                <small class="text-muted">Permisos principales:</small>
-                <div class="mt-2">
-                  <span class="badge bg-primary me-1">users.read</span>
-                  <span class="badge bg-primary me-1">users.update</span>
-                  <span class="badge bg-primary me-1">roles.read</span>
-                  <span class="badge bg-secondary">+12 más</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Rol Moderador -->
-            <div class="role-item">
-              <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                <div class="d-flex align-items-center">
-                  <div class="role-icon me-3">
-                    <i class="fas fa-user-cog text-secondary fa-2x"></i>
-                  </div>
-                  <div>
-                    <h6 class="mb-1 fw-bold">Moderador</h6>
-                    <p class="text-muted mb-1 small">Moderación de contenido y usuarios</p>
-                    <div class="d-flex gap-2">
-                      <span class="badge bg-success">Activo</span>
-                      <span class="badge bg-info">15 usuarios</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="role-actions">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" title="Editar">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-info" title="Ver Permisos">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-warning" title="Duplicar">
-                      <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" title="Eliminar">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="permissions-preview p-3 bg-light">
-                <small class="text-muted">Permisos principales:</small>
-                <div class="mt-2">
-                  <span class="badge bg-primary me-1">content.moderate</span>
-                  <span class="badge bg-primary me-1">users.read</span>
-                  <span class="badge bg-primary me-1">reports.view</span>
-                  <span class="badge bg-secondary">+6 más</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Rol Usuario -->
-            <div class="role-item">
-              <div class="d-flex justify-content-between align-items-center p-3">
-                <div class="d-flex align-items-center">
-                  <div class="role-icon me-3">
-                    <i class="fas fa-user text-success fa-2x"></i>
-                  </div>
-                  <div>
-                    <h6 class="mb-1 fw-bold">Usuario</h6>
-                    <p class="text-muted mb-1 small">Acceso básico al sistema</p>
-                    <div class="d-flex gap-2">
-                      <span class="badge bg-success">Activo</span>
-                      <span class="badge bg-info">131 usuarios</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="role-actions">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" title="Editar">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-info" title="Ver Permisos">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-warning" title="Duplicar">
-                      <i class="fas fa-copy"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="permissions-preview p-3 bg-light">
-                <small class="text-muted">Permisos principales:</small>
-                <div class="mt-2">
-                  <span class="badge bg-primary me-1">profile.read</span>
-                  <span class="badge bg-primary me-1">profile.update</span>
-                  <span class="badge bg-primary me-1">dashboard.access</span>
-                </div>
-              </div>
-            </div>
+              </div>              
+            </div>          
           </div>
         </div>
-      </div>
-
-      <!-- Panel de Configuración -->
-      <div class="col-md-4">
-        <!-- Permisos Rápidos -->
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-primary text-white">
-            <h6 class="card-title mb-0">
-              <i class="fas fa-bolt me-2"></i>
-              Configuración Rápida
-            </h6>
-          </div>
-          <div class="card-body">
-            <div class="d-grid gap-2">
-              <button class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-sync me-1"></i>
-                Sincronizar Permisos
-              </button>
-              <button class="btn btn-outline-warning btn-sm">
-                <i class="fas fa-shield-alt me-1"></i>
-                Verificar Seguridad
-              </button>
-              <button class="btn btn-outline-info btn-sm">
-                <i class="fas fa-download me-1"></i>
-                Exportar Configuración
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Permisos Disponibles -->
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-info text-white">
-            <h6 class="card-title mb-0">
-              <i class="fas fa-list me-2"></i>
-              Permisos Disponibles
-            </h6>
-          </div>
-          <div class="card-body">
-            <div class="permission-category mb-3">
-              <h6 class="text-primary">Usuarios</h6>
-              <div class="ms-2">
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="users-create">
-                  <label class="form-check-label small" for="users-create">users.create</label>
-                </div>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="users-read">
-                  <label class="form-check-label small" for="users-read">users.read</label>
-                </div>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="users-update">
-                  <label class="form-check-label small" for="users-update">users.update</label>
-                </div>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="users-delete">
-                  <label class="form-check-label small" for="users-delete">users.delete</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="permission-category mb-3">
-              <h6 class="text-success">Contenido</h6>
-              <div class="ms-2">
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="content-create">
-                  <label class="form-check-label small" for="content-create">content.create</label>
-                </div>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="content-moderate">
-                  <label class="form-check-label small" for="content-moderate">content.moderate</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="permission-category">
-              <h6 class="text-warning">Sistema</h6>
-              <div class="ms-2">
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="system-config">
-                  <label class="form-check-label small" for="system-config">system.config</label>
-                </div>
-                <div class="form-check form-check-sm">
-                  <input class="form-check-input" type="checkbox" id="system-logs">
-                  <label class="form-check-label small" for="system-logs">system.logs</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actividad Reciente -->
-        <div class="card shadow-sm">
-          <div class="card-header bg-success text-white">
-            <h6 class="card-title mb-0">
-              <i class="fas fa-history me-2"></i>
-              Actividad Reciente
-            </h6>
-          </div>
-          <div class="card-body">
-            <div class="activity-item mb-2">
-              <small class="text-muted">Hace 1 hora</small>
-              <p class="mb-0 small">Rol "Editor" creado</p>
-            </div>
-            <div class="activity-item mb-2">
-              <small class="text-muted">Hace 3 horas</small>
-              <p class="mb-0 small">Permisos actualizados en "Moderador"</p>
-            </div>
-            <div class="activity-item">
-              <small class="text-muted">Ayer</small>
-              <p class="mb-0 small">15 usuarios asignados al rol "Usuario"</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal para Agregar Rol -->
-<div class="modal fade" id="addRoleModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <i class="fas fa-plus-circle me-2"></i>
-          Crear Nuevo Rol
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="roleName" class="form-label">Nombre del Rol</label>
-              <input type="text" class="form-control" id="roleName" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="roleColor" class="form-label">Color</label>
-              <select class="form-select" id="roleColor">
-                <option value="primary">Azul (Primario)</option>
-                <option value="success">Verde (Éxito)</option>
-                <option value="warning">Amarillo (Advertencia)</option>
-                <option value="danger">Rojo (Peligro)</option>
-                <option value="info">Cian (Información)</option>
-                <option value="secondary">Gris (Secundario)</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="roleDescription" class="form-label">Descripción</label>
-            <textarea class="form-control" id="roleDescription" rows="3" 
-                      placeholder="Describe las responsabilidades de este rol..."></textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Permisos</label>
-            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
-              <div class="row">
-                <div class="col-md-6">
-                  <h6 class="text-primary">Usuarios</h6>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="perm-users-create">
-                    <label class="form-check-label" for="perm-users-create">Crear usuarios</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="perm-users-read">
-                    <label class="form-check-label" for="perm-users-read">Ver usuarios</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="perm-users-update">
-                    <label class="form-check-label" for="perm-users-update">Editar usuarios</label>
-                  </div>
-                  <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="perm-users-delete">
-                    <label class="form-check-label" for="perm-users-delete">Eliminar usuarios</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <h6 class="text-success">Sistema</h6>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="perm-system-config">
-                    <label class="form-check-label" for="perm-system-config">Configuración</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="perm-system-logs">
-                    <label class="form-check-label" for="perm-system-logs">Ver logs</label>
-                  </div>
-                  <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="perm-system-backup">
-                    <label class="form-check-label" for="perm-system-backup">Backup</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success">
-          <i class="fas fa-save me-1"></i>
-          Crear Rol
-        </button>
       </div>
     </div>
   </div>

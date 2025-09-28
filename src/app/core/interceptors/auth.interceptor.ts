@@ -13,8 +13,10 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Agregar API Key y JWT Token a todas las peticiones
-    req = this.addAuthHeaders(req);
+  // Agregar API Key y JWT Token a todas las peticiones
+  req = this.addAuthHeaders(req);
+  // Log para verificar los headers
+  console.log('Headers enviados:', req.headers.keys(), req.headers.get('x-api-key'));
 
     return next.handle(req).pipe(
       catchError(error => {
@@ -30,22 +32,12 @@ export class AuthInterceptor implements HttpInterceptor {
    * Agregar headers de autenticación (JWT + API Key)
    */
   private addAuthHeaders(request: HttpRequest<any>): HttpRequest<any> {
-    let authReq = request;
-
-    // Agregar API Key a todas las peticiones según tu especificación
-    authReq = authReq.clone({
-      headers: authReq.headers.set('x-api-key', environment.apiKey)
-    });
-
-    // Agregar JWT Token si está disponible
+  let headers = request.headers.set('x-api-key', environment.apiKey);
     const token = this.authService.getToken();
     if (token && !this.authService.isTokenExpired()) {
-      authReq = authReq.clone({
-        headers: authReq.headers.set('Authorization', `Bearer ${token}`)
-      });
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
-
-    return authReq;
+    return request.clone({ headers });
   }
 
   /**

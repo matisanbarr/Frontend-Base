@@ -1,44 +1,42 @@
-
-<!-- Menú principal global -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="/">
-      <img src="assets/logo.png" alt="Logo" width="32" height="32" class="me-2" />
-      <span>MiApp</span>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/">
+      <img src="assets/logo.png" alt="Logo" width="36" height="36" class="me-2 rounded-circle border" />
+      <span class="fs-5">MiApp</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
         <ng-container *ngIf="!isLoggedIn">
           <li class="nav-item">
             <span class="nav-link disabled">Bienvenido</span>
           </li>
         </ng-container>
-        <ng-container *ngIf="isLoggedIn && hasAdminRole">
+  <ng-container *ngIf="isLoggedIn && (hasAdminRole || hasUserRole)">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Administrar
+              <i class="bi bi-gear me-1"></i>Administrar
             </a>
             <ul class="dropdown-menu" aria-labelledby="adminMenu">
-              <li><a class="dropdown-item" routerLink="/admin/users">Usuarios</a></li>
-              <li><a class="dropdown-item" routerLink="/admin/roles">Roles</a></li>
+              <li *ngIf="hasAdminRole"><a class="dropdown-item" routerLink="/admin/users"><i class="bi bi-people me-1"></i>Usuarios</a></li>
+              <li><a class="dropdown-item" routerLink="/admin/roles"><i class="bi bi-shield-lock me-1"></i>Roles</a></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" (click)="logout()">Cerrar sesión</a>
+            <a class="nav-link" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</a>
           </li>
         </ng-container>
         <ng-container *ngIf="isLoggedIn && !hasAdminRole">
           <li class="nav-item">
-            <a class="nav-link" href="#">Opción 1</a>
+            <a class="nav-link" href="#"><i class="bi bi-house-door me-1"></i>Opción 1</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Opción 2</a>
+            <a class="nav-link" href="#"><i class="bi bi-list-task me-1"></i>Opción 2</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" (click)="logout()">Cerrar sesión</a>
+            <a class="nav-link" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</a>
           </li>
         </ng-container>
       </ul>
@@ -46,13 +44,22 @@
   </div>
 </nav>
 
-<main class="app-container">
+<main class="w-100">
   <router-outlet></router-outlet>
 </main>
 
-<!-- Footer global -->
-<footer class="bg-light text-center text-muted py-3 mt-5">
+<!-- Footer global mejorado -->
+<footer class="bg-white text-center text-muted py-4 mt-5 border-top shadow-sm">
   <div class="container">
-    <small>&copy; 2025 MiApp. Todos los derechos reservados.</small>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <small>
+        &copy; 2025 <span class="fw-bold text-primary">Frontend Base</span> &mdash; Todos los derechos reservados.
+      </small>
+      <div class="mt-2 mt-md-0">
+        <a href="#" class="text-muted me-3 text-decoration-none"><i class="bi bi-github"></i></a>
+        <a href="#" class="text-muted me-3 text-decoration-none"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-muted text-decoration-none"><i class="bi bi-envelope"></i></a>
+      </div>
+    </div>
   </div>
 </footer>
