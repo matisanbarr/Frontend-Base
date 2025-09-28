@@ -7,16 +7,18 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   currentUser$ = this.authService.currentUser$;
   userRoles: string[] = [];
   hasAdminRole: boolean = false;
+  isLoggedIn: boolean = false;
 
   constructor(private authService: AuthService) {
     this.userRoles = this.authService.getCurrentUserRoles();
-    this.hasAdminRole = this.authService.hasAnyRole(['Admin', 'SuperAdmin']);
+    this.hasAdminRole = this.authService.hasAnyRole(['Administrador', 'Usuario']);
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   logout(): void {

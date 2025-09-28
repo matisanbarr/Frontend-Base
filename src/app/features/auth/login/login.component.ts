@@ -11,7 +11,7 @@ import { LoadingService } from '../../../core/services/loading.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   loginData: LoginRequest = {

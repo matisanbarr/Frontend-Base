@@ -1,5 +1,58 @@
-<!-- Main Application Template -->
+
+<!-- Menú principal global -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img src="assets/logo.png" alt="Logo" width="32" height="32" class="me-2" />
+      <span>MiApp</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <ng-container *ngIf="!isLoggedIn">
+          <li class="nav-item">
+            <span class="nav-link disabled">Bienvenido</span>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isLoggedIn && hasAdminRole">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Administrar
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="adminMenu">
+              <li><a class="dropdown-item" routerLink="/admin/users">Usuarios</a></li>
+              <li><a class="dropdown-item" routerLink="/admin/roles">Roles</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" (click)="logout()">Cerrar sesión</a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isLoggedIn && !hasAdminRole">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Opción 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Opción 2</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" (click)="logout()">Cerrar sesión</a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <main class="app-container">
-  <!-- Router Outlet for navigation -->
   <router-outlet></router-outlet>
 </main>
+
+<!-- Footer global -->
+<footer class="bg-light text-center text-muted py-3 mt-5">
+  <div class="container">
+    <small>&copy; 2025 MiApp. Todos los derechos reservados.</small>
+  </div>
+</footer>

@@ -1,227 +1,198 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse, RegisterRequest, User } from '../../models';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly TOKEN_KEY = 'auth_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
-  private readonly USER_KEY = 'current_user';
-  private readonly USER_ROLES_KEY = 'user_roles';
-  
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUser());
-  public currentUser$ = this.currentUserSubject.asObservable();
-  
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthState());
-  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+	private readonly TOKEN_KEY = 'auth_token';
+	private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+	private readonly USER_KEY = 'current_user';
+	private readonly USER_ROLES_KEY = 'user_roles';
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
+	private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUser());
+	public currentUser$ = this.currentUserSubject.asObservable();
 
-  /**
-   * Iniciar sesión
-   */
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials, {
-      headers: { 'x-api-key': environment.apiKey }
-    }).pipe(
-      tap(response => {
-        this.setSession(response);
-      }),
-      catchError(error => {
-        console.error('Error en login:', error);
-        throw error;
-      })
-    );
-  }
+	private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthState());
+	public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  /**
-   * Registrar usuario
-   */
-  register(userData: RegisterRequest): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/usuarios`, userData, {
-      headers: { 'x-api-key': environment.apiKey }
-    }).pipe(
-      catchError(error => {
-        console.error('Error en registro:', error);
-        throw error;
-      })
-    );
-  }
+	constructor(private http: HttpClient, private router: Router) {}
 
-  /**
-   * Cerrar sesión
-   */
-  logout(): void {
-    // Opcional: llamar al endpoint de logout en el servidor
-    // this.http.post(`${environment.apiUrl}/auth/logout`, {}).subscribe();
-    
-    this.clearSession();
-    this.router.navigate(['/auth/login']);
-  }
+	// --- Sesión y autenticación ---
 
-  /**
-   * Refrescar token
-   */
-  refreshToken(): Observable<LoginResponse> {
-    const refreshToken = this.getRefreshToken();
-    
-    if (!refreshToken) {
-      this.logout();
-      return of();
-    }
+	login(credentials: LoginRequest): Observable<LoginResponse> {
+		return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials, {
+			headers: { 'x-api-key': environment.apiKey }
+		}).pipe(
+			tap(response => this.setSession(response)),
+			catchError(error => {
+				console.error('Error en login:', error);
+				throw error;
+			})
+		);
+	}
 
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, 
-      { refreshToken }, 
-      { headers: { 'x-api-key': environment.apiKey } }
-    ).pipe(
-      tap(response => {
-        this.setSession(response);
-      }),
-      catchError(error => {
-        console.error('Error al refrescar token:', error);
-        this.logout();
-        throw error;
-      })
-    );
-  }
+	register(userData: RegisterRequest): Observable<User> {
+		return this.http.post<User>(`${environment.apiUrl}/usuarios`, userData, {
+			headers: { 'x-api-key': environment.apiKey }
+		}).pipe(
+			catchError(error => {
+				console.error('Error en registro:', error);
+				throw error;
+			})
+		);
+	}
 
-  /**
-   * Obtener token actual
-   */
-  getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
-  }
+	logout(): void {
+		this.clearSession();
+		this.router.navigate(['/auth/login']);
+	}
 
-  /**
-   * Obtener refresh token
-   */
-  getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
-  }
+	refreshToken(): Observable<LoginResponse> {
+		const refreshToken = this.getRefreshToken();
+		if (!refreshToken) {
+			this.logout();
+			return of();
+		}
+		return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken }, {
+			headers: { 'x-api-key': environment.apiKey }
+		}).pipe(
+			tap(response => this.setSession(response)),
+			catchError(error => {
+				console.error('Error al refrescar token:', error);
+				this.logout();
+				throw error;
+			})
+		);
+	}
 
-  /**
-   * Obtener usuario actual
-   */
-  getCurrentUser(): User | null {
-    const userStr = localStorage.getItem(this.USER_KEY);
-    if (!userStr || userStr === 'undefined') {
-      return null;
-    }
-    try {
-      return JSON.parse(userStr);
-    } catch (e) {
-      console.error('Error al parsear usuario:', e);
-      return null;
-    }
-  }
+	// --- Métodos de obtención de datos ---
 
-  /**
-   * Verificar si el usuario está autenticado
-   */
-  isAuthenticated(): boolean {
-    return this.hasValidToken();
-  }
+	getToken(): string | null {
+		return localStorage.getItem(this.TOKEN_KEY);
+	}
 
-  /**
-   * Obtener roles del usuario actual
-   */
-  getCurrentUserRoles(): string[] {
-    const rolesStr = localStorage.getItem(this.USER_ROLES_KEY);
-    return rolesStr ? JSON.parse(rolesStr) : [];
-  }
+	getRefreshToken(): string | null {
+		return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+	}
 
-  /**
-   * Verificar si el usuario tiene un rol específico
-   */
-  hasRole(role: string): boolean {
-    const userRoles = this.getCurrentUserRoles();
-    return userRoles.includes(role);
-  }
+	getCurrentUser(): User | null {
+		const userStr = localStorage.getItem(this.USER_KEY);
+		if (!userStr || userStr === 'undefined') return null;
+		try {
+			return JSON.parse(userStr);
+		} catch (e) {
+			console.error('Error al parsear usuario:', e);
+			return null;
+		}
+	}
 
-  /**
-   * Verificar si el usuario tiene alguno de los roles especificados
-   */
-  hasAnyRole(roles: string[]): boolean {
-    const userRoles = this.getCurrentUserRoles();
-    return roles.some(role => userRoles.includes(role));
-  }
+	getCurrentUserRoles(): string[] {
+		const rolesStr = localStorage.getItem(this.USER_ROLES_KEY);
+		return rolesStr ? JSON.parse(rolesStr) : [];
+	}
 
-  /**
-   * Verificar si el token está expirado
-   */
-  isTokenExpired(): boolean {
-    const token = this.getToken();
-    if (!token) return true;
+	// --- Métodos de verificación ---
 
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Math.floor(Date.now() / 1000);
-      return payload.exp < currentTime;
-    } catch (error) {
-      console.error('Error al verificar expiración del token:', error);
-      return true;
-    }
-  }
+	isAuthenticated(): boolean {
+		return this.hasValidToken();
+	}
 
-  /**
-   * Establecer sesión después del login
-   */
-  private setSession(authResult: LoginResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, authResult.token);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(authResult.user));
-    
-    if (authResult.refreshToken) {
-      localStorage.setItem(this.REFRESH_TOKEN_KEY, authResult.refreshToken);
-    }
+	/**
+	 * Retorna true si el usuario está autenticado (token válido y usuario actual existe)
+	 */
+	isLoggedIn(): boolean {
+		return this.isAuthenticated() && !!this.getCurrentUser();
+	}
 
-    this.currentUserSubject.next(authResult.user);
-    this.isAuthenticatedSubject.next(true);
-  }
+	hasRole(role: string): boolean {
+		return this.getCurrentUserRoles().includes(role);
+	}
 
-  /**
-   * Limpiar sesión
-   */
-  private clearSession(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    
-    this.currentUserSubject.next(null);
-    this.isAuthenticatedSubject.next(false);
-  }
+	hasAnyRole(roles: string[]): boolean {
+		const userRoles = this.getCurrentUserRoles();
+		return roles.some(role => userRoles.includes(role));
+	}
 
-  /**
-   * Verificar si tiene un token válido
-   */
-  private hasValidToken(): boolean {
-    const token = this.getToken();
-    return token !== null && !this.isTokenExpired();
-  }
+	isTokenExpired(): boolean {
+		const token = this.getToken();
+		if (!token) return true;
+		try {
+			const payload = JSON.parse(atob(token.split('.')[1]));
+			const currentTime = Math.floor(Date.now() / 1000);
+			return payload.exp < currentTime;
+		} catch (error) {
+			console.error('Error al verificar expiración del token:', error);
+			return true;
+		}
+	}
 
-  /**
-   * Verificar estado inicial de autenticación (sin errores)
-   */
-  private checkInitialAuthState(): boolean {
-    try {
-      const token = this.getToken();
-      if (!token) return false;
-      
-      // Para testing, aceptar cualquier token
-      if (token.includes('test') || token.includes('example')) return true;
-      
-      return !this.isTokenExpired();
-    } catch (error) {
-      console.warn('Error checking initial auth state:', error);
-      return false;
-    }
-  }
+	// --- Métodos privados ---
+
+	private setSession(authResult: LoginResponse): void {
+		localStorage.setItem(this.TOKEN_KEY, authResult.token);
+		let user = authResult.user;
+		try {
+			const payload = JSON.parse(atob(authResult.token.split('.')[1]));
+			if (!user) {
+				const nameKey = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
+				user = {
+					id: '',
+					nombreUsuario: payload[nameKey] || '',
+					fechaCreacion: '',
+					fechaModificacion: ''
+				};
+			}
+			localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+			const roleKey = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+			if (payload[roleKey]) {
+				localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify([payload[roleKey]]));
+			} else {
+				localStorage.removeItem(this.USER_ROLES_KEY);
+			}
+		} catch (e) {
+			console.error('Error al extraer datos del JWT:', e);
+			localStorage.setItem(this.USER_KEY, JSON.stringify(user || {
+				id: '',
+				nombreUsuario: '',
+				fechaCreacion: '',
+				fechaModificacion: ''
+			}));
+			localStorage.removeItem(this.USER_ROLES_KEY);
+		}
+		if (authResult.refreshToken) {
+			localStorage.setItem(this.REFRESH_TOKEN_KEY, authResult.refreshToken);
+		}
+		this.currentUserSubject.next(user);
+		this.isAuthenticatedSubject.next(true);
+	}
+
+	private clearSession(): void {
+		localStorage.removeItem(this.TOKEN_KEY);
+		localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+		localStorage.removeItem(this.USER_KEY);
+		localStorage.removeItem(this.USER_ROLES_KEY);
+		this.currentUserSubject.next(null);
+		this.isAuthenticatedSubject.next(false);
+	}
+
+	private hasValidToken(): boolean {
+		const token = this.getToken();
+		return token !== null && !this.isTokenExpired();
+	}
+
+	private checkInitialAuthState(): boolean {
+		try {
+			const token = this.getToken();
+			if (!token) return false;
+			if (token.includes('test') || token.includes('example')) return true;
+			return !this.isTokenExpired();
+		} catch (error) {
+			console.warn('Error checking initial auth state:', error);
+			return false;
+		}
+	}
 }

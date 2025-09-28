@@ -1,340 +1,77 @@
-<div class="dashboard-container">
-  <div class="container-fluid">
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-      <div class="container">
-        <a class="navbar-brand" href="/dashboard">
-          <i class="bi bi-speedometer2 me-2"></i>
-          Dashboard
-        </a>
-        
-        <div class="navbar-nav ms-auto">
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" 
-               href="#" id="navbarDropdown" role="button" 
-               data-bs-toggle="dropdown" aria-expanded="false"
-               *ngIf="currentUser$ | async as user">
-              <i class="bi bi-person-circle me-2"></i>
-              {{ user.nombreUsuario }}
+
+<div class="container py-5">
+  <!-- Dashboard para Admin -->
+  <div *ngIf="hasAdminRole; else userDashboard">
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="card h-100 border-primary">
+          <div class="card-body text-center">
+            <i class="bi bi-people fs-1 text-primary mb-3"></i>
+            <h5 class="card-title">Administrar Usuarios</h5>
+            <p class="card-text text-muted">Gestiona los usuarios del sistema.</p>
+            <a href="/admin/users" class="btn btn-primary btn-sm">
+              <i class="bi bi-arrow-right me-1"></i>Ir a Usuarios
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="/profile">
-                <i class="bi bi-person me-2"></i>Mi Perfil
-              </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item text-danger" (click)="logout()">
-                <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
-              </button></li>
-            </ul>
           </div>
         </div>
       </div>
-    </nav>
-
-    <div class="container">
-      <!-- Welcome Section -->
-      <div class="row">
-        <div class="col-12">
-          <div class="welcome-section mb-4">
-            <h1 class="display-6 fw-bold text-primary">
-              <i class="bi bi-house-door me-3"></i>
-              ¡Bienvenido de vuelta!
-            </h1>
-            <p class="lead text-muted">
-              Has iniciado sesión correctamente. Los guards están funcionando perfectamente.
-            </p>
+      <div class="col-md-6 mb-3">
+        <div class="card h-100 border-info">
+          <div class="card-body text-center">
+            <i class="bi bi-shield-lock fs-1 text-info mb-3"></i>
+            <h5 class="card-title">Administrar Roles</h5>
+            <p class="card-text text-muted">Gestiona los roles y permisos.</p>
+            <a href="/admin/roles" class="btn btn-info btn-sm">
+              <i class="bi bi-arrow-right me-1"></i>Ir a Roles
+            </a>
           </div>
         </div>
       </div>
-
-      <!-- User Info Cards -->
-      <div class="row mb-4" *ngIf="currentUser$ | async as user">
-        <!-- User Information -->
-        <div class="col-lg-6 mb-3">
-          <div class="card h-100 border-primary">
-            <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">
-                <i class="bi bi-person-badge me-2"></i>
-                Información del Usuario
-              </h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-4 fw-semibold">Usuario:</div>
-                <div class="col-sm-8">{{ user.nombreUsuario }}</div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-4 fw-semibold">ID:</div>
-                <div class="col-sm-8">
-                  <code class="text-primary">{{ user.id }}</code>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-4 fw-semibold">Creado:</div>
-                <div class="col-sm-8">{{ user.fechaCreacion | date:'medium' }}</div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-4 fw-semibold">Estado:</div>
-                <div class="col-sm-8">
-                  <span class="badge bg-success">
-                    <i class="bi bi-check-circle me-1"></i>Activo
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Roles and Permissions -->
-        <div class="col-lg-6 mb-3">
-          <div class="card h-100 border-info">
-            <div class="card-header bg-info text-white">
-              <h5 class="mb-0">
-                <i class="bi bi-shield-check me-2"></i>
-                Roles y Permisos
-              </h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-3">
-                <strong>Roles asignados:</strong>
-                <div class="mt-2" *ngIf="userRoles.length > 0; else noRoles">
-                  <span class="badge bg-primary me-1 mb-1" *ngFor="let role of userRoles">
-                    <i class="bi bi-award me-1"></i>{{ role }}
-                  </span>
-                </div>
-                <ng-template #noRoles>
-                  <p class="text-muted fst-italic">No hay roles asignados</p>
-                </ng-template>
-              </div>
-              
-              <hr>
-              
-              <div class="permissions-list">
-                <strong>Permisos:</strong>
-                <ul class="list-unstyled mt-2 mb-0">
-                  <li class="d-flex align-items-center mb-1">
-                    <i [class]="hasAdminRole ? 'bi bi-check-circle text-success' : 'bi bi-x-circle text-danger'" class="me-2"></i>
-                    Panel de administración
-                  </li>
-                  <li class="d-flex align-items-center mb-1">
-                    <i [class]="hasAdminRole ? 'bi bi-check-circle text-success' : 'bi bi-x-circle text-danger'" class="me-2"></i>
-                    Gestión de usuarios
-                  </li>
-                  <li class="d-flex align-items-center mb-1">
-                    <i class="bi bi-check-circle text-success me-2"></i>
-                    Ver perfil personal
-                  </li>
-                  <li class="d-flex align-items-center">
-                    <i [class]="hasAdminRole ? 'bi bi-check-circle text-success' : 'bi bi-x-circle text-danger'" class="me-2"></i>
-                    Gestión de roles
-                  </li>
-                </ul>
-              </div>
-            </div>
+    </div>
+    <!-- Estadísticas -->
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white text-center">
+          <div class="card-body">
+            <i class="bi bi-people fs-2 mb-2"></i>
+            <h4 class="mb-0"></h4>
+            <p class="mb-0">Usuarios Activos</p>
           </div>
         </div>
       </div>
-
-      <!-- Navigation Cards -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <h3 class="mb-3">
-            <i class="bi bi-grid me-2"></i>
-            Panel de Navegación
-          </h3>
-        </div>
-        
-        <!-- Profile Card -->
-        <div class="col-lg-4 col-md-6 mb-3">
-          <div class="card navigation-card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-              <div class="card-icon text-success mb-3">
-                <i class="bi bi-person-circle"></i>
-              </div>
-              <h5 class="card-title">Mi Perfil</h5>
-              <p class="card-text text-muted">
-                Ver y editar información personal, cambiar contraseña y configuraciones.
-              </p>
-              <a href="/profile" class="btn btn-success btn-sm">
-                <i class="bi bi-arrow-right me-1"></i>Ver Perfil
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Admin Users Card -->
-        <div class="col-lg-4 col-md-6 mb-3" *ngIf="hasAdminRole">
-          <div class="card navigation-card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-              <div class="card-icon text-warning mb-3">
-                <i class="bi bi-people"></i>
-              </div>
-              <h5 class="card-title">Gestión de Usuarios</h5>
-              <p class="card-text text-muted">
-                Administrar usuarios del sistema, crear nuevos y asignar permisos.
-              </p>
-              <a href="/admin/users" class="btn btn-warning btn-sm">
-                <i class="bi bi-arrow-right me-1"></i>Gestionar
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Admin Roles Card -->
-        <div class="col-lg-4 col-md-6 mb-3" *ngIf="hasAdminRole">
-          <div class="card navigation-card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-              <div class="card-icon text-danger mb-3">
-                <i class="bi bi-shield-lock"></i>
-              </div>
-              <h5 class="card-title">Gestión de Roles</h5>
-              <p class="card-text text-muted">
-                Administrar roles del sistema y configurar permisos específicos.
-              </p>
-              <a href="/admin/roles" class="btn btn-danger btn-sm">
-                <i class="bi bi-arrow-right me-1"></i>Administrar
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Register Users (Admin only) -->
-        <div class="col-lg-4 col-md-6 mb-3" *ngIf="hasAdminRole">
-          <div class="card navigation-card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-              <div class="card-icon text-primary mb-3">
-                <i class="bi bi-person-plus"></i>
-              </div>
-              <h5 class="card-title">Nuevo Usuario</h5>
-              <p class="card-text text-muted">
-                Registrar nuevos usuarios en el sistema con roles específicos.
-              </p>
-              <a href="/admin/register" class="btn btn-primary btn-sm">
-                <i class="bi bi-arrow-right me-1"></i>Crear Usuario
-              </a>
-            </div>
+      <div class="col-md-4 mb-3">
+        <div class="card bg-info text-white text-center">
+          <div class="card-body">
+            <i class="bi bi-award fs-2 mb-2"></i>
+            <h4 class="mb-0"></h4>
+            <p class="mb-0">Roles Asignados</p>
           </div>
         </div>
       </div>
-
-      <!-- Testing Section -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <div class="card border-secondary">
-            <div class="card-header bg-light">
-              <h5 class="mb-0">
-                <i class="bi bi-bug me-2"></i>
-                Panel de Testing de Guards
-              </h5>
-            </div>
-            <div class="card-body">
-              <p class="text-muted mb-3">
-                Prueba el funcionamiento de los guards navegando a diferentes rutas:
-              </p>
-              
-              <div class="d-flex flex-wrap gap-2">
-                <!-- Protected Routes -->
-                <button class="btn btn-outline-primary btn-sm" (click)="testRoute('/profile')">
-                  <i class="bi bi-person me-1"></i>Perfil (Protegido)
-                </button>
-                
-                <!-- Admin Routes -->
-                <button class="btn btn-outline-warning btn-sm" 
-                        (click)="testRoute('/admin/users')" 
-                        *ngIf="hasAdminRole">
-                  <i class="bi bi-people me-1"></i>Admin Users (Con Permisos)
-                </button>
-                
-                <button class="btn btn-outline-danger btn-sm" 
-                        (click)="testRoute('/admin/users')" 
-                        *ngIf="!hasAdminRole">
-                  <i class="bi bi-shield-exclamation me-1"></i>Admin Users (Sin Permisos)
-                </button>
-                
-                <!-- Public Routes -->
-                <button class="btn btn-outline-secondary btn-sm" (click)="testRoute('/auth/login')">
-                  <i class="bi bi-box-arrow-in-right me-1"></i>Login (Ya autenticado)
-                </button>
-                
-                <!-- 404 Test -->
-                <button class="btn btn-outline-info btn-sm" (click)="testRoute('/nonexistent')">
-                  <i class="bi bi-question-circle me-1"></i>404 Page
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats Cards -->
-      <div class="row">
-        <div class="col-md-3 mb-3">
-          <div class="card stats-card bg-primary text-white">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="stats-icon me-3">
-                  <i class="bi bi-people"></i>
-                </div>
-                <div>
-                  <h4 class="mb-0">2</h4>
-                  <p class="mb-0">Usuarios Activos</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-3 mb-3">
-          <div class="card stats-card bg-success text-white">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="stats-icon me-3">
-                  <i class="bi bi-shield-check"></i>
-                </div>
-                <div>
-                  <h4 class="mb-0">{{ userRoles.length }}</h4>
-                  <p class="mb-0">Roles Asignados</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-3 mb-3">
-          <div class="card stats-card bg-info text-white">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="stats-icon me-3">
-                  <i class="bi bi-clock"></i>
-                </div>
-                <div>
-                  <h4 class="mb-0">1</h4>
-                  <p class="mb-0">Sesiones Activas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-3 mb-3">
-          <div class="card stats-card bg-warning text-white">
-            <div class="card-body">
-              <div class="d-flex align-items-center">
-                <div class="stats-icon me-3">
-                  <i class="bi bi-graph-up"></i>
-                </div>
-                <div>
-                  <h4 class="mb-0">100%</h4>
-                  <p class="mb-0">Sistema Online</p>
-                </div>
-              </div>
-            </div>
+      <div class="col-md-4 mb-3">
+        <div class="card bg-success text-white text-center">
+          <div class="card-body">
+            <i class="bi bi-clock fs-2 mb-2"></i>
+            <h4 class="mb-0"></h4>
+            <p class="mb-0">Sesiones Activas</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Dashboard para Usuario -->
+  <ng-template #userDashboard>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card border-secondary text-center">
+          <div class="card-body">
+            <i class="bi bi-person fs-1 text-secondary mb-3"></i>
+            <h5 class="card-title">Panel de Usuario</h5>
+            <p class="card-text text-muted">Ejemplo de tarjeta para usuarios estándar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </div>
