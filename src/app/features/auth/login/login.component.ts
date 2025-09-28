@@ -73,9 +73,9 @@ export class LoginComponent {
       complete: () => {
         this.isLoading = false;
         this.loadingService.hide();
-      }
+    }
     });
-  }
+}
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
