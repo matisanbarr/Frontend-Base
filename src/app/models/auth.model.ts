@@ -1,18 +1,14 @@
-// Modelo de Usuario
+// Modelo de Usuario según tu backend
 export interface User {
-  id: string;
-  username: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  roles: string[];
-  createdAt: Date;
-  isActive: boolean;
+  id: string; // guid
+  nombreUsuario: string;
+  fechaCreacion: string; // datetime ISO 8601
+  fechaModificacion?: string; // datetime nullable
 }
 
-// Modelo para Login Request
+// Modelo para Login Request según tu backend
 export interface LoginRequest {
-  username: string;
+  nombreUsuario: string;
   password: string;
 }
 
@@ -24,14 +20,35 @@ export interface LoginResponse {
   expiresIn: number;
 }
 
-// Modelo para Register Request
+// Modelo para Register Request según tu backend
 export interface RegisterRequest {
-  username: string;
-  email: string;
+  nombreUsuario: string;
   password: string;
-  confirmPassword: string;
-  firstName?: string;
-  lastName?: string;
+}
+
+// Modelo de Rol
+export interface Role {
+  id: string; // guid
+  nombre: string;
+  fechaCreacion: string; // datetime ISO 8601
+  fechaModificacion?: string; // datetime nullable
+}
+
+// Modelo para crear rol
+export interface CreateRoleRequest {
+  nombre: string;
+}
+
+// Modelo para asignar rol a usuario
+export interface UsuarioRoleRequest {
+  usuarioId: string; // guid
+  rolId: string; // guid
+}
+
+// Modelo para respuesta de asignación de rol
+export interface UsuarioRoleResponse {
+  usuarioId: string; // guid
+  rolId: string; // guid
 }
 
 // Modelo para cambio de contraseña
