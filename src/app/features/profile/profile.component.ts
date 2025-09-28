@@ -1,21 +1,39 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="container mt-4">
-      <h2>Mi Perfil</h2>
-      <div class="card">
-        <div class="card-body">
-          <p class="text-muted">Componente de perfil de usuario - próximo a implementar</p>
-        </div>
-      </div>
-    </div>
-  `
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
-  constructor() {}
+  profileForm: FormGroup;
+  currentUser$ = this.authService.currentUser$;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {
+    this.profileForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.pattern(/^\+?[\d\s-()]+$/)]],
+      bio: ['']
+    });
+  }
+
+  onSubmit(): void {
+    if (this.profileForm.valid) {
+      console.log('Perfil actualizado:', this.profileForm.value);
+    }
+  }
+
+  onCancel(): void {
+    this.profileForm.reset();
+  }
 }

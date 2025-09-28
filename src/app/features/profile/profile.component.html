@@ -1,0 +1,146 @@
+<div class="profile-container">
+  <div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="profile-header">
+          <div class="d-flex align-items-center">
+            <div class="profile-avatar me-4">
+              <i class="fas fa-user-circle fa-4x text-primary"></i>
+            </div>
+            <div>
+              <h2 class="mb-1">Mi Perfil</h2>
+              <p class="text-muted mb-0">Administra tu información personal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Información Personal -->
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+              <i class="fas fa-user me-2"></i>
+              Información Personal
+            </h5>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="firstName" value="Juan">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="lastName" class="form-label">Apellido</label>
+                  <input type="text" class="form-control" id="lastName" value="Pérez">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" value="juan.perez@example.com">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="phone" class="form-label">Teléfono</label>
+                  <input type="tel" class="form-control" id="phone" value="+1234567890">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="bio" class="form-label">Biografía</label>
+                <textarea class="form-control" id="bio" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save me-1"></i>
+                  Guardar Cambios
+                </button>
+                <button type="button" class="btn btn-secondary">
+                  <i class="fas fa-undo me-1"></i>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Lateral -->
+      <div class="col-md-4">
+        <!-- Cambiar Contraseña -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-warning text-dark">
+            <h6 class="card-title mb-0">
+              <i class="fas fa-lock me-2"></i>
+              Seguridad
+            </h6>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small mb-3">Última actualización: Hace 30 días</p>
+            <button class="btn btn-warning btn-sm w-100">
+              <i class="fas fa-key me-1"></i>
+              Cambiar Contraseña
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuraciones -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-info text-white">
+            <h6 class="card-title mb-0">
+              <i class="fas fa-cog me-2"></i>
+              Configuraciones
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="notifications" checked>
+              <label class="form-check-label" for="notifications">
+                Notificaciones por email
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="updates">
+              <label class="form-check-label" for="updates">
+                Actualizaciones del sistema
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="marketing">
+              <label class="form-check-label" for="marketing">
+                Marketing y promociones
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white">
+            <h6 class="card-title mb-0">
+              <i class="fas fa-history me-2"></i>
+              Actividad Reciente
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="activity-item mb-2">
+              <small class="text-muted">Hoy 10:30 AM</small>
+              <p class="mb-0 small">Actualización de perfil</p>
+            </div>
+            <div class="activity-item mb-2">
+              <small class="text-muted">Ayer 3:45 PM</small>
+              <p class="mb-0 small">Inicio de sesión exitoso</p>
+            </div>
+            <div class="activity-item">
+              <small class="text-muted">2 días atrás</small>
+              <p class="mb-0 small">Cambio de contraseña</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,16 @@ import { Routes } from '@angular/router';
 import { AuthGuard, RoleGuard, LoginGuard, TokenGuard } from './core/guards';
 
 export const routes: Routes = [
-  // Ruta por defecto - redirigir al dashboard si está autenticado, sino al login
+  // Ruta de testing
+  {
+    path: 'test',
+    loadComponent: () => import('./test.component').then(m => m.TestComponent)
+  },
+
+  // Ruta por defecto - redirigir al login
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: '/auth/login',
     pathMatch: 'full'
   },
   
@@ -16,11 +22,6 @@ export const routes: Routes = [
       {
         path: 'login',
         loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),
-        canActivate: [LoginGuard] // No permitir acceso si ya está autenticado
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),
         canActivate: [LoginGuard] // No permitir acceso si ya está autenticado
       }
     ]
@@ -41,11 +42,15 @@ export const routes: Routes = [
     children: [
       {
         path: 'users',
-        loadComponent: () => import('./features/admin/users/users.component').then(m => m.UsersComponent)
+        loadComponent: () => import('./features/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent)
       },
       {
         path: 'roles',
-        loadComponent: () => import('./features/admin/roles/roles.component').then(m => m.RolesComponent)
+        loadComponent: () => import('./features/admin/admin-roles/admin-roles.component').then(m => m.AdminRolesComponent)
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       }
     ]
   },

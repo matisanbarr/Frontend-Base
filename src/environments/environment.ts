@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7001/api', // Cambia esta URL por la de tu API .NET Core
-  apiKey: 'your-api-key-here', // Tu API Key
+  apiUrl: 'https://localhost:7101/api', // Cambia esta URL por la de tu API .NET Core
+  apiKey: 'd3c1f9a0-7b34-4c1a-9a3b-91b0c1e6e7a8', // Tu API Key
   appName: 'Frontend App',
   version: '1.0.0',
   // Configuraciones específicas para desarrollo

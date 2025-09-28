@@ -8,7 +8,7 @@ export interface User {
 
 // Modelo para Login Request según tu backend
 export interface LoginRequest {
-  nombreUsuario: string;
+  usuario: string;
   password: string;
 }
 
