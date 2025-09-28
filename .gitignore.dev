@@ -1,0 +1,14 @@
+# Configuración específica para desarrollo
+# Este archivo contiene configuraciones que pueden ser específicas del desarrollador
+
+# API URLs locales (podrías tener diferentes)
+# Ejemplo: src/environments/environment.local.ts
+
+# Configuraciones de proxy específicas del desarrollador
+# proxy.conf.local.json
+
+# Configuraciones de testing específicas
+# karma.conf.local.js
+
+# Certificados SSL para desarrollo local
+# ssl/

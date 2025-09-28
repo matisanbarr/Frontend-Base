@@ -1,3 +1,5 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
 # Angular specific
 /dist/
 /out-tsc/
@@ -6,23 +8,111 @@
 /e2e/test-output/
 /.angular/
 .angular/
+/bazel-out
 
 # Node modules and dependency files
 /node_modules/
 /package-lock.json
 /yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Environment files
-/.env
+# TypeScript cache
+*.tsbuildinfo
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+/.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.sass-cache
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
 
 # Angular CLI and build artefacts
 /.angular-cli.json
 /.ng/
 
-# TypeScript cache
-*.tsbuildinfo
+# Environment files - IMPORTANT: Configurar correctamente
+# Mantener los archivos de environment base pero ignorar los específicos
+src/environments/environment.local.ts
+src/environments/environment.staging.ts
+*.env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# API Keys y configuración sensible
+src/assets/config/app-config.json
+src/assets/config/api-keys.json
+
+# Testing
+/coverage
+/.nyc_output
+
+# Build outputs
+/build
+/www
+/platforms
 
 # Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
