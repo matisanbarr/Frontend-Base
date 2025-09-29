@@ -3,11 +3,12 @@ import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RolService, Rol } from '../../../core/services/rol.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-roles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ConfirmModalComponent],
+  imports: [CommonModule, ReactiveFormsModule, ConfirmModalComponent, RouterModule],
   templateUrl: './admin-roles.component.html',
   styleUrl: './admin-roles.component.scss'
 })

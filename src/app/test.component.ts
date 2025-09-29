@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common';
         <p>Si ves esto, Angular está funcionando bien.</p>
         <hr>
         <p class="mb-0">
-          <a href="/auth/login" class="btn btn-primary">Ir al Login</a>
-          <a href="/dashboard" class="btn btn-secondary ms-2">Ir al Dashboard</a>
+          <a routerLink="/auth/login" class="btn btn-primary">Ir al Login</a>
+          <a routerLink="/dashboard" class="btn btn-secondary ms-2">Ir al Dashboard</a>
         </p>
       </div>
     </div>

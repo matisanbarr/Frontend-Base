@@ -1,82 +1,81 @@
-<div class="admin-roles-container">
-  <app-confirm-modal
-    *ngIf="showConfirmModal"
-    [message]="'¿Seguro que deseas eliminar el rol \'' + rolAEliminar + '\'?'"
-    [confirmText]="'Eliminar'"
-    [cancelText]="'Cancelar'"
-    (confirm)="confirmarEliminacion()"
-    (cancel)="cerrarModal()"
-  ></app-confirm-modal>
-  <div class="container-fluid py-4">  
-    <div class="row mb-4">
-      <div class="col-md-12">
-        <div class="card stat-card bg-light text-dark">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div class="container py-4">
-                <div class="row mb-4">
-                  <div class="col-12">
-                    <h2 class="mb-1">
-                      <i class="fas fa-user-shield me-2 text-primary"></i>
-                      Administración de Roles
-                    </h2>
-                    <p class="text-muted mb-0">Gestiona los roles del sistema</p>
-                  </div>
-                </div>
-                <div class="row justify-content-center">
-                  <div class="col-lg-7 col-md-10 mb-4">
-                    <div class="card shadow-sm">
-                      <div class="card-header bg-white">
-                        <h5 class="mb-0">Roles registrados</h5>
-                      </div>
-                      <div class="card-body p-0">
-                        <div *ngIf="loading" class="text-center py-4">
-                          <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Cargando...</span>
-                          </div>
-                        </div>
-                        <ul class="list-group list-group-flush" *ngIf="!loading">
-                          <li *ngFor="let rol of roles" class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <span class="fs-5">
-                              <i class="fas fa-user-tag text-primary me-2"></i>
-                              {{ rol.nombre }}
-                            </span>
-                            <button class="btn btn-outline-danger btn-sm" (click)="eliminarRol(rol.nombre)">
-                              <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                          </li>
-                          <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted py-4">
-                            No hay roles registrados.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-5 col-md-8">
-                    <div class="card shadow-sm">
-                      <div class="card-header bg-white">
-                        <h5 class="mb-0">Crear Nuevo Rol</h5>
-                      </div>
-                      <div class="card-body">
-                        <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
-                          <div class="mb-3">
-                            <label for="rolNombre" class="form-label">Nombre del Rol</label>
-                            <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Administrador" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
-                            <div *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched" class="invalid-feedback">
-                              El nombre es requerido (3-50 caracteres).
-                            </div>
-                          </div>
-                          <button type="submit" class="btn btn-success w-100" [disabled]="rolForm.invalid || loading">
-                            <i class="fas fa-save me-1"></i>
-                            Crear Rol
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>              
-            </div>          
+
+
+<!-- Modal de confirmación -->
+<app-confirm-modal
+  *ngIf="showConfirmModal"
+  [message]="'¿Seguro que deseas eliminar el rol \' ' + rolAEliminar + '\'?'"
+  [confirmText]="'Eliminar'"
+  [cancelText]="'Cancelar'"
+  (confirm)="confirmarEliminacion()"
+  (cancel)="cerrarModal()"
+></app-confirm-modal>
+
+<div class="container py-4">
+  <div class="row mb-3">
+    <div class="col-12 text-center">
+      <h2>
+        <i class="fas fa-user-shield text-primary me-2"></i>
+        Administración de Roles
+      </h2>
+      <p class="text-muted">Gestiona los roles del sistema</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-7 col-md-12 mb-4">
+      <div class="card">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Roles registrados</h5>
+        </div>
+        <div class="card-body p-0">
+          <ng-container *ngIf="loading; else listaRoles">
+            <div class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #listaRoles>
+            <ul class="list-group list-group-flush">
+              <li *ngFor="let rol of roles" class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                  <i class="fas fa-user-tag text-primary me-2"></i>
+                  {{ rol.nombre }}
+                </span>
+                <button class="btn btn-outline-danger btn-sm" (click)="eliminarRol(rol.nombre)">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </li>
+              <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted">
+                No hay roles registrados.
+              </li>
+            </ul>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5 col-md-12">
+      <div class="card">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Crear Nuevo Rol</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
+            <div class="mb-3">
+              <label for="rolNombre" class="form-label">Nombre del Rol</label>
+              <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Administrador" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
+              <div *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched" class="invalid-feedback">
+                El nombre es requerido (3-50 caracteres).
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100" [disabled]="rolForm.invalid || loading">
+              <i class="fas fa-save me-1"></i>
+              Crear Rol
+            </button>
+          </form>
+          <div class="mt-3">
+            <button class="btn btn-outline-secondary" routerLink="/dashboard">
+              <i class="fas fa-arrow-left me-1"></i> Volver al Panel
+            </button>
           </div>
         </div>
       </div>
