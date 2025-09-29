@@ -27,297 +27,118 @@
       </div>
     </div>
 
-    <!-- Filtros y Búsqueda -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="fas fa-search"></i>
-                  </span>
-                  <input type="text" class="form-control" placeholder="Buscar usuarios...">
-                </div>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select">
-                  <option value="">Todos los roles</option>
-                  <option value="admin">Administrador</option>
-                  <option value="user">Usuario</option>
-                  <option value="moderator">Moderador</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <select class="form-select">
-                  <option value="">Todos los estados</option>
-                  <option value="active">Activo</option>
-                  <option value="inactive">Inactivo</option>
-                  <option value="pending">Pendiente</option>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <button class="btn btn-outline-secondary w-100">
-                  <i class="fas fa-filter me-1"></i>
-                  Filtrar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Estadísticas -->
-    <div class="row mb-4">
-      <div class="col-md-3">
-        <div class="card stat-card bg-primary text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">156</h4>
-                <p class="mb-0">Total Usuarios</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-users fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-success text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">142</h4>
-                <p class="mb-0">Activos</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-user-check fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-warning text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">8</h4>
-                <p class="mb-0">Pendientes</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-user-clock fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card stat-card bg-danger text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="mb-0">6</h4>
-                <p class="mb-0">Inactivos</p>
-              </div>
-              <div class="stat-icon">
-                <i class="fas fa-user-times fa-2x"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tabla de Usuarios -->
-    <div class="row">
-      <div class="col-12">
-        <div class="card shadow-sm">
+    <div class="row d-flex align-items-center justify-content-center">
+      <div class="col-12 col-lg-6 col-md-6 mb-4">
+        <div class="card">
           <div class="card-header bg-white">
-            <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Lista de Usuarios</h5>
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="fas fa-sync-alt me-1"></i>
-                  Actualizar
-                </button>
-              </div>
+            <h5 class="mb-0">Usuarios registrados</h5>
+            <div class="mt-2">
+              <input type="text" class="form-control" placeholder="Buscar usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
             </div>
           </div>
           <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-hover mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>
-                      <input type="checkbox" class="form-check-input">
-                    </th>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Último Acceso</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <input type="checkbox" class="form-check-input">
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="user-avatar me-2">
-                          <i class="fas fa-user-circle fa-lg text-primary"></i>
-                        </div>
-                        <div>
-                          <div class="fw-bold">Juan Pérez</div>
-                          <small class="text-muted">ID: 001</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>juan.perez&#64;example.com</td>
-                    <td>
-                      <span class="badge bg-primary">Administrador</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Activo</span>
-                    </td>
-                    <td>
-                      <small class="text-muted">Hace 2 horas</small>
-                    </td>
-                    <td>
-                      <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-primary" title="Editar">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-info" title="Ver">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-outline-danger" title="Eliminar">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input type="checkbox" class="form-check-input">
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="user-avatar me-2">
-                          <i class="fas fa-user-circle fa-lg text-success"></i>
-                        </div>
-                        <div>
-                          <div class="fw-bold">María García</div>
-                          <small class="text-muted">ID: 002</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>maria.garcia&#64;example.com</td>
-                    <td>
-                      <span class="badge bg-info">Usuario</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Activo</span>
-                    </td>
-                    <td>
-                      <small class="text-muted">Hace 1 día</small>
-                    </td>
-                    <td>
-                      <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-primary" title="Editar">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-info" title="Ver">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-outline-danger" title="Eliminar">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input type="checkbox" class="form-check-input">
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="user-avatar me-2">
-                          <i class="fas fa-user-circle fa-lg text-warning"></i>
-                        </div>
-                        <div>
-                          <div class="fw-bold">Carlos López</div>
-                          <small class="text-muted">ID: 003</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>carlos.lopez&#64;example.com</td>
-                    <td>
-                      <span class="badge bg-secondary">Moderador</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-warning">Pendiente</span>
-                    </td>
-                    <td>
-                      <small class="text-muted">Nunca</small>
-                    </td>
-                    <td>
-                      <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-primary" title="Editar">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-info" title="Ver">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-outline-danger" title="Eliminar">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer bg-white">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>Mostrando 1-3 de 156 usuarios</div>
-              <nav>
-                <ul class="pagination pagination-sm mb-0">
-                  <li class="page-item disabled">
-                    <span class="page-link">Anterior</span>
-                  </li>
-                  <li class="page-item active">
-                    <span class="page-link">1</span>
-                  </li>
-                  <li class="page-item">
-                    <span class="page-link">2</span>
-                  </li>
-                  <li class="page-item">
-                    <span class="page-link">3</span>
-                  </li>
-                  <li class="page-item">
-                    <span class="page-link">Siguiente</span>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+            <ng-container *ngIf="loading; else listaUsuarios">
+              <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #listaUsuarios>
+              <ul class="list-group list-group-flush usuarios-scroll">
+                <li *ngFor="let user of usuarios" class="list-group-item d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="fas fa-user-circle text-primary me-2"></i>
+                    {{ user.nombreUsuario }}
+                    <ng-container *ngFor="let rol of user.roles">
+                      <span class="badge bg-info ms-2">{{ rol.nombre }}</span>
+                    </ng-container>
+                  </span>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-info" title="Ver" (click)="abrirModalVer(user)">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" title="Resetear Password" (click)="abrirModalResetPassword(user)">
+                      <i class="fas fa-key"></i>
+                    </button>
+                    <button class="btn btn-outline-warning" title="Asignar Roles" (click)="abrirModalAsignarRoles(user)">
+                      <i class="fas fa-user-plus"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" title="Quitar Roles" (click)="abrirModalQuitarRoles(user)">
+                      <i class="fas fa-user-minus"></i>
+                    </button>
+                  </div>
+                </li>
+                <li *ngIf="usuarios.length === 0" class="list-group-item text-center text-muted">
+                  No hay usuarios registrados.
+                </li>
+              </ul>
+              <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+                <button *ngIf="paginaActual > 1" class="btn btn-outline-primary me-2" (click)="paginaAnterior()">Anterior</button>
+                <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+                <button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-primary ms-2" (click)="paginaSiguiente()">Siguiente</button>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
     </div>
+   
   </div>
 </div>
 
 <!-- Modal para Agregar Usuario -->
 <div class="modal fade" id="addUserModal" tabindex="-1">
+<!-- Modal Ver Usuario -->
+<app-confirm-modal
+  *ngIf="showModalVer"
+  [message]="'Usuario: ' + usuarioSeleccionado?.firstName + ' ' + usuarioSeleccionado?.lastName + '\nEmail: ' + usuarioSeleccionado?.email + '\nRol: ' + usuarioSeleccionado?.role"
+  [confirmText]="'Cerrar'"
+  [cancelText]="''"
+  (confirm)="cerrarModalVer()"
+></app-confirm-modal>
+
+<!-- Modal Resetear Password -->
+<app-confirm-modal
+  *ngIf="showModalResetPassword"
+  [message]="'¿Seguro que deseas resetear el password de ' + usuarioSeleccionado?.firstName + '?'"
+  [confirmText]="'Resetear'"
+  [cancelText]="'Cancelar'"
+  (confirm)="resetearPassword()"
+  (cancel)="cerrarModalResetPassword()"
+></app-confirm-modal>
+
+<!-- Modal Asignar Roles -->
+<app-confirm-modal
+  *ngIf="showModalAsignarRoles"
+  [message]="'Asignar roles a ' + usuarioSeleccionado?.firstName"
+  [confirmText]="'Asignar'"
+  [cancelText]="'Cancelar'"
+  (confirm)="asignarRoles()"
+  (cancel)="cerrarModalAsignarRoles()"
+>
+  <div *ngFor="let rol of rolesDisponibles">
+    <label>
+      <input type="checkbox" [(ngModel)]="rol.seleccionado"> {{ rol.nombre }}
+    </label>
+  </div>
+</app-confirm-modal>
+
+<!-- Modal Quitar Roles -->
+<app-confirm-modal
+  *ngIf="showModalQuitarRoles"
+  [message]="'Quitar roles a ' + usuarioSeleccionado?.firstName"
+  [confirmText]="'Quitar'"
+  [cancelText]="'Cancelar'"
+  (confirm)="quitarRoles()"
+  (cancel)="cerrarModalQuitarRoles()"
+>
+  <div *ngFor="let rol of rolesAsignados">
+    <label>
+      <input type="checkbox" [(ngModel)]="rol.seleccionado"> {{ rol.nombre }}
+    </label>
+  </div>
+</app-confirm-modal>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

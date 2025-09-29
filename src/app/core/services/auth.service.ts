@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { LoginRequest, LoginResponse, RegisterRequest, User } from '../../models';
+import { LoginRequest, LoginResponse, User } from '../../models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -31,16 +31,7 @@ export class AuthService {
 				throw error;
 			})
 		);
-	}
-
-	register(userData: RegisterRequest): Observable<User> {
-			return this.http.post<User>(`${environment.apiUrl}/usuarios`, userData).pipe(
-			catchError(error => {
-				console.error('Error en registro:', error);
-				throw error;
-			})
-		);
-	}
+	}	
 
 	logout(): void {
 		this.clearSession();
