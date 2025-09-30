@@ -22,7 +22,7 @@
 	<div class="row">
 		<div class="col-12 col-md-6 col-lg-6 mb-4">
 			<div class="card border-0 shadow-sm rounded-3">
-				<div class="card-header" style="background-color:#e3f2fd;color:#1565c0;">
+				<div class="card-header card-header-info">
 					<h5 class="mb-0"><i class="bi bi-people me-2"></i>Usuarios registrados</h5>
 					<div class="mt-2">
 						<input type="text" class="form-control" placeholder="Buscar usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
@@ -37,15 +37,12 @@
 						</div>
 					</ng-container>
 					<ng-template #listaUsuarios>
-						<div class="usuarios-scroll">
+						<div class="planes-scroll">
 							<ul class="list-group list-group-flush">
 								<ng-container *ngFor="let usuario of usuarios">
 									<li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
 										<div class="flex-grow-1 text-start d-flex align-items-center gap-2">
-											<span class="rounded-circle d-inline-block me-2"
-												[ngStyle]="{ width: '14px', height: '14px', background: usuario.estadoActivo ? '#28a745' : '#dc3545', display: 'inline-block' }"
-												title="{{ usuario.estadoActivo ? 'Activo' : 'Inactivo' }}">
-											</span>
+											<span class="status-circle me-2" [ngClass]="usuario.estadoActivo ? 'status-active' : 'status-inactive'" title="{{ usuario.estadoActivo ? 'Activo' : 'Inactivo' }}"></span>
 											<div>
 												<div class="fw-bold mb-0">{{ usuario.nombre }}</div>
 												<div class="text-muted small">{{ usuario.email }}</div>

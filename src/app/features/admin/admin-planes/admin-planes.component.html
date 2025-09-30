@@ -1,110 +1,140 @@
+
 <!-- Modal de confirmación -->
 <app-confirm-modal
-  *ngIf="showConfirmModal"
-  [message]="'¿Seguro que deseas eliminar el plan \' ' + planANombreEliminar + '\'?'"
-  [confirmText]="'Eliminar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="confirmarEliminacion()"
-  (cancel)="cerrarModal()"
+	*ngIf="showConfirmModal"
+	[message]="'¿Seguro que deseas eliminar el plan \' ' + planANombreEliminar + '\'?'"
+	[confirmText]="'Eliminar'"
+	[cancelText]="'Cancelar'"
+	(confirm)="confirmarEliminacion()"
+	(cancel)="cerrarModal()"
 ></app-confirm-modal>
 
 <div class="container py-4">
-  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
-  <div class="row mb-3">
-    <div class="col-12 text-center">
-      <h2>
-        <i class="fas fa-cubes text-primary me-2"></i>
-        Administración de Planes
-      </h2>
-      <p class="text-muted">Gestiona los planes del sistema</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-6 col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header" style="background-color:#e3f2fd;color:#1565c0;">
-          <h5 class="mb-0">Planes registrados</h5>
-          <div class="mt-2">
-            <input type="text" class="form-control" placeholder="Buscar plan..." [(ngModel)]="filtroBusqueda" (input)="buscarPlanes()">
-          </div>
-        </div>
-        <div class="card-body p-0">
-          <ng-container *ngIf="loading; else listaPlanes">
-            <div class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-              </div>
-            </div>
-          </ng-container>
-          <ng-template #listaPlanes>
-            <ul class="list-group list-group-flush">
-              <div class="planes-scroll">
-                <ul class="list-group list-group-flush">
-                  <li *ngFor="let plan of planes" class="list-group-item d-flex justify-content-between align-items-center">
-                      <div class="flex-grow-1 text-start">
-                        <div class="fw-bold">{{ plan.nombre }}</div>
-                        <div class="text-muted">{{ plan.descripcion || 'Sin descripción' }}</div>
-                        <div class="text-muted small">Precio: {{ plan.precio | currency:'USD' }} | Máx. usuarios: {{ plan.maximoUsuarios }}</div>
-                        <div class="text-muted small">Activo: <span [ngClass]="plan.estaActivo ? 'text-success' : 'text-danger'">{{ plan.estaActivo ? 'Sí' : 'No' }}</span></div>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <button class="btn btn-warning btn-sm text-white" (click)="editarPlan(plan)">
-                          <i class="fas fa-edit"></i> Modificar
-                        </button>
-                        <button class="btn btn-danger btn-sm text-white" (click)="eliminarPlan(plan)">
-                          <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                      </div>
-                  </li>
-                  <li *ngIf="planes.length === 0" class="list-group-item text-center text-muted">
-                    No hay planes registrados.
-                  </li>
-                </ul>
-              </div>
-            </ul>
-          </ng-template>
-        </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-          <button class="btn btn-outline-primary btn-sm" [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
-          <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
-          <button class="btn btn-outline-primary btn-sm" [disabled]="paginaActual === totalPaginas" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">{{ modoEdicion ? 'Editar Plan' : 'Nuevo Plan' }}</h5>
-        </div>
-        <div class="card-body">
-          <form [formGroup]="planForm" (ngSubmit)="guardarPlan()">
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" formControlName="nombre">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Descripción</label>
-              <textarea class="form-control" formControlName="descripcion"></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Precio</label>
-              <input type="number" class="form-control" formControlName="precio">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Máximo de usuarios</label>
-              <input type="number" class="form-control" formControlName="maximoUsuarios">
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" formControlName="estaActivo" id="activoCheck">
-              <label class="form-check-label" for="activoCheck">Activo</label>
-            </div>
-            <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-success" [disabled]="planForm.invalid">{{ modoEdicion ? 'Actualizar' : 'Crear' }}</button>
-              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()" *ngIf="modoEdicion">Cancelar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+	<app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+	<div class="row mb-3">
+		<div class="col-12 text-center">
+			<h2>
+				<i class="fas fa-cubes text-primary me-2"></i>
+				Administración de Planes
+			</h2>
+			<p class="text-muted">Gestiona los planes de suscripción del sistema</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-6 col-lg-6 mb-4">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header card-header-info">
+					<h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Planes registrados</h5>
+					<div class="mt-2">
+						<input type="text" class="form-control" placeholder="Buscar plan..." [(ngModel)]="filtroBusqueda" (input)="buscarPlanes()">
+					</div>
+				</div>
+				<div class="card-body p-0 bg-light">
+					<ng-container *ngIf="loading; else listaPlanes">
+						<div class="text-center py-4">
+							<div class="spinner-border text-info" role="status">
+								<span class="visually-hidden">Cargando...</span>
+							</div>
+						</div>
+					</ng-container>
+					<ng-template #listaPlanes>
+						<div class="planes-scroll">
+							<ul class="list-group list-group-flush">
+								<ng-container *ngFor="let plan of planes">
+									<li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+										<div class="flex-grow-1 text-start d-flex align-items-center gap-2">
+											<span class="status-circle me-2" [ngClass]="plan.estaActivo ? 'status-active' : 'status-inactive'" title="{{ plan.estaActivo ? 'Activo' : 'Inactivo' }}"></span>
+											<div>
+												<div class="fw-bold mb-0">{{ plan.nombre }}</div>
+												<div class="text-muted small">{{ plan.descripcion || 'Sin descripción' }}</div>
+												<div class="text-muted small">Precio: {{ plan.precio | currency:'CLP':'symbol':'1.0-0':'es-CL' }} | Máx. usuarios: {{ plan.maximoUsuarios }}</div>
+											</div>
+										</div>
+										<div class="d-flex gap-2">
+											<button class="btn btn-warning btn-sm text-white" (click)="editarPlan(plan)">
+												<i class="fas fa-edit me-1"></i> Modificar
+											</button>
+											<button class="btn btn-danger btn-sm text-white" (click)="eliminarPlan(plan)">
+												<i class="fas fa-trash me-1"></i> Eliminar
+											</button>
+										</div>
+									</li>
+								</ng-container>
+								<li *ngIf="planes.length === 0" class="list-group-item text-center text-muted border-0">
+									No hay planes registrados.
+								</li>
+							</ul>
+						</div>
+						<div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+							<button *ngIf="paginaActual > 1" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
+							<span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+							<button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+						</div>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-lg-6">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>{{ modoEdicion ? 'Modificar Plan' : 'Registrar Nuevo Plan' }}</h5>
+						<div class="form-check form-switch ms-2">
+							<input class="form-check-input" type="checkbox" id="estaActivoSwitch" formControlName="estaActivo">
+							<label class="form-check-label" for="estaActivoSwitch">
+								{{ planForm.get('estaActivo')?.value ? 'Activo' : 'Inactivo' }}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="card-body bg-light">
+					  <form [formGroup]="planForm" (ngSubmit)="guardarPlan()">
+						<div class="mb-3">
+							<label for="nombre" class="form-label">Nombre</label>
+							<input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Ej: Plan Básico" [class.is-invalid]="planForm.get('nombre')?.invalid && planForm.get('nombre')?.touched">
+							<div *ngIf="planForm.get('nombre')?.invalid && planForm.get('nombre')?.touched" class="invalid-feedback">
+								El nombre es requerido (3-50 caracteres).
+							</div>
+						</div>
+						<div class="mb-3">
+							<label for="descripcion" class="form-label">Descripción</label>
+							<textarea class="form-control" id="descripcion" formControlName="descripcion" placeholder="Ej: Acceso a funcionalidades básicas"></textarea>
+						</div>
+									<div class="row mb-3">
+										<div class="col-6">
+											<label for="precio" class="form-label">Precio</label>
+											<input type="number" class="form-control" id="precio" formControlName="precio" placeholder="Ej: 100" min="0">
+											<div *ngIf="planForm.get('precio')?.value < 0" class="invalid-feedback d-block">
+												El precio no puede ser negativo.
+											</div>
+										</div>
+										<div class="col-6">
+											<label for="maximoUsuarios" class="form-label">Máximo de usuarios</label>
+											<input type="number" class="form-control" id="maximoUsuarios" formControlName="maximoUsuarios" placeholder="Ej: 10" min="1">
+											<div *ngIf="planForm.get('maximoUsuarios')?.value < 1" class="invalid-feedback d-block">
+												Debe ser al menos 1.
+											</div>
+										</div>
+									</div>
+						<div class="d-flex justify-content-between align-items-center mt-4">
+							<button class="btn btn-light" routerLink="/dashboard">
+								<i class="fas fa-arrow-left me-1"></i> Volver al Panel
+							</button>
+							<div class="d-flex gap-2">
+								<button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+									<i class="fas fa-eraser me-1"></i> Limpiar
+								</button>
+								<button *ngIf="modoEdicion" type="submit" class="btn btn-warning text-white" [disabled]="planForm.invalid || loading">
+									<i class="fas fa-save me-1"></i> Modificar Plan
+								</button>
+								<button *ngIf="!modoEdicion" type="submit" class="btn btn-primary text-white" [disabled]="planForm.invalid || loading">
+									<i class="fas fa-save me-1"></i> Crear Plan
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

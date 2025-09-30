@@ -1,3 +1,21 @@
+// --- Estados de círculo (activo/inactivo) ---
+.status-circle {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 50%;
+}
+.status-active {
+  background: #28a745;
+}
+.status-inactive {
+  background: #dc3545;
+}
+
+// --- Íconos grandes reutilizables ---
+.icon-xl {
+  font-size: 3rem;
+}
 // --- Utilidades de color para cabeceras de tarjetas ---
 .card-header-info {
   background-color: #e3f2fd !important;

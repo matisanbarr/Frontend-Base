@@ -1,111 +1,146 @@
 <!-- Modal de confirmación -->
 <app-confirm-modal
-  *ngIf="showConfirmModal"
-  [message]="'¿Seguro que deseas eliminar el tenant \' ' + tenantANombreEliminar + '\'?'"
-  [confirmText]="'Eliminar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="confirmarEliminacion()"
-  (cancel)="cerrarModal()"
+	*ngIf="showConfirmModal"
+	[message]="'¿Seguro que deseas eliminar la empresa \' ' + tenantANombreEliminar + '\'?'"
+	[confirmText]="'Eliminar'"
+	[cancelText]="'Cancelar'"
+	(confirm)="confirmarEliminacion()"
+	(cancel)="cerrarModal()"
 ></app-confirm-modal>
 
 <div class="container py-4">
-  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
-  <div class="row mb-3">
-    <div class="col-12 text-center">
-      <h2>
-        <i class="fas fa-building text-primary me-2"></i>
-        Administración de Tenants
-      </h2>
-      <p class="text-muted">Gestiona los tenants del sistema</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-6 col-lg-6 mb-4">
-      <div class="card">
-  <div class="card-header card-header-info">
-          <h5 class="mb-0">Tenants registrados</h5>
-          <div class="mt-2">
-            <input type="text" class="form-control" placeholder="Buscar tenant..." [(ngModel)]="filtroBusqueda" (input)="buscarTenants()">
-          </div>
-        </div>
-        <div class="card-body p-0">
-          <ng-container *ngIf="loading; else listaTenants">
-            <div class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-              </div>
-            </div>
-          </ng-container>
-          <ng-template #listaTenants>
-            <ul class="list-group list-group-flush">
-              <div class="tenants-scroll">
-                <ul class="list-group list-group-flush">
-                  <li *ngFor="let tenant of tenants" class="list-group-item d-flex justify-content-between align-items-center">
-                      <div class="flex-grow-1 text-start">
-                        <div class="fw-bold">{{ tenant.nombre }}</div>
-                        <div class="text-muted">{{ tenant.correo || 'Sin correo' }}</div>
-                        <div class="text-muted small">Teléfono: {{ tenant.telefono || '-' }}</div>
-                        <div class="text-muted small">Dirección: {{ tenant.direccion || '-' }}</div>
-                        <div class="text-muted small">Activo: <span [ngClass]="tenant.activo ? 'text-success' : 'text-danger'">{{ tenant.activo ? 'Sí' : 'No' }}</span></div>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <button class="btn btn-warning btn-sm text-white" (click)="editarTenant(tenant)">
-                          <i class="fas fa-edit"></i> Modificar
-                        </button>
-                        <button class="btn btn-danger btn-sm text-white" (click)="eliminarTenant(tenant)">
-                          <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                      </div>
-                  </li>
-                  <li *ngIf="tenants.length === 0" class="list-group-item text-center text-muted">
-                    No hay tenants registrados.
-                  </li>
-                </ul>
-              </div>
-            </ul>
-          </ng-template>
-        </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-          <button class="btn btn-outline-primary btn-sm" [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
-          <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
-          <button class="btn btn-outline-primary btn-sm" [disabled]="paginaActual === totalPaginas" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">{{ modoEdicion ? 'Editar Tenant' : 'Nuevo Tenant' }}</h5>
-        </div>
-        <div class="card-body">
-          <form [formGroup]="tenantForm" (ngSubmit)="guardarTenant()">
-            <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" formControlName="nombre">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Correo</label>
-              <input type="email" class="form-control" formControlName="correo">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" formControlName="telefono">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Dirección</label>
-              <input type="text" class="form-control" formControlName="direccion">
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" formControlName="activo" id="activoCheck">
-              <label class="form-check-label" for="activoCheck">Activo</label>
-            </div>
-            <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-success" [disabled]="tenantForm.invalid">{{ modoEdicion ? 'Actualizar' : 'Crear' }}</button>
-              <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()" *ngIf="modoEdicion">Cancelar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+	<app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+	<div class="row mb-3">
+		<div class="col-12 text-center">
+			<h2>
+				<i class="fas fa-building text-primary me-2"></i>
+				Administración de Empresas
+			</h2>
+			<p class="text-muted">Gestiona las empresas del sistema</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-6 col-lg-6 mb-4">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header" style="background-color:#e3f2fd;color:#1565c0;">
+					<h5 class="mb-0"><i class="bi bi-buildings me-2"></i>Empresas registradas</h5>
+					<div class="mt-2">
+						<input type="text" class="form-control" placeholder="Buscar empresa..." [(ngModel)]="filtroBusqueda" (input)="buscarTenants()">
+					</div>
+				</div>
+				<div class="card-body p-0 bg-light">
+					<ng-container *ngIf="loading; else listaEmpresas">
+						<div class="text-center py-4">
+							<div class="spinner-border text-info" role="status">
+								<span class="visually-hidden">Cargando...</span>
+							</div>
+						</div>
+					</ng-container>
+					<ng-template #listaEmpresas>
+						<div class="tenants-scroll">
+							<ul class="list-group list-group-flush">
+								<ng-container *ngFor="let tenant of tenants">
+									<li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+										<div class="flex-grow-1 text-start d-flex align-items-center gap-2">
+											<span class="rounded-circle d-inline-block me-2"
+												[ngStyle]="{ width: '14px', height: '14px', background: tenant.activo ? '#28a745' : '#dc3545', display: 'inline-block' }"
+												title="{{ tenant.activo ? 'Activo' : 'Inactivo' }}">
+											</span>
+											<div>
+												<div class="fw-bold mb-0">{{ tenant.nombre }}</div>
+												<div class="text-muted small">{{ tenant.correo || 'Sin correo' }}</div>
+												<div class="text-muted small">Teléfono: {{ tenant.telefono || '-' }}</div>
+												<div class="text-muted small">Dirección: {{ tenant.direccion || '-' }}</div>
+											</div>
+										</div>
+										<div class="d-flex gap-2">
+											<button class="btn btn-warning btn-sm text-white" (click)="editarTenant(tenant)">
+												<i class="fas fa-edit me-1"></i> Modificar
+											</button>
+											<button class="btn btn-danger btn-sm text-white" (click)="eliminarTenant(tenant)">
+												<i class="fas fa-trash me-1"></i> Eliminar
+											</button>
+										</div>
+									</li>
+								</ng-container>
+								<li *ngIf="tenants.length === 0" class="list-group-item text-center text-muted border-0">
+									No hay empresas registradas.
+								</li>
+							</ul>
+						</div>
+						<div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+							<button *ngIf="paginaActual > 1" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
+							<span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+							<button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+						</div>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-lg-6">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0"><i class="bi bi-building me-2"></i>{{ modoEdicion ? 'Modificar Empresa' : 'Registrar Nueva Empresa' }}</h5>
+						<div class="form-check form-switch ms-2">
+							<input class="form-check-input" type="checkbox" id="activoSwitch" formControlName="activo">
+							<label class="form-check-label" for="activoSwitch">
+								{{ tenantForm.get('activo')?.value ? 'Activo' : 'Inactivo' }}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="card-body bg-light">
+					<form [formGroup]="tenantForm" (ngSubmit)="guardarTenant()">
+						<div class="mb-3">
+							<label for="nombre" class="form-label">Nombre</label>
+							<input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Ej: Empresa S.A." [class.is-invalid]="tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched">
+							<div *ngIf="tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched" class="invalid-feedback">
+								El nombre es requerido (3-50 caracteres).
+							</div>
+						</div>
+						<div class="mb-3">
+							<label for="correo" class="form-label">Correo</label>
+							<input type="email" class="form-control" id="correo" formControlName="correo" placeholder="Ej: empresa@email.com" [class.is-invalid]="tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched">
+							<div *ngIf="tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched" class="invalid-feedback">
+								Correo válido requerido.
+							</div>
+						</div>
+						<div class="row mb-3">
+							<div class="col-6">
+								<label for="telefono" class="form-label">Teléfono</label>
+								<input type="text" class="form-control" id="telefono" formControlName="telefono" placeholder="Ej: 555123456" [class.is-invalid]="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched" minlength="7" maxlength="20">
+								<div *ngIf="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched" class="invalid-feedback">
+									Teléfono entre 7 y 20 caracteres.
+								</div>
+							</div>
+							<div class="col-6">
+								<label for="direccion" class="form-label">Dirección</label>
+								<input type="text" class="form-control" id="direccion" formControlName="direccion" placeholder="Ej: Calle 123, Ciudad" [class.is-invalid]="tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched" maxlength="200">
+								<div *ngIf="tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched" class="invalid-feedback">
+									Máximo 200 caracteres.
+								</div>
+							</div>
+						</div>
+						<div class="d-flex justify-content-between align-items-center mt-4">
+							<button class="btn btn-light" routerLink="/dashboard">
+								<i class="fas fa-arrow-left me-1"></i> Volver al Panel
+							</button>
+							<div class="d-flex gap-2">
+								<button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+									<i class="fas fa-eraser me-1"></i> Limpiar
+								</button>
+								<button *ngIf="modoEdicion" type="submit" class="btn btn-warning text-white" [disabled]="tenantForm.invalid || loading">
+									<i class="fas fa-save me-1"></i> Modificar Empresa
+								</button>
+								<button *ngIf="!modoEdicion" type="submit" class="btn btn-primary text-white" [disabled]="tenantForm.invalid || loading">
+									<i class="fas fa-save me-1"></i> Crear Empresa
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

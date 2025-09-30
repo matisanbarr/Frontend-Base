@@ -17,6 +17,9 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   styleUrls: ['./admin-tenants.component.scss']
 })
 export class AdminTenantsComponent {
+  goToPanel() {
+    window.location.href = '/dashboard';
+  }
   readonly alertService = inject(AlertService);
   modoEdicion: boolean = false;
   tenantEditandoId: string | null = null;
