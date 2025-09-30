@@ -33,7 +33,7 @@ export class LoginComponent {
 
   onLogin(): void {
     if (!this.loginData.usuario || !this.loginData.password) {
-      this.errorMessage = 'Por favor completa todos los campos';
+      this.errorMessage = 'Por favor completa todos los campos.';
       this.successMessage = '';
       return;
     }

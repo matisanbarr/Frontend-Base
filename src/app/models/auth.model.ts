@@ -1,9 +1,26 @@
+// Modelo para registro de usuario
+export interface RegisterUserRequest {
+  nombre: string;
+  password: string;
+  email: string;
+  fechaNacimiento?: string;
+  genero?: number;
+  estadoActivo?: boolean;
+  isGlobal?: boolean;
+  roles?: Role[];
+}
 // Modelo de Usuario según tu backend
 export interface User {
-  id: string; // guid
-  nombreUsuario: string;
-  fechaCreacion: string; // datetime ISO 8601
-  fechaModificacion?: string; // datetime nullable
+  id?: string; // guid
+  nombre: string;
+  password?: string;
+  email: string;
+  fechaNacimiento?: string;
+  genero?: number;
+  estadoActivo?: boolean;
+  isGlobal?: boolean;
+  tenantId?: string;
+  roles?: Role[];
 }
 
 // Modelo para Login Request según tu backend
@@ -18,14 +35,16 @@ export interface LoginResponse {
   refreshToken?: string;
   user: User;
   expiresIn: number;
+  tenantId: string;
+  isGlobal: boolean;
 }
 
 // Modelo de Rol
 export interface Role {
-  id: string; // guid
+  id?: string; // guid
   nombre: string;
-  fechaCreacion: string; // datetime ISO 8601
-  fechaModificacion?: string; // datetime nullable
+  descripcion?: string;
+  isGlobal?: boolean;
 }
 
 // Modelo para crear rol

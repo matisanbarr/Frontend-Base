@@ -80,7 +80,7 @@
           <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
             <div class="mb-3">
               <label for="rolNombre" class="form-label">Nombre del Rol</label>
-              <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Administrador" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
+              <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Admin Global" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
               <div *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched" class="invalid-feedback">
                 El nombre es requerido (3-50 caracteres).
               </div>

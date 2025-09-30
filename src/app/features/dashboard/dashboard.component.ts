@@ -22,7 +22,7 @@ export class DashboardComponent {
 
   constructor(private authService: AuthService, private router: Router) {
     this.userRoles = this.authService.getCurrentUserRoles();
-    this.hasAdminRole = this.authService.hasAnyRole(['Administrador', 'Usuario']);
+    this.hasAdminRole = this.authService.hasAnyRole(['Admin Global', 'Usuario']);
     this.isLoggedIn = this.authService.isLoggedIn();
   }
 

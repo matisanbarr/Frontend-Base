@@ -2,7 +2,7 @@
   <div class="container">
     <a class="navbar-brand d-flex align-items-center fw-bold text-primary" routerLink="/dashboard">
       <img src="assets/logo.png" alt="Logo" width="36" height="36" class="me-2 rounded-circle border" />
-      <span class="fs-5">Grimat Labss</span>
+      <span class="fs-5">Grimat Labs</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow rounded border-0" aria-labelledby="userMenu" style="min-width: 280px;">
               <li class="dropdown-item-text">
-                <div class="fw-semibold text-dark">{{ currentUser.nombreUsuario || currentUser.nombre }}</div>
+                <div class="fw-semibold text-dark">{{ currentUser.name || currentUser.nombre }}</div>
                 <div class="text-muted small">{{ currentUser.email }}</div>
                 <div *ngIf="currentUser.roles && currentUser.roles.length" class="mt-2">
                   <span *ngFor="let rol of currentUser.roles" class="badge rounded-pill bg-gradient bg-info text-dark me-1">{{ rol }}</span>

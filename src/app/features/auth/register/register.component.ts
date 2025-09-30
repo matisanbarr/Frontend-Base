@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
               <p class="text-center text-muted">Componente de registro de usuarios - próximo a implementar</p>
               <div class="alert alert-info">
                 <i class="bi bi-info-circle"></i>
-                <strong>Nota:</strong> Solo administradores pueden registrar nuevos usuarios.
+                <strong>Nota:</strong> Solo Admin Globales pueden registrar nuevos usuarios.
               </div>
             </div>
           </div>

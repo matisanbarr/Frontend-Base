@@ -22,7 +22,7 @@ export class AppComponent {
     // Suscribirse a los cambios de autenticación
     this.authService.isAuthenticated$.subscribe(auth => {
       this.isLoggedIn = this.authService.isLoggedIn();
-      this.hasAdminRole = this.authService.hasAnyRole(['Administrador']);
+      this.hasAdminRole = this.authService.hasAnyRole(['Admin Global']);
       this.hasUserRole = this.authService.hasAnyRole(['Usuario']);
     });
   }
@@ -31,7 +31,7 @@ export class AppComponent {
     this.authService.logout();
     // Actualizar estado inmediatamente después de logout
     this.isLoggedIn = this.authService.isLoggedIn();
-    this.hasAdminRole = this.authService.hasAnyRole(['Administrador']);
+    this.hasAdminRole = this.authService.hasAnyRole(['Admin Global']);
     this.hasUserRole = this.authService.hasAnyRole(['Usuario']);
   }
 }

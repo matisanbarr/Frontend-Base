@@ -22,7 +22,7 @@ export class MainNavbarComponent {
     this.isLoggedIn = this.authService.isAuthenticated();
     this.currentUser = this.authService.getCurrentUser();
     const roles = this.authService.getCurrentUserRoles();
-    this.hasAdminRole = roles.includes('Administrador');
+    this.hasAdminRole = roles.includes('Admin Global');
     this.hasUserRole = roles.includes('Usuario');
 
     // Suscripción para cambios en tiempo real
@@ -30,7 +30,7 @@ export class MainNavbarComponent {
       this.isLoggedIn = auth;
       this.currentUser = this.authService.getCurrentUser();
       const roles = this.authService.getCurrentUserRoles();
-      this.hasAdminRole = roles.includes('Administrador');
+      this.hasAdminRole = roles.includes('Admin Global');
       this.hasUserRole = roles.includes('Usuario');
     });
   }

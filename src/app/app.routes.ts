@@ -38,7 +38,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [TokenGuard, AuthGuard, RoleGuard],
-  data: { roles: ['Administrador', 'Usuario'] }, // Roles requeridos
+  data: { roles: ['Admin Global', 'Usuario'] }, // Roles requeridos
     children: [
       {
         path: 'users',
