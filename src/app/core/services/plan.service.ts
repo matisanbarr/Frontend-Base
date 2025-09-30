@@ -7,7 +7,7 @@ import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { Plan } from '../../models/plan.model';
 
 @Injectable({ providedIn: 'root' })
-export class RolService {
+export class PlanService {
   private apiUrl = environment.apiUrl + '/planes';
 
   constructor(private http: HttpClient) {}

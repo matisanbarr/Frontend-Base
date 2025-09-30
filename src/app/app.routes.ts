@@ -49,6 +49,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/admin-roles/admin-roles.component').then(m => m.AdminRolesComponent)
       },
       {
+        path: 'planes',
+        loadComponent: () => import('./features/admin/admin-planes/admin-planes.component').then(m => m.AdminPlanesComponent)
+      },
+      {
+        path: 'tenants',
+        loadComponent: () => import('./features/admin/admin-tenants/admin-tenants.component').then(m => m.AdminTenantsComponent)
+      },
+      {
         path: 'register',
         loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       }

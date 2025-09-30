@@ -1,3 +1,42 @@
+// --- Utilidades de color para cabeceras de tarjetas ---
+.card-header-info {
+  background-color: #e3f2fd !important;
+  color: #1565c0 !important;
+}
+.card-header-success {
+  background-color: #e8f5e9 !important;
+  color: #388e3c !important;
+}
+.card-header-warning {
+  background-color: #fff3e0 !important;
+  color: #ef6c00 !important;
+}
+.card-header-primary {
+  background-color: #e1f5fe !important;
+  color: #0277bd !important;
+}
+// --- Estilos reutilizables para tarjetas y scroll ---
+.card-hover {
+  transition: box-shadow 0.3s;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15), 0 0.125rem 0.25rem rgba(0,0,0,0.12);
+}
+.card-hover:hover {
+  box-shadow: 0 1.5rem 2rem rgba(0,0,0,0.25), 0 0.25rem 0.5rem rgba(0,0,0,0.18);
+}
+
+.dashboard-zoom {
+  transition: transform 0.2s cubic-bezier(.4,0,.2,1), box-shadow 0.2s cubic-bezier(.4,0,.2,1);
+}
+.dashboard-zoom:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+
+.planes-scroll, .tenants-scroll, .roles-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+}
 /* You can add global styles to this file, and also import other style files */
 
 // Bootstrap 5
