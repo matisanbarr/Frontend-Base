@@ -57,18 +57,16 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/admin-tenants/admin-tenants.component').then(m => m.AdminTenantsComponent)
       },
       {
+        path: 'asignacion-planes',
+        loadComponent: () => import('./features/admin/admin-asignacion-planes/admin-asignacion-planes.component').then(m => m.AdminAsignacionPlanesComponent)
+      },
+      {
         path: 'register',
         loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
       }
     ]
   },
 
-  // Página de perfil (cualquier usuario autenticado)
-  {
-    path: 'profile',
-    loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
-    canActivate: [TokenGuard, AuthGuard]
-  },
 
   // Página de acceso denegado
   {

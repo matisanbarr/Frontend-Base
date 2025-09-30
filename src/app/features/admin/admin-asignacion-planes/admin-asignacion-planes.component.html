@@ -1,0 +1,146 @@
+<!-- Modal de confirmación -->
+<app-confirm-modal
+  *ngIf="showConfirmModal"
+  [message]="'¿Seguro que deseas eliminar la asignación?'"
+  [confirmText]="'Eliminar'"
+  [cancelText]="'Cancelar'"
+  (confirm)="confirmarEliminacion()"
+  (cancel)="cerrarModal()"
+></app-confirm-modal>
+
+<div class="container py-4">
+  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+  <div class="row mb-3">
+    <div class="col-12 text-center">
+      <h2>
+        <i class="fas fa-link text-primary me-2"></i>
+        Asignación de Subscripciones a Empresas
+      </h2>
+      <p class="text-muted">Asigna subscripciones a las empresas del sistema</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-6 col-lg-6 mb-4">
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header card-header-info">
+          <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i>Asignaciones registradas</h5>
+          <div class="mt-2">
+            <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="filtroBusqueda" (input)="buscarAsignaciones()">
+          </div>
+        </div>
+        <div class="card-body p-0 bg-light">
+          <ng-container *ngIf="loading; else listaAsignaciones">
+            <div class="text-center py-4">
+              <div class="spinner-border text-info" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #listaAsignaciones>
+            <div class="planes-scroll">
+              <ul class="list-group list-group-flush">
+                <ng-container *ngFor="let asignacion of asignaciones">
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+                    <div class="flex-grow-1 text-start d-flex align-items-center gap-2">
+                      <span class="status-circle me-2" [ngClass]="asignacion.activo ? 'status-active' : 'status-inactive'" title="{{ asignacion.activo ? 'Activo' : 'Inactivo' }}"></span>
+                      <div>
+                        <div class="fw-bold mb-0">
+                          {{ getTenantNombre(asignacion.tenantId) }}
+                        </div>
+                        <div class="text-muted small">
+                          Subscripción: {{ getPlanNombre(asignacion.planId) }}
+                        </div>
+                          <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span>Inicio: {{ asignacion.fechaInicio | fechaLarga }}</span>
+                            <span *ngIf="asignacion.fechaFin">| Fin: {{ asignacion.fechaFin | fechaLarga }}</span>
+                            <span *ngIf="getDiasRestantes(asignacion) !== null" [ngClass]="getDiasRestantes(asignacion) == null ? '' : getDiasRestantes(asignacion)! > 15 ? 'badge bg-success text-white' : getDiasRestantes(asignacion)! <= 15 && getDiasRestantes(asignacion)! >= 6 ? 'badge bg-warning text-white' : getDiasRestantes(asignacion)! <= 5 ? 'badge bg-danger text-white' : ''" class="badge">
+                            {{ getDiasRestantes(asignacion) }} días restantes
+                          </span>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-warning btn-sm text-white" (click)="editarAsignacion(asignacion)">
+                        <i class="fas fa-edit me-1"></i> Modificar
+                      </button>
+                      <button class="btn btn-danger btn-sm text-white" (click)="eliminarAsignacion(asignacion)">
+                        <i class="fas fa-trash me-1"></i> Eliminar
+                      </button>
+                    </div>
+                  </li>
+                </ng-container>
+                <li *ngIf="asignaciones.length === 0" class="list-group-item text-center text-muted border-0">
+                  No hay asignaciones registradas.
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+              <button *ngIf="paginaActual > 1" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
+              <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+              <button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="card border-0 shadow-sm rounded-3">
+        <form [formGroup]="asignacionForm" (ngSubmit)="guardarAsignacion()">
+          <div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i>{{ modoEdicion ? 'Modificar Asignación' : 'Asignar Nueva Subscripción' }}</h5>
+              <div class="form-check form-switch ms-2">
+                <input class="form-check-input" type="checkbox" id="activoSwitch" formControlName="activo">
+                <label class="form-check-label" for="activoSwitch">
+                  {{ asignacionForm.get('activo')?.value ? 'Activo' : 'Inactivo' }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="card-body bg-light">
+            <div class="mb-3">
+              <label for="tenantSelect" class="form-label">Empresa</label>
+              <select class="form-select" id="tenantSelect" formControlName="tenantId">
+                <option value="" disabled selected>Selecciona una empresa</option>
+                <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.nombre }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="planSelect" class="form-label">Subscripción</label>
+              <select class="form-select" id="planSelect" formControlName="planId">
+                <option value="" disabled selected>Selecciona una subscripción</option>
+                <option *ngFor="let plan of planes" [value]="plan.id">{{ plan.nombre }}</option>
+              </select>
+            </div>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                <input type="date" class="form-control" id="fechaInicio" formControlName="fechaInicio">
+              </div>
+              <div class="col-6">
+                <label for="fechaFin" class="form-label">Fecha de fin</label>
+                <input type="date" class="form-control" id="fechaFin" formControlName="fechaFin">
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <button class="btn btn-light" routerLink="/dashboard">
+                <i class="fas fa-arrow-left me-1"></i> Volver al Panel
+              </button>
+              <div class="d-flex gap-2">
+                <button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                  <i class="fas fa-eraser me-1"></i> Limpiar
+                </button>
+                <button *ngIf="modoEdicion" type="submit" class="btn btn-warning text-white" [disabled]="asignacionForm.invalid || loading">
+                  <i class="fas fa-save me-1"></i> Modificar Asignación
+                </button>
+                <button *ngIf="!modoEdicion" type="submit" class="btn btn-primary text-white" [disabled]="asignacionForm.invalid || loading">
+                  <i class="fas fa-save me-1"></i> Asignar Subscripción
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+ </div>
