@@ -1,0 +1,5 @@
+// Limita la altura de la lista de roles y agrega scroll vertical
+.roles-scroll {
+		max-height: 300px;
+	overflow-y: auto;
+}
