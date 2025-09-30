@@ -1,191 +1,167 @@
-<div class="admin-users-container">
-  <div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="admin-header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 class="mb-1">
-                <i class="fas fa-users me-2 text-primary"></i>
-                Administración de Usuarios
-              </h2>
-              <p class="text-muted mb-0">Gestiona usuarios del sistema</p>
-            </div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                <i class="fas fa-plus me-1"></i>
-                Nuevo Usuario
-              </button>
-              <button class="btn btn-outline-primary">
-                <i class="fas fa-download me-1"></i>
-                Exportar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Modal de confirmación -->
+<app-confirm-modal
+	*ngIf="showConfirmModal"
+	[message]="'¿Seguro que deseas eliminar el usuario \' ' + usuarioANombreEliminar + '\'?'"
+	[confirmText]="'Eliminar'"
+	[cancelText]="'Cancelar'"
+	(confirm)="confirmarEliminacion()"
+	(cancel)="cerrarModal()"
+></app-confirm-modal>
 
-    <div class="row d-flex align-items-center justify-content-center">
-      <div class="col-12 col-lg-6 col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header bg-white">
-            <h5 class="mb-0">Usuarios registrados</h5>
-            <div class="mt-2">
-              <input type="text" class="form-control" placeholder="Buscar usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
-            </div>
-          </div>
-          <div class="card-body p-0">
-            <ng-container *ngIf="loading; else listaUsuarios">
-              <div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-              </div>
-            </ng-container>
-            <ng-template #listaUsuarios>
-              <ul class="list-group list-group-flush usuarios-scroll">
-                <li *ngFor="let user of usuarios" class="list-group-item d-flex justify-content-between align-items-center">
-                  <span>
-                    <i class="fas fa-user-circle text-primary me-2"></i>
-                    {{ user.nombreUsuario }}
-                    <ng-container *ngFor="let rol of user.roles">
-                      <span class="badge bg-info ms-2">{{ rol.nombre }}</span>
-                    </ng-container>
-                  </span>
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-info" title="Ver" (click)="abrirModalVer(user)">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-primary" title="Resetear Password" (click)="abrirModalResetPassword(user)">
-                      <i class="fas fa-key"></i>
-                    </button>
-                    <button class="btn btn-outline-warning" title="Asignar Roles" (click)="abrirModalAsignarRoles(user)">
-                      <i class="fas fa-user-plus"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" title="Quitar Roles" (click)="abrirModalQuitarRoles(user)">
-                      <i class="fas fa-user-minus"></i>
-                    </button>
+<div class="container py-4">
+	<app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+	<div class="row mb-3">
+		<div class="col-12 text-center">
+			<h2>
+				<i class="fas fa-users text-primary me-2"></i>
+				Administración de Usuarios
+			</h2>
+			<p class="text-muted">Gestiona los usuarios del sistema</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 col-md-6 col-lg-6 mb-4">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header" style="background-color:#e3f2fd;color:#1565c0;">
+					<h5 class="mb-0"><i class="bi bi-people me-2"></i>Usuarios registrados</h5>
+					<div class="mt-2">
+						<input type="text" class="form-control" placeholder="Buscar usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
+					</div>
+				</div>
+				<div class="card-body p-0 bg-light">
+					<ng-container *ngIf="loading; else listaUsuarios">
+						<div class="text-center py-4">
+							<div class="spinner-border text-info" role="status">
+								<span class="visually-hidden">Cargando...</span>
+							</div>
+						</div>
+					</ng-container>
+					<ng-template #listaUsuarios>
+						<div class="usuarios-scroll">
+							<ul class="list-group list-group-flush">
+								<ng-container *ngFor="let usuario of usuarios">
+									<li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+										<div class="flex-grow-1 text-start d-flex align-items-center gap-2">
+											<span class="rounded-circle d-inline-block me-2"
+												[ngStyle]="{ width: '14px', height: '14px', background: usuario.estadoActivo ? '#28a745' : '#dc3545', display: 'inline-block' }"
+												title="{{ usuario.estadoActivo ? 'Activo' : 'Inactivo' }}">
+											</span>
+											<div>
+												<div class="fw-bold mb-0">{{ usuario.nombre }}</div>
+												<div class="text-muted small">{{ usuario.email }}</div>
+												<div>
+													<span *ngFor="let rol of usuario.roles"
+														class="badge me-1"
+														[ngClass]="rol.nombre | roleColor:rolesDisponibles">{{ rol.nombre }}</span>
+												</div>
+											</div>
+										</div>
+										<div class="d-flex gap-2">
+											<button class="btn btn-warning btn-sm text-white" (click)="editarUsuario(usuario)">
+												<i class="fas fa-edit me-1"></i> Modificar
+											</button>
+											<button class="btn btn-danger btn-sm text-white" (click)="eliminarUsuario(usuario)">
+												<i class="fas fa-trash me-1"></i> Eliminar
+											</button>
+										</div>
+									</li>
+								</ng-container>
+								<li *ngIf="usuarios.length === 0" class="list-group-item text-center text-muted border-0">
+									No hay usuarios registrados.
+								</li>
+							</ul>
+						</div>
+						<div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+							<button *ngIf="paginaActual > 1" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
+							<span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+							<button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+						</div>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-6 col-lg-6">
+			<div class="card border-0 shadow-sm rounded-3">
+				<div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>{{ modoEdicion ? 'Modificar Usuario' : 'Registrar Nuevo Usuario' }}</h5>
+						<div class="form-check form-switch ms-2">
+							<input class="form-check-input" type="checkbox" id="estadoActivoSwitch" [formControl]="estadoActivoControl">
+							<label class="form-check-label" for="estadoActivoSwitch">
+								{{ usuarioForm.get('estadoActivo')?.value ? 'Activo' : 'Inactivo' }}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="card-body bg-light">
+					<form [formGroup]="usuarioForm" (ngSubmit)="modoEdicion ? actualizarUsuarioYRoles() : registrarUsuario()">
+						<!-- El switch de estadoActivo ahora está en el header del formulario -->
+						<div class="mb-3">
+							<label for="nombre" class="form-label">Nombre</label>
+							<input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Ej: Juan Pérez" [class.is-invalid]="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
+							<div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched" class="invalid-feedback">
+								El nombre es requerido (3-50 caracteres).
+							</div>
+						</div>
+						<div class="mb-3">
+							<label for="email" class="form-label">Email</label>
+							<input type="email" class="form-control" id="email" formControlName="email" placeholder="Ej: usuario@email.com" [class.is-invalid]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
+							<div *ngIf="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched" class="invalid-feedback">
+								Email válido requerido.
+							</div>
+						</div>
+									<div class="mb-3">
+										<label for="password" class="form-label">Contraseña</label>
+										<input type="password" class="form-control" id="password" formControlName="password" [class.is-invalid]="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched && !modoEdicion">
+										<div *ngIf="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched && !modoEdicion" class="invalid-feedback">
+											Contraseña requerida (mínimo 6 caracteres).
+										</div>
+										<div *ngIf="modoEdicion" class="form-text">Si escribes una nueva contraseña, se actualizará. Si la dejas vacía, no se modifica.</div>
+									</div>
+									<div class="row mb-3">
+										<div class="col-6">
+											<label for="fechaNacimiento" class="form-label">Fecha de cumpleaños</label>
+											<input id="fechaNacimiento" type="date" class="form-control" formControlName="fechaNacimiento" style="min-width: 140px;">
+										</div>
+										<div class="col-6">
+											<label for="genero" class="form-label">Género</label>
+											<select id="genero" class="form-select" formControlName="genero">
+												<option *ngFor="let g of generos" [value]="g.value">{{ g.label }}</option>
+											</select>
+										</div>
+									</div>
+                <hr *ngIf="modoEdicion">
+                <div *ngIf="modoEdicion" class="mt-4">
+                  <h6>Asignar o quitar roles</h6>
+                  <div class="form-check" *ngFor="let rol of rolesDisponibles">
+                    <input class="form-check-input" type="checkbox"
+                      [value]="rol.id ?? ''"
+                      [checked]="rolesSeleccionadosTemp.includes(rol.id ?? '')"
+                      (change)="onRolTempCheck($event, rol.id ?? '')">
+                    <label class="form-check-label">{{ rol.nombre }}</label>
                   </div>
-                </li>
-                <li *ngIf="usuarios.length === 0" class="list-group-item text-center text-muted">
-                  No hay usuarios registrados.
-                </li>
-              </ul>
-              <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
-                <button *ngIf="paginaActual > 1" class="btn btn-outline-primary me-2" (click)="paginaAnterior()">Anterior</button>
-                <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
-                <button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-primary ms-2" (click)="paginaSiguiente()">Siguiente</button>
+                </div>
+              <div class="d-flex justify-content-between align-items-center mt-4">
+			<button class="btn btn-light" routerLink="/dashboard">
+				<i class="fas fa-arrow-left me-1"></i> Volver al Panel
+			</button>
+              <div class="d-flex gap-2">
+				<button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="limpiarFormulario()">
+					<i class="fas fa-eraser me-1"></i> Limpiar
+				</button>
+                <!-- Botón Modificar solo si hay cambios y en modo edición -->
+				<button *ngIf="modoEdicion && hayCambios" type="submit" class="btn btn-warning text-white" [disabled]="usuarioForm.invalid || loading">
+					<i class="fas fa-save me-1"></i> Modificar Usuario
+				</button>
+				<!-- Botón Crear solo si no está en edición -->
+				<button *ngIf="!modoEdicion" type="submit" class="btn btn-primary text-white" [disabled]="usuarioForm.invalid || loading">
+					<i class="fas fa-save me-1"></i> Crear Usuario
+				</button>
               </div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-    </div>
-   
-  </div>
-</div>
-
-<!-- Modal para Agregar Usuario -->
-<div class="modal fade" id="addUserModal" tabindex="-1">
-<!-- Modal Ver Usuario -->
-<app-confirm-modal
-  *ngIf="showModalVer"
-  [message]="'Usuario: ' + usuarioSeleccionado?.firstName + ' ' + usuarioSeleccionado?.lastName + '\nEmail: ' + usuarioSeleccionado?.email + '\nRol: ' + usuarioSeleccionado?.role"
-  [confirmText]="'Cerrar'"
-  [cancelText]="''"
-  (confirm)="cerrarModalVer()"
-></app-confirm-modal>
-
-<!-- Modal Resetear Password -->
-<app-confirm-modal
-  *ngIf="showModalResetPassword"
-  [message]="'¿Seguro que deseas resetear el password de ' + usuarioSeleccionado?.firstName + '?'"
-  [confirmText]="'Resetear'"
-  [cancelText]="'Cancelar'"
-  (confirm)="resetearPassword()"
-  (cancel)="cerrarModalResetPassword()"
-></app-confirm-modal>
-
-<!-- Modal Asignar Roles -->
-<app-confirm-modal
-  *ngIf="showModalAsignarRoles"
-  [message]="'Asignar roles a ' + usuarioSeleccionado?.firstName"
-  [confirmText]="'Asignar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="asignarRoles()"
-  (cancel)="cerrarModalAsignarRoles()"
->
-  <div *ngFor="let rol of rolesDisponibles">
-    <label>
-      <input type="checkbox" [(ngModel)]="rol.seleccionado"> {{ rol.nombre }}
-    </label>
-  </div>
-</app-confirm-modal>
-
-<!-- Modal Quitar Roles -->
-<app-confirm-modal
-  *ngIf="showModalQuitarRoles"
-  [message]="'Quitar roles a ' + usuarioSeleccionado?.firstName"
-  [confirmText]="'Quitar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="quitarRoles()"
-  (cancel)="cerrarModalQuitarRoles()"
->
-  <div *ngFor="let rol of rolesAsignados">
-    <label>
-      <input type="checkbox" [(ngModel)]="rol.seleccionado"> {{ rol.nombre }}
-    </label>
-  </div>
-</app-confirm-modal>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <i class="fas fa-user-plus me-2"></i>
-          Agregar Nuevo Usuario
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="newFirstName" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="newFirstName" required>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="newLastName" class="form-label">Apellido</label>
-              <input type="text" class="form-control" id="newLastName" required>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="newEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="newEmail" required>
-          </div>
-          <div class="mb-3">
-            <label for="newRole" class="form-label">Rol</label>
-            <select class="form-select" id="newRole" required>
-              <option value="">Seleccionar rol...</option>
-              <option value="admin">Administrador</option>
-              <option value="user">Usuario</option>
-              <option value="moderator">Moderador</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="newPassword" class="form-label">Contraseña Temporal</label>
-            <input type="password" class="form-control" id="newPassword" required>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success">
-          <i class="fas fa-save me-1"></i>
-          Crear Usuario
-        </button>
-      </div>
-    </div>
-  </div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

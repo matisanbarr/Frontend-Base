@@ -16,7 +16,7 @@ export const environment = {
   production: false,
   apiUrl: 'https://localhost:7001/api', // Tu URL local específica
   apiKey: 'tu-api-key-local',
-  appName: 'Frontend App - Local',
+  appName: 'Grimat Labs - Local',
   version: '1.0.0-dev'
 };
 ```

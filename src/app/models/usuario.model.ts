@@ -1,8 +1,12 @@
 import { Rol } from "./rol.model";
 
-// Modelo de Usuario según tu backend
-export interface RegistroUsuario {
-  nombreUsuario: string;
+export interface Usuario {
+  id?: string;
+  nombre: string;
   password: string;
+  email: string;
+  fechaNacimiento?: string;
+  genero?: number;
+  estadoActivo: boolean;
   roles: Rol[];
 }

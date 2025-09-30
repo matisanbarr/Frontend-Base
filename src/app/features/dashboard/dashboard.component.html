@@ -1,74 +1,42 @@
-<div class="container py-5">
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 75vh;">
   <!-- Dashboard para Admin -->
-  <div *ngIf="hasAdminRole; else userDashboard">
-    <div class="row g-4 mb-4">
-      <div class="col-md-6">
-        <div class="card card-hover shadow-sm border-0 h-100">
-          <div class="card-body text-center">
-            <i class="bi bi-people fs-1 text-primary mb-3"></i>
-            <h5 class="card-title fw-bold">Administrar Usuarios</h5>
-            <p class="card-text text-muted mb-4">Gestiona los usuarios del sistema.</p>
-            <a routerLink="/admin/users" class="btn btn-outline-primary btn-sm px-4">
-              <i class="bi bi-arrow-right me-1"></i>Ir a Usuarios
-            </a>
+  <ng-container *ngIf="hasAdminRole; else userDashboard">
+  <div class="row justify-content-center align-items-center g-5 w-100">
+      <div class="col-md-5 mb-4">
+        <a routerLink="/admin/users" class="text-decoration-none">
+          <div class="card card-hover shadow-lg border-0 h-100 rounded-4 dashboard-zoom">
+            <div class="card-header text-center" style="background-color:#e3f2fd;color:#1565c0;">
+              <h4 class="card-title fw-bold mb-0">Administrar Usuarios</h4>
+            </div>
+            <div class="card-body text-center py-5">
+              <i class="bi bi-people fs-1 text-primary mb-3"></i>
+              <p class="card-text text-muted mb-0">Gestiona los usuarios del sistema de forma sencilla y rápida.</p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
-      <div class="col-md-6">
-        <div class="card card-hover shadow-sm border-0 h-100">
-          <div class="card-body text-center">
-            <i class="bi bi-shield-lock fs-1 text-info mb-3"></i>
-            <h5 class="card-title fw-bold">Administrar Roles</h5>
-            <p class="card-text text-muted mb-4">Gestiona los roles y permisos.</p>
-            <a routerLink="/admin/roles" class="btn btn-outline-info btn-sm px-4">
-              <i class="bi bi-arrow-right me-1"></i>Ir a Roles
-            </a>
+      <div class="col-md-5 mb-4">
+        <a routerLink="/admin/roles" class="text-decoration-none">
+          <div class="card card-hover shadow-lg border-0 h-100 rounded-4 dashboard-zoom">
+            <div class="card-header text-center" style="background-color:#e8f5e9;color:#388e3c;">
+              <h4 class="card-title fw-bold mb-0">Administrar Roles</h4>
+            </div>
+            <div class="card-body text-center py-5">
+              <i class="bi bi-shield-lock fs-1 text-success mb-3"></i>
+              <p class="card-text text-muted mb-0">Gestiona los roles y permisos con facilidad.</p>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <!-- Estadísticas -->
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card card-hover shadow-sm border-0 bg-primary text-white text-center">
-          <div class="card-body">
-            <i class="bi bi-people fs-2 mb-2"></i>
-            <h4 class="mb-1 fw-bold"></h4>
-            <small>Usuarios Activos</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card card-hover shadow-sm border-0 bg-info text-white text-center">
-          <div class="card-body">
-            <i class="bi bi-award fs-2 mb-2"></i>
-            <h4 class="mb-1 fw-bold"></h4>
-            <small>Roles Asignados</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card card-hover shadow-sm border-0 bg-success text-white text-center">
-          <div class="card-body">
-            <i class="bi bi-clock fs-2 mb-2"></i>
-            <h4 class="mb-1 fw-bold"></h4>
-            <small>Sesiones Activas</small>
-          </div>
-        </div>
+        </a>
       </div>
     </div>
-  </div>
-
-  <!-- Dashboard para Usuario -->
+  </ng-container>
+  <!-- Dashboard para usuario normal -->
   <ng-template #userDashboard>
     <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card card-hover shadow-sm border-0 text-center">
-          <div class="card-body">
-            <i class="bi bi-person fs-1 text-secondary mb-3"></i>
-            <h5 class="card-title fw-bold">Panel de Usuario</h5>
-            <p class="card-text text-muted">Ejemplo de tarjeta para usuarios estándar.</p>
-          </div>
+      <div class="col-md-8">
+        <div class="alert alert-info text-center py-5 rounded-4 shadow-sm">
+          <h4 class="fw-bold mb-3">Bienvenido al Dashboard</h4>
+          <p class="mb-0">Aquí podrás ver información relevante sobre tu cuenta y actividades recientes.</p>
         </div>
       </div>
     </div>

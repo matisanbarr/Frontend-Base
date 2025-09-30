@@ -20,12 +20,6 @@ export interface LoginResponse {
   expiresIn: number;
 }
 
-// Modelo para Register Request según tu backend
-export interface RegisterRequest {
-  nombreUsuario: string;
-  password: string;
-}
-
 // Modelo de Rol
 export interface Role {
   id: string; // guid

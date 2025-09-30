@@ -17,6 +17,9 @@ export class DashboardComponent {
   hasAdminRole: boolean = false;
   isLoggedIn: boolean = false;
 
+  // Referencia para el template de usuario estándar
+  userDashboard: any;
+
   constructor(private authService: AuthService, private router: Router) {
     this.userRoles = this.authService.getCurrentUserRoles();
     this.hasAdminRole = this.authService.hasAnyRole(['Administrador', 'Usuario']);

@@ -117,43 +117,41 @@ export class AuthService {
 
 	// --- Métodos privados ---
 
-	private setSession(authResult: LoginResponse): void {
-		localStorage.setItem(this.TOKEN_KEY, authResult.token);
-		let user = authResult.user;
-		try {
-			const payload = JSON.parse(atob(authResult.token.split('.')[1]));
-			if (!user) {
+		private setSession(authResult: LoginResponse): void {
+			localStorage.setItem(this.TOKEN_KEY, authResult.token);
+			try {
+				const payload = JSON.parse(atob(authResult.token.split('.')[1]));
 				const nameKey = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
-				user = {
-					id: '',
-					nombreUsuario: payload[nameKey] || '',
-					fechaCreacion: '',
-					fechaModificacion: ''
-				};
-			}
-			localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-			const roleKey = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-			if (payload[roleKey]) {
-				localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify([payload[roleKey]]));
-			} else {
+				const emailKey = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
+				const roleKey = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+				let roles = payload[roleKey];
+				if (roles) {
+					if (typeof roles === 'string') {
+						roles = [roles];
+					}
+					localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify(roles));
+				} else {
+					localStorage.removeItem(this.USER_ROLES_KEY);
+				}
+				// Usuario decodificado completo
+						// Construir usuario sólo con datos presentes
+						const user: any = {};
+						if (payload[nameKey]) user.nombreUsuario = payload[nameKey];
+						if (payload[emailKey]) user.email = payload[emailKey];
+						if (roles && roles.length) user.roles = roles;
+						localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+						this.currentUserSubject.next(user);
+			} catch (e) {
+				console.error('Error al extraer datos del JWT:', e);
+						localStorage.setItem(this.USER_KEY, JSON.stringify({}));
 				localStorage.removeItem(this.USER_ROLES_KEY);
+				this.currentUserSubject.next(null);
 			}
-		} catch (e) {
-			console.error('Error al extraer datos del JWT:', e);
-			localStorage.setItem(this.USER_KEY, JSON.stringify(user || {
-				id: '',
-				nombreUsuario: '',
-				fechaCreacion: '',
-				fechaModificacion: ''
-			}));
-			localStorage.removeItem(this.USER_ROLES_KEY);
+			if (authResult.refreshToken) {
+				localStorage.setItem(this.REFRESH_TOKEN_KEY, authResult.refreshToken);
+			}
+			this.isAuthenticatedSubject.next(true);
 		}
-		if (authResult.refreshToken) {
-			localStorage.setItem(this.REFRESH_TOKEN_KEY, authResult.refreshToken);
-		}
-		this.currentUserSubject.next(user);
-		this.isAuthenticatedSubject.next(true);
-	}
 
 	private clearSession(): void {
 		localStorage.removeItem(this.TOKEN_KEY);

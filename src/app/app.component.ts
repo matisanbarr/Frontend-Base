@@ -1,19 +1,19 @@
 
-import { NgForOf, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
-import { LoadingComponent } from './shared/components/loading.component';
+import { MainNavbarComponent } from './shared/components/layout/main-navbar.component';
+import { MainFooterComponent } from './shared/components/layout/main-footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgIf],
+  imports: [RouterOutlet, MainNavbarComponent, MainFooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Frontend App';
+  title = 'Grimat Labs';
   isLoggedIn: boolean = false;
   hasAdminRole: boolean = false;
   hasUserRole: boolean = false;

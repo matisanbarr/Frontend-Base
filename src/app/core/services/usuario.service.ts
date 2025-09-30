@@ -2,20 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Rol } from '../../models/rol.model';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
-import { RegisterRequest, User } from '../../models';
 import { AsignarRolesDto } from '../../models/asignarRoles.model';
+import { Usuario } from '../../models/usuario.model';
 
 @Injectable({ providedIn: 'root' })
-export class RolService {
+export class UsuarioService {
   private apiUrl = environment.apiUrl + '/usuarios';
 
   constructor(private http: HttpClient) {}
 
-  registro(userData: RegisterRequest): Observable<boolean> {
-			return this.http.post<boolean>(this.apiUrl, userData).pipe(
+  registro(usuario: Usuario): Observable<boolean> {
+			return this.http.post<boolean>(this.apiUrl, usuario).pipe(
 			catchError(error => {
 				console.error('Error en registro:', error);
 				throw error;
@@ -23,8 +22,8 @@ export class RolService {
 		);
 	}
 
-  modificar(userData: User): Observable<User> {
-			return this.http.put<User>(`${this.apiUrl}/${userData.id}`, userData).pipe(
+  modificar(userData: Usuario): Observable<boolean> {
+			return this.http.put<boolean>(`${this.apiUrl}/${userData.id}`, userData).pipe(
 			catchError(error => {
 				console.error('Error en modificar usuario:', error);
 				throw error;
@@ -32,12 +31,12 @@ export class RolService {
 		);
 	}
 
-  listarUsuarios(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  listarUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.apiUrl);
   }
 
-  eliminarUsuario(nombre: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${nombre}`);
+  eliminarUsuario(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
   listarPaginadoUsuarios(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
