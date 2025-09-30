@@ -2,33 +2,33 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Rol } from '../../models/rol.model';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
+import { Plan } from '../../models/plan.model';
 
 @Injectable({ providedIn: 'root' })
 export class RolService {
-  private apiUrl = environment.apiUrl + '/roles';
+  private apiUrl = environment.apiUrl + '/planes';
 
   constructor(private http: HttpClient) {}
 
-  crearRol(rol: Rol): Observable<any> {
-    return this.http.post(this.apiUrl, rol);
+  crearPlan(plan: Plan): Observable<any> {
+    return this.http.post(this.apiUrl, plan);
   }
 
-  modificarRol(rol: Rol): Observable<any> {
-    return this.http.put(this.apiUrl, rol);
+  modificarPlan(plan: Plan): Observable<any> {
+    return this.http.put(this.apiUrl, plan);
   }
 
-  listarRoles(): Observable<Rol[]> {
-    return this.http.get<Rol[]>(this.apiUrl);
-  }  
-
-  eliminarRol(nombre: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${nombre}`);
+  listarPlanes(): Observable<Plan[]> {
+    return this.http.get<Plan[]>(this.apiUrl);
   }
 
-  listarPaginadoRoles(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
+  eliminarPlan(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  listarPaginadoPlanes(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
     return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
   }
 }
