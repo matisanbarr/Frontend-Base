@@ -66,7 +66,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err?.error?.message || 'Error al iniciar sesión';
+        this.errorMessage = err?.message || err?.mensaje || err?.error?.mensaje || err?.error?.message || 'Error al iniciar sesión';
         this.successMessage = '';
         this.loadingService.hide();
       },

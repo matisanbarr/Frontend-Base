@@ -9,6 +9,8 @@ import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.co
 import { AlertService } from '../../../core/services/alert.service';
 import { Usuario } from '../../../models/usuario.model';
 import { Rol } from '../../../models/rol.model';
+import { Tenant } from '../../../models/tenant.model';
+import { TenantService } from '../../../core/services/tenant.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { RolService } from '../../../core/services/rol.service';
 import { PaginacionDto } from '../../../models/compartidos';
@@ -21,6 +23,11 @@ import { PaginacionDto } from '../../../models/compartidos';
   styleUrl: './admin-users.component.scss'
 })
 export class AdminUsersComponent {
+  getTenantName(tenantId: string | null | undefined): string {
+    if (!tenantId) return 'Sin empresa';
+    const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
+    return tenant ? tenant.nombre : 'Empresa desconocida';
+  }
   get estadoActivoControl(): FormControl {
     return this.usuarioForm.get('estadoActivo') as FormControl;
   }
@@ -41,9 +48,11 @@ export class AdminUsersComponent {
   rolesSeleccionadosOriginal: string[] = [];
   rolesSeleccionadosTemp: string[] = [];
   rolesCambiados: boolean = false;
+  tenants: Tenant[] = [];
 
   readonly usuarioService = inject(UsuarioService);
   readonly rolService = inject(RolService);
+  readonly tenantService = inject(TenantService);
   readonly fb = inject(FormBuilder);
 
   generos = [
@@ -60,11 +69,33 @@ export class AdminUsersComponent {
       password: ['', [Validators.minLength(6)]],
       fechaNacimiento: [''],
       genero: [0],
+      isGlobal: [false],
+      tenantId: [null, Validators.required],
       roles: [[]],
-      estadoActivo: [true] // Nuevo campo booleano
+      estadoActivo: [true]
+    });
+    this.usuarioForm.get('isGlobal')?.valueChanges.subscribe((isGlobal: boolean) => {
+      if (isGlobal) {
+        this.usuarioForm.get('tenantId')?.setValue(null);
+        this.usuarioForm.get('tenantId')?.disable();
+      } else {
+        this.usuarioForm.get('tenantId')?.enable();
+      }
     });
     this.cargarUsuarios();
     this.cargarRoles();
+    this.cargarTenants();
+  }
+
+  cargarTenants(): void {
+    this.tenantService.listarTenants().subscribe({
+      next: (tenants: Tenant[]) => {
+        this.tenants = tenants;
+      },
+      error: () => {
+        this.tenants = [];
+      }
+    });
   }
 
   cargarRoles(): void {
@@ -147,10 +178,17 @@ export class AdminUsersComponent {
       password: '',
       fechaNacimiento: usuario.fechaNacimiento || '',
       genero: usuario.genero ?? 0,
+      isGlobal: usuario.isGlobal ?? false,
+      tenantId: usuario.isGlobal ? null : (usuario.tenantId ?? null),
       roles: usuario.roles.map(r => r.id),
       estadoActivo: usuario.estadoActivo ?? true
     });
-    this.usuarioForm.markAsPristine(); // Resetea el estado dirty
+    if (usuario.isGlobal) {
+      this.usuarioForm.get('tenantId')?.disable();
+    } else {
+      this.usuarioForm.get('tenantId')?.enable();
+    }
+    this.usuarioForm.markAsPristine();
     this.rolesSeleccionadosOriginal = usuario.roles.map(r => r.id ?? '').filter(id => !!id);
     this.rolesSeleccionadosTemp = [...this.rolesSeleccionadosOriginal];
     this.rolesCambiados = false;
@@ -287,8 +325,12 @@ export class AdminUsersComponent {
       password: '',
       fechaNacimiento: '',
       genero: 0,
-      roles: []
+      isGlobal: false,
+      tenantId: null,
+      roles: [],
+      estadoActivo: true
     });
+    this.usuarioForm.get('tenantId')?.enable();
     this.modoEdicion = false;
     this.usuarioEditandoId = null;
   }
