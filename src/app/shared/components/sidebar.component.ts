@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
   @Input() sidebarCollapsed = false;
-  @Input() isAdminGlobal = false;
+  @Input() isAdminGlobal: boolean|null = null;
   @Input() adminMenuOpen = true;
   @Input() proyectos: Proyecto[] = [];
   @Input() proyectosMenuOpen: { [id: string]: boolean } = {};

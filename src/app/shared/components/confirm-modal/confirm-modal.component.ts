@@ -10,6 +10,8 @@ export class ConfirmModalComponent {
   @Input() message: string = '¿Estás seguro que deseas eliminar?';
   @Input() confirmText: string = 'Eliminar';
   @Input() cancelText: string = 'Cancelar';
+
+  @Input() confirmDisabled: boolean = false;
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 

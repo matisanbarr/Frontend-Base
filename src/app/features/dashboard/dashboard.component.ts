@@ -1,5 +1,6 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,19 +8,22 @@ import { AuthService } from '../../core/services/auth.service';
 import { ProyectoService } from '../../core/services/proyecto.service';
 import { Proyecto } from '../../models/proyecto.model';
 import { SidebarComponent } from '../../shared/components/sidebar.component';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent],
+  imports: [CommonModule, RouterModule, SidebarComponent, HomeComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private userSub?: Subscription;
   currentUser$ = this.authService.currentUser$;
+  userName: string|null = null;
   userRoles: string[] = [];
   isLoggedIn: boolean = false;
-  isAdminGlobal: boolean = false;
+  isAdminGlobal: boolean|null = null;
   proyectos: Proyecto[] = [];
   sidebarCollapsed = false;
   adminMenuOpen = true;
@@ -32,11 +36,19 @@ export class DashboardComponent implements OnInit {
   ) {
     this.userRoles = this.authService.getCurrentUserRoles();
     this.isLoggedIn = this.authService.isLoggedIn();
-    this.isAdminGlobal = this.authService.hasRole('Admin Global');
   }
 
   ngOnInit(): void {
+    this.userSub = this.authService.currentUser$.subscribe(user => {
+      this.userName = (user as any)?.nombre || (user as any)?.name || '';
+      const roles = (user as any)?.roles || [];
+      this.isAdminGlobal = Array.isArray(roles) && roles.includes('Admin Global');
+    });
     this.cargarProyectos();
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
   }
 
   cargarProyectos(): void {

@@ -12,6 +12,11 @@
     (toggleProyectoMenuEvent)="toggleProyectoMenu($event)"
   ></app-sidebar>
   <main class="dashboard-content">
-    <router-outlet></router-outlet>
+    <router-outlet #outlet="outlet"></router-outlet>   
+    @if(userName !== null && isAdminGlobal !== null){
+    <ng-container *ngIf="!outlet.isActivated">   
+      <app-home [isAdminGlobal]="isAdminGlobal" [userName]="userName"></app-home>
+    </ng-container>
+      }
   </main>
 </div>

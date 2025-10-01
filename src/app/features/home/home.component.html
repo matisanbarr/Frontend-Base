@@ -1,0 +1,28 @@
+<ng-container *ngIf="isAdminGlobal; else userHome">
+  <div class="home-admin-wrapper">
+  <span class="bienvenido-admin">Bienvenido {{ userName }}</span>
+    <div class="admin-home-grid-custom">
+      <div class="admin-home-row">
+        <div class="admin-home-section w-100">
+          <app-usuarios-cumple class="w-100" />
+        </div>
+        <div class="admin-home-section w-100">
+          <app-empresas-suscripcion class="w-100" />
+        </div>
+      </div>
+      <div class="admin-home-row">
+        <div class="admin-home-section admin-home-section-full w-100">
+          <app-mini-cards class="w-100" />
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #userHome>
+  <div class="container text-center py-5">
+    <h1 class="display-4 mb-3">Bienvenido</h1>
+    <p class="lead mb-4">Selecciona un proyecto o módulo del menú para comenzar a trabajar.</p>
+    <img src="assets/user-illustration.svg" alt="Bienvenido" style="max-width: 320px; width: 100%; margin-bottom: 2rem;" *ngIf="homeImageExists">
+    <div class="text-muted">¡Que tengas un gran día!</div>
+  </div>
+</ng-template>

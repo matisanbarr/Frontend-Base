@@ -1,0 +1,90 @@
+// .admin-home-grid ya no se usa, pero se deja por compatibilidad
+.admin-home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.home-admin-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+.admin-home-grid-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  height: 100%;
+  min-height: 0;
+}
+.admin-home-row {
+  display: flex;
+  gap: 2rem;
+  min-height: 0;
+}
+.admin-home-row-top {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.admin-home-row-bottom {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.admin-home-section {
+  flex: 1 1 0;
+  background: #f4f6fb;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 2rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 180px;
+  min-width: 0;
+}
+.admin-home-section-full {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+.bienvenido-admin-static {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.2rem 1rem 0 0;
+  font-size: 0.98rem;
+  color: #888;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.admin-home-grid-full {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2rem;
+  width: 100vw;
+  height: 100vh;
+  align-items: stretch;
+  justify-items: stretch;
+  padding: 4rem 2.5rem 2.5rem 2.5rem;
+  box-sizing: border-box;
+}
+.display-4 {
+  color: #388e3c;
+}
+.lead {
+  color: #555;
+}
+img {
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+}
+.text-muted {
+  margin-top: 2rem;
+}

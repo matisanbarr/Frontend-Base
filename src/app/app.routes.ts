@@ -34,6 +34,7 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [TokenGuard, AuthGuard],
     children: [
+
       // Rutas de administración (requieren rol admin)
       {
         path: 'admin',
@@ -65,11 +66,15 @@ export const routes: Routes = [
             loadComponent: () => import('./features/admin/admin-asignacion-planes/admin-asignacion-planes.component').then(m => m.AdminAsignacionPlanesComponent)
           },
           {
+            path: 'asignacion-proyectos',
+            loadComponent: () => import('./features/admin/admin-asignacion-proyectos/admin-asignacion-proyectos.component').then(m => m.AdminAsignacionProyectosComponent)
+          },
+          {
             path: 'register',
             loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
           }
         ]
-      }
+      },
       // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.
     ]
   },

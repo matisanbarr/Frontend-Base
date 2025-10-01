@@ -6,6 +6,7 @@ import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { TenantPlan } from '../../models/asignacion-plan.model';
 import { Proyecto } from '../../models/proyecto.model';
+import { AsignarProyectosTenant } from '../../models/asignar-proyectos-tenant.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProyectoService {
@@ -33,9 +34,18 @@ export class ProyectoService {
     return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
   }
 
-   agregarAUnTenant(tenantId: string, proyecto: Proyecto): Observable<any> {
-    return this.http.post<any>(this.apiUrl + '/agregar-a-tenant/' + tenantId,
-      proyecto
-    );
+  agregarAUnTenant(asignarProyectoTenant: AsignarProyectosTenant): Observable<any> {
+    return this.http.post<any>(this.apiUrl + '/asignar-a-tenant', asignarProyectoTenant);
   }
+
+  listarAsignacionesProyectosPaginado(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/asignaciones-paginadas', { params: paginacion as any });
+  }
+
+  eliminarAsignacionProyecto(tenantId: string, proyectoId: string): Observable<any> {
+    return this.http.delete(this.apiUrl+ '/asignacion', {
+      params: { tenantId, proyectoId }
+    });
+  }
+
 }
