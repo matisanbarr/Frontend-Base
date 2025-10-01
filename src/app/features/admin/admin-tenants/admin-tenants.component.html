@@ -10,15 +10,6 @@
 
 <div class="container py-4">
 	<app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
-	<div class="row mb-3">
-		<div class="col-12 text-center">
-			<h2>
-				<i class="fas fa-building text-primary me-2"></i>
-				Administración de Empresas
-			</h2>
-			<p class="text-muted">Gestiona las empresas del sistema</p>
-		</div>
-	</div>
 	<div class="row">
 		<div class="col-12 col-md-6 col-lg-6 mb-4">
 			<div class="card border-0 shadow-sm rounded-3">
@@ -42,10 +33,9 @@
 								<ng-container *ngFor="let tenant of tenants">
 									<li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
 										<div class="flex-grow-1 text-start d-flex align-items-center gap-2">
-											<span class="rounded-circle d-inline-block me-2"
-												[ngStyle]="{ width: '14px', height: '14px', background: tenant.activo ? '#28a745' : '#dc3545', display: 'inline-block' }"
-												title="{{ tenant.activo ? 'Activo' : 'Inactivo' }}">
-											</span>
+											<div>
+												<span class="status-circle me-2" [ngClass]="tenant.activo ? 'status-active' : 'status-inactive'" title="{{ tenant.activo ? 'Activo' : 'Inactivo' }}"></span>
+											</div>
 											<div>
 												<div class="fw-bold mb-0">{{ tenant.nombre }}</div>
 												<div class="text-muted small">{{ tenant.correo || 'Sin correo' }}</div>
@@ -123,18 +113,15 @@
 							</div>
 						</div>
 						<div class="d-flex justify-content-between align-items-center mt-4">
-							<button class="btn btn-light" routerLink="/dashboard">
-								<i class="fas fa-arrow-left me-1"></i> Volver al Panel
-							</button>
-							<div class="d-flex gap-2">
+							<div>
 								<button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
 									<i class="fas fa-eraser me-1"></i> Limpiar
 								</button>
-								<button *ngIf="modoEdicion" type="submit" class="btn btn-warning text-white" [disabled]="tenantForm.invalid || loading">
-									<i class="fas fa-save me-1"></i> Modificar Empresa
-								</button>
-								<button *ngIf="!modoEdicion" type="submit" class="btn btn-primary text-white" [disabled]="tenantForm.invalid || loading">
-									<i class="fas fa-save me-1"></i> Crear Empresa
+							</div>
+							<div>
+								<button type="submit" class="btn" [class.btn-primary]="!modoEdicion" [class.btn-warning]="modoEdicion" [disabled]="tenantForm.invalid || loading">
+									<i class="fas fa-save me-1"></i>
+									{{ modoEdicion ? 'Modificar Empresa' : 'Crear Empresa' }}
 								</button>
 							</div>
 						</div>

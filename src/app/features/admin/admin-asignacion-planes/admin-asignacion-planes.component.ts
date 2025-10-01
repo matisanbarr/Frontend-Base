@@ -18,7 +18,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   selector: 'app-admin-asignacion-planes',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent, FechaLargaPipe],
-  // ...existing code...
   templateUrl: './admin-asignacion-planes.component.html',
   styleUrls: ['./admin-asignacion-planes.component.scss']
 })

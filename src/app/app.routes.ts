@@ -27,43 +27,50 @@ export const routes: Routes = [
     ]
   },
 
-  // Rutas protegidas (requieren autenticación)
+
+  // Rutas protegidas (dashboard y sus hijos)
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [TokenGuard, AuthGuard]
-  },
-
-  // Rutas de administración (requieren rol admin)
-  {
-    path: 'admin',
-    canActivate: [TokenGuard, AuthGuard, RoleGuard],
-  data: { roles: ['Admin Global', 'Usuario'] }, // Roles requeridos
+    canActivate: [TokenGuard, AuthGuard],
     children: [
+      // Rutas de administración (requieren rol admin)
       {
-        path: 'users',
-        loadComponent: () => import('./features/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent)
-      },
-      {
-        path: 'roles',
-        loadComponent: () => import('./features/admin/admin-roles/admin-roles.component').then(m => m.AdminRolesComponent)
-      },
-      {
-        path: 'planes',
-        loadComponent: () => import('./features/admin/admin-planes/admin-planes.component').then(m => m.AdminPlanesComponent)
-      },
-      {
-        path: 'tenants',
-        loadComponent: () => import('./features/admin/admin-tenants/admin-tenants.component').then(m => m.AdminTenantsComponent)
-      },
-      {
-        path: 'asignacion-planes',
-        loadComponent: () => import('./features/admin/admin-asignacion-planes/admin-asignacion-planes.component').then(m => m.AdminAsignacionPlanesComponent)
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
+        path: 'admin',
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin Global', 'Usuario'] },
+        children: [
+          {
+            path: 'users',
+            loadComponent: () => import('./features/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent)
+          },
+          {
+            path: 'roles',
+            loadComponent: () => import('./features/admin/admin-roles/admin-roles.component').then(m => m.AdminRolesComponent)
+          },
+          {
+            path: 'planes',
+            loadComponent: () => import('./features/admin/admin-planes/admin-planes.component').then(m => m.AdminPlanesComponent)
+          },
+          {
+            path: 'tenants',
+            loadComponent: () => import('./features/admin/admin-tenants/admin-tenants.component').then(m => m.AdminTenantsComponent)
+          },
+          {
+            path: 'proyectos',
+            loadComponent: () => import('./features/admin/admin-proyectos/admin-proyectos.component').then(m => m.AdminProyectosComponent)
+          },
+          {
+            path: 'asignacion-planes',
+            loadComponent: () => import('./features/admin/admin-asignacion-planes/admin-asignacion-planes.component').then(m => m.AdminAsignacionPlanesComponent)
+          },
+          {
+            path: 'register',
+            loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
+          }
+        ]
       }
+      // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.
     ]
   },
 

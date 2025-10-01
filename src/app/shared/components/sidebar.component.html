@@ -1,0 +1,39 @@
+<div class="sidebar" [class.collapsed]="sidebarCollapsed">
+  <div class="sidebar-header">
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="bi" [ngClass]="sidebarCollapsed ? 'bi-chevron-double-right' : 'bi-chevron-double-left'"></i>
+    </button>
+    <span *ngIf="!sidebarCollapsed" class="sidebar-title">Menú</span>
+  </div>
+  <ul class="sidebar-menu">
+    <!-- Menú Administración solo para Admin Global -->
+    <li *ngIf="isAdminGlobal" class="sidebar-group">
+      <div class="sidebar-link" (click)="toggleAdminMenu()">
+        <i class="bi bi-gear"></i>
+        <span *ngIf="!sidebarCollapsed">Administración</span>
+        <i class="bi" [ngClass]="adminMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'" *ngIf="!sidebarCollapsed"></i>
+      </div>
+      <ul class="sidebar-submenu" *ngIf="adminMenuOpen && !sidebarCollapsed">
+        <li><a routerLink="/dashboard/admin/roles"><i class="bi bi-shield-lock"></i> Roles</a></li>
+        <li><a routerLink="/dashboard/admin/users"><i class="bi bi-people"></i> Usuarios</a></li>
+        <li><a routerLink="/dashboard/admin/tenants"><i class="bi bi-building"></i> Empresas</a></li>
+        <li><a routerLink="/dashboard/admin/planes"><i class="bi bi-box-seam"></i> Subscripciones</a></li>
+        <li><a routerLink="/dashboard/admin/proyectos"><i class="bi bi-kanban"></i> Proyectos</a></li>
+        <li><a routerLink="/dashboard/admin/asignacion-planes"><i class="bi bi-link-45deg"></i> Asignar Subscripciones</a></li>
+      </ul>
+    </li>
+    <!-- Menús de proyectos -->
+    <li *ngFor="let proyecto of proyectos" class="sidebar-group">
+      <div class="sidebar-link" (click)="toggleProyectoMenu(proyecto)">
+        <i class="bi bi-folder"></i>
+        <span *ngIf="!sidebarCollapsed">{{ proyecto.nombre }}</span>
+        <i class="bi" [ngClass]="isProyectoMenuOpen(proyecto) ? 'bi-chevron-down' : 'bi-chevron-right'" *ngIf="!sidebarCollapsed"></i>
+      </div>
+      <ul class="sidebar-submenu" *ngIf="isProyectoMenuOpen(proyecto) && !sidebarCollapsed">
+        <li *ngFor="let comp of getComponentesProyecto(proyecto)">
+          <a [routerLink]="comp.route"><i class="bi" [ngClass]="comp.icon"></i> {{ comp.label }}</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
