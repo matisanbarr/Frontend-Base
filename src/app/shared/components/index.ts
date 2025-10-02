@@ -9,3 +9,6 @@ export * from './layout/main-footer.component';
 export * from './layout/main-navbar.component';
 // Not Found
 export * from './not-found/not-found.component';
+
+// Form Buttons
+export * from './form-buttons/form-buttons.component';

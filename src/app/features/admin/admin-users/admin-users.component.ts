@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components';
-import { RoleColorPipe } from '../pipes/role-color.pipe';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -20,6 +19,8 @@ import { TenantService } from '../../../core/services/tenant.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { RolService } from '../../../core/services/rol.service';
 import { PaginacionDto } from '../../../models/compartidos';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -31,12 +32,19 @@ import { PaginacionDto } from '../../../models/compartidos';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
-    RoleColorPipe,
+    AdminListComponent,
+    FormButtonsComponent,
   ],
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss'],
 })
 export class AdminUsersComponent {
+  // Funciones para el componente reutilizable de lista
+  usuarioNombreFn = (usuario: Usuario) => usuario.nombre || null;
+  usuarioCorreoFn = (usuario: Usuario) => usuario.email || null;
+  usuarioRolesFn = (usuario: Usuario) => usuario.roles?.map((r) => r.nombre) || null;
+  usuarioEstadoFn = (usuario: Usuario) => (usuario.estadoActivo ? 'Activo' : 'Inactivo');
+
   modoEdicion: boolean = false;
   usuarioEditandoId: string | null = null;
   usuarioForm: FormGroup;

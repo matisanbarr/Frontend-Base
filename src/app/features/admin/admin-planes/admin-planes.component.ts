@@ -8,6 +8,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -25,11 +26,19 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
+    AdminListComponent,
   ],
   templateUrl: './admin-planes.component.html',
   styleUrls: ['./admin-planes.component.scss'],
 })
 export class AdminPlanesComponent {
+  // Funciones para AdminListComponent
+  planNombreFn = (plan: Plan) => plan.nombre || null;
+  descripcionFn = (plan: Plan) => plan.descripcion || null;
+  precioFn = (plan: Plan) => plan.precio || null;
+  maximoUsuariosFn = (plan: Plan) => plan.maximoUsuarios || null;
+  planEstadoFn = (plan: Plan) => (plan.estaActivo ? 'Activo' : 'Inactivo');
+
   modoEdicion: boolean = false;
   planEditandoId: string | null = null;
   planForm: FormGroup;

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -20,11 +21,16 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
+    AdminListComponent,
   ],
   templateUrl: './admin-roles.component.html',
   styleUrls: ['./admin-roles.component.scss'],
 })
 export class AdminRolesComponent {
+  // Funciones para el componente de lista genérico
+  rolNombreFn = (rol: Rol) => rol.nombre || null;
+  rolDescriptionFn = (rol: Rol) => rol.descripcion || null;
+
   modoEdicion: boolean = false;
   rolEditandoId: string | null = null;
   rolForm: FormGroup;

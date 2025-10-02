@@ -91,37 +91,17 @@
             </div>
           </ng-container>
           <ng-template #listaAsignaciones>
-            <ul class="list-group list-group-flush">
-              <div style="max-height: 400px; overflow-y: auto">
-                <ul class="list-group list-group-flush">
-                  <li *ngFor="let asignacion of asignaciones" class="list-group-item p-0">
-                    <div class="d-flex align-items-center justify-content-between w-100 p-3">
-                      <div>
-                        <div class="fw-bold">{{ asignacion.tenantNombre }}</div>
-                        <div class="text-muted small">
-                          Proyectos asignados:
-                          <span *ngFor="let proyecto of asignacion.proyectos; let last = last">
-                            {{ proyecto.nombre }}<span *ngIf="!last">, </span>
-                          </span>
-                        </div>
-                      </div>
-                      <button
-                        class="btn btn-danger btn-sm text-white ms-2"
-                        (click)="eliminarAsignacion(asignacion)"
-                      >
-                        <i class="fas fa-trash"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                  <li
-                    *ngIf="asignaciones.length === 0"
-                    class="list-group-item text-center text-muted"
-                  >
-                    No hay asignaciones registradas.
-                  </li>
-                </ul>
-              </div>
-            </ul>
+            <div style="max-height: 400px; overflow-y: auto">
+              <app-admin-list
+                [items]="asignaciones"
+                [nombreFn]="asignacionEmpresaFn"
+                [rolesFn]="asignacionProyectosFn"
+                [loading]="loading"
+                [emptyText]="'No hay asignaciones registradas.'"
+                (remove)="eliminarAsignacion($event)"
+              >
+              </app-admin-list>
+            </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
                 *ngIf="paginaActual > 1"

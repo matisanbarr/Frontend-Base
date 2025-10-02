@@ -1,0 +1,179 @@
+<ul class="list-group list-group-flush">
+  <ng-container *ngFor="let item of items">
+    <li class="list-group-item border-0 border-bottom">
+      <div class="d-none d-md-flex justify-content-between align-items-center">
+        <div class="flex-grow-1 text-start d-flex align-items-center gap-2 pe-3">
+          <!-- Círculo de estado como primera columna si se provee estadoFn -->
+          <div *ngIf="estadoFn && estadoFn(item)" class="me-2">
+            <span
+              class="estado-circulo"
+              [ngClass]="{
+                'bg-success': estadoFn(item) === 'Activo',
+                'bg-danger': estadoFn(item) === 'Inactivo',
+                'bg-warning': estadoFn(item) !== 'Activo' && estadoFn(item) !== 'Inactivo',
+              }"
+              title="{{ estadoFn(item) }}"
+            ></span>
+          </div>
+          <div>
+            <div *ngIf="nombreFn && nombreFn(item)" class="text-muted small text-truncate">
+              <div class="fw-bold mb-0 text-truncate">{{ nombreFn(item) }}</div>
+            </div>
+            <div
+              *ngIf="descriptionFn && descriptionFn(item)"
+              class="text-muted small adminlist-descripcion py-2"
+            >
+              Descripción: {{ descriptionFn(item) }}
+            </div>
+            <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
+              Correo: {{ correoFn(item) }}
+            </div>
+            <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
+              Teléfono: {{ telefonoFn(item) }}
+            </div>
+            <div *ngIf="direccionFn && direccionFn(item)" class="text-muted small">
+              Dirección: {{ direccionFn(item) }}
+            </div>
+            <div *ngIf="precioFn && precioFn(item)" class="text-muted small">
+              Precio: {{ precioFn(item) }}
+            </div>
+            <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
+              Máximo de usuarios: {{ maximoUsuariosFn(item) }}
+            </div>
+            <div *ngIf="subscripcionFn && subscripcionFn(item)" class="text-muted small">
+              Subscripción: {{ subscripcionFn(item) }}
+            </div>
+            <div *ngIf="fechaInicioFn && fechaInicioFn(item)" class="text-muted small">
+              Fecha inicio: {{ fechaInicioFn(item) }}
+            </div>
+            <div *ngIf="fechaFinFn && fechaFinFn(item)" class="text-muted small">
+              Fecha fin: {{ fechaFinFn(item) }}
+            </div>
+            <ng-container
+              *ngIf="
+                diasRestantesFn &&
+                diasRestantesFn(item) !== null &&
+                diasRestantesFn(item) !== undefined
+              "
+            >
+              <ng-container *ngIf="diasRestantesFn(item) as diasStr">
+                <ng-container *ngIf="diasStr != null">
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': diasToNum(diasStr) > 15,
+                      'bg-warning': diasToNum(diasStr) <= 15 && diasToNum(diasStr) > 5,
+                      'bg-danger': diasToNum(diasStr) <= 5,
+                    }"
+                  >
+                    {{ diasToNum(diasStr) }} días restantes
+                  </span>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <!-- Badges de roles si se provee rolesFn -->
+            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
+              <span
+                *ngFor="let rol of rolesFn(item)"
+                class="badge me-1"
+                [ngClass]="
+                  rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
+                "
+              >
+                {{ rol }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="adminlist-btns-col">
+          <button class="btn btn-warning btn-sm text-white adminlist-btn" (click)="edit.emit(item)">
+            <i class="fas fa-edit me-1"></i> Modificar
+          </button>
+          <button
+            class="btn btn-danger btn-sm text-white adminlist-btn"
+            (click)="remove.emit(item)"
+          >
+            <i class="fas fa-trash me-1"></i> Eliminar
+          </button>
+        </div>
+      </div>
+      <!-- Mobile/tablet: botones debajo y centrados -->
+      <div class="d-block d-md-none w-100">
+        <div class="w-100">
+          <div class="flex-grow-1 text-start gap-2 pe-3">
+            <div *ngIf="estadoFn && estadoFn(item)" class="me-2">
+              <span
+                class="estado-circulo"
+                [ngClass]="{
+                  'bg-success': estadoFn(item) === 'Activo',
+                  'bg-danger': estadoFn(item) === 'Inactivo',
+                  'bg-warning': estadoFn(item) !== 'Activo' && estadoFn(item) !== 'Inactivo',
+                }"
+                title="{{ estadoFn(item) }}"
+              ></span>
+            </div>
+            <div>
+              <div *ngIf="nombreFn && nombreFn(item)" class="text-muted small text-truncate">
+                <div class="fw-bold mb-0 text-truncate">{{ nombreFn(item) }}</div>
+              </div>
+              <div
+                *ngIf="descriptionFn && descriptionFn(item)"
+                class="text-muted small adminlist-descripcion py-2"
+              >
+                Descripción: {{ descriptionFn(item) }}
+              </div>
+              <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
+                Correo: {{ correoFn(item) }}
+              </div>
+              <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
+                Teléfono: {{ telefonoFn(item) }}
+              </div>
+              <div *ngIf="direccionFn && direccionFn(item)" class="text-muted small">
+                Dirección: {{ direccionFn(item) }}
+              </div>
+              <div *ngIf="precioFn && precioFn(item)" class="text-muted small">
+                Precio: {{ precioFn(item) }}
+              </div>
+              <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
+                Máximo de usuarios: {{ maximoUsuariosFn(item) }}
+              </div>
+              <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
+                <span
+                  *ngFor="let rol of rolesFn(item)"
+                  class="badge me-1"
+                  [ngClass]="
+                    rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
+                  "
+                >
+                  {{ rol }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="adminlist-btns-col w-100 mt-2">
+          <button class="btn btn-warning btn-sm text-white adminlist-btn" (click)="edit.emit(item)">
+            <i class="fas fa-edit me-1"></i> Modificar
+          </button>
+          <button
+            class="btn btn-danger btn-sm text-white adminlist-btn"
+            (click)="remove.emit(item)"
+          >
+            <i class="fas fa-trash me-1"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </li>
+  </ng-container>
+  <li
+    *ngIf="!loading && items.length === 0"
+    class="list-group-item text-center text-muted border-0"
+  >
+    {{ emptyText }}
+  </li>
+  <li *ngIf="loading" class="list-group-item text-center border-0">
+    <div class="spinner-border text-info" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </li>
+</ul>

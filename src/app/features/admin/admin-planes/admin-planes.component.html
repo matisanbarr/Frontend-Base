@@ -35,48 +35,19 @@
           </ng-container>
           <ng-template #listaPlanes>
             <div class="planes-scroll">
-              <ul class="list-group list-group-flush">
-                <ng-container *ngFor="let plan of planes">
-                  <li
-                    class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom"
-                  >
-                    <div class="flex-grow-1 text-start d-flex align-items-center gap-2">
-                      <div>
-                        <span
-                          class="status-circle me-2"
-                          [ngClass]="plan.estaActivo ? 'status-active' : 'status-inactive'"
-                          title="{{ plan.estaActivo ? 'Activo' : 'Inactivo' }}"
-                        ></span>
-                      </div>
-                      <div>
-                        <div class="fw-bold mb-0">{{ plan.nombre }}</div>
-                        <div class="text-muted small">
-                          {{ plan.descripcion || 'Sin descripción' }}
-                        </div>
-                        <div class="text-muted small">
-                          Precio:
-                          {{ plan.precio | currency: 'CLP' : 'symbol' : '1.0-0' : 'es-CL' }} | Máx.
-                          usuarios: {{ plan.maximoUsuarios }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-warning btn-sm text-white" (click)="editarPlan(plan)">
-                        <i class="fas fa-edit me-1"></i> Modificar
-                      </button>
-                      <button class="btn btn-danger btn-sm text-white" (click)="eliminarPlan(plan)">
-                        <i class="fas fa-trash me-1"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                </ng-container>
-                <li
-                  *ngIf="planes.length === 0"
-                  class="list-group-item text-center text-muted border-0"
-                >
-                  No hay planes registrados.
-                </li>
-              </ul>
+              <app-admin-list
+                [items]="planes"
+                [nombreFn]="planNombreFn"
+                [descriptionFn]="descripcionFn"
+                [precioFn]="precioFn"
+                [maximoUsuariosFn]="maximoUsuariosFn"
+                [estadoFn]="planEstadoFn"
+                [loading]="loading"
+                [emptyText]="'No hay planes registrados.'"
+                (edit)="editarPlan($event)"
+                (remove)="eliminarPlan($event)"
+              >
+              </app-admin-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button

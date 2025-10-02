@@ -1,0 +1,64 @@
+.adminlist-btns-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  min-width: 120px;
+  max-width: 140px;
+}
+.adminlist-btn {
+  width: 100%;
+  min-width: 110px;
+  max-width: 140px;
+  margin-bottom: 0 !important;
+}
+.adminlist-descripcion {
+  white-space: pre-line;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: block;
+  max-width: 100%;
+  text-align: justify;
+  font-style: italic;
+}
+// Círculo de estado para la lista
+.estado-circulo {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid #ccc;
+  vertical-align: middle;
+}
+.list-group-item .flex-grow-1 {
+  min-width: 0;
+}
+.list-group-item .gap-2 {
+  flex-wrap: wrap;
+}
+@media (max-width: 767px) {
+  .adminlist-btns-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    text-align: center;
+    order: 2;
+    margin-top: 0.5rem;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .adminlist-btn {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block;
+    width: 90% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .flex-grow-1 {
+    order: 1;
+    width: 100% !important;
+  }
+}

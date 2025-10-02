@@ -34,40 +34,18 @@
             </div>
           </ng-container>
           <ng-template #listaProyectos>
-            <ul class="list-group list-group-flush">
-              <div style="max-height: 400px; overflow-y: auto">
-                <ul class="list-group list-group-flush">
-                  <li
-                    *ngFor="let proyecto of proyectos"
-                    class="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    <div class="flex-grow-1 text-start">
-                      <div class="fw-bold">{{ proyecto.nombre }}</div>
-                      <div class="text-muted small">
-                        {{ proyecto.descripcion || 'Sin descripción' }}
-                      </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button
-                        class="btn btn-warning btn-sm text-white"
-                        (click)="editarProyecto(proyecto)"
-                      >
-                        <i class="fas fa-edit"></i> Modificar
-                      </button>
-                      <button
-                        class="btn btn-danger btn-sm text-white"
-                        (click)="eliminarProyecto(proyecto)"
-                      >
-                        <i class="fas fa-trash"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                  <li *ngIf="proyectos.length === 0" class="list-group-item text-center text-muted">
-                    No hay proyectos registrados.
-                  </li>
-                </ul>
-              </div>
-            </ul>
+            <div style="max-height: 400px; overflow-y: auto">
+              <app-admin-list
+                [items]="proyectos"
+                [nombreFn]="proyectoNombreFn"
+                [descriptionFn]="proyectoDescripcionFn"
+                [loading]="loading"
+                [emptyText]="'No hay proyectos registrados.'"
+                (edit)="editarProyecto($event)"
+                (remove)="eliminarProyecto($event)"
+              >
+              </app-admin-list>
+            </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
                 *ngIf="paginaActual > 1"

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -27,11 +28,15 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
+    AdminListComponent,
   ],
   templateUrl: './admin-proyectos.component.html',
   styleUrls: ['./admin-proyectos.component.scss'],
 })
 export class AdminProyectosComponent {
+  // Funciones para AdminListComponent
+  public proyectoNombreFn = (proyecto: Proyecto) => proyecto.nombre;
+  public proyectoDescripcionFn = (proyecto: Proyecto) => proyecto.descripcion || 'Sin descripción';
   modoEdicion: boolean = false;
   proyectoEditandoId: string | null = null;
   proyectoForm: FormGroup;

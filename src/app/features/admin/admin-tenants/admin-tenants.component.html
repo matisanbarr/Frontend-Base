@@ -35,49 +35,18 @@
           </ng-container>
           <ng-template #listaEmpresas>
             <div class="tenants-scroll">
-              <ul class="list-group list-group-flush">
-                <ng-container *ngFor="let tenant of tenants">
-                  <li
-                    class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom"
-                  >
-                    <div class="flex-grow-1 text-start d-flex align-items-center gap-2">
-                      <div>
-                        <span
-                          class="status-circle me-2"
-                          [ngClass]="tenant.activo ? 'status-active' : 'status-inactive'"
-                          title="{{ tenant.activo ? 'Activo' : 'Inactivo' }}"
-                        ></span>
-                      </div>
-                      <div>
-                        <div class="fw-bold mb-0">{{ tenant.nombre }}</div>
-                        <div class="text-muted small">{{ tenant.correo || 'Sin correo' }}</div>
-                        <div class="text-muted small">Teléfono: {{ tenant.telefono || '-' }}</div>
-                        <div class="text-muted small">Dirección: {{ tenant.direccion || '-' }}</div>
-                      </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button
-                        class="btn btn-warning btn-sm text-white"
-                        (click)="editarTenant(tenant)"
-                      >
-                        <i class="fas fa-edit me-1"></i> Modificar
-                      </button>
-                      <button
-                        class="btn btn-danger btn-sm text-white"
-                        (click)="eliminarTenant(tenant)"
-                      >
-                        <i class="fas fa-trash me-1"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                </ng-container>
-                <li
-                  *ngIf="tenants.length === 0"
-                  class="list-group-item text-center text-muted border-0"
-                >
-                  No hay empresas registradas.
-                </li>
-              </ul>
+              <app-admin-list
+                [items]="tenants"
+                [nombreFn]="tenantNombreFn"
+                [estadoFn]="tenantEstadoFn"
+                [correoFn]="tenantCorreoFn"
+                [telefonoFn]="tenantTelefonoFn"
+                [direccionFn]="tenantDireccionFn"
+                [loading]="loading"
+                [emptyText]="'No hay empresas registradas.'"
+                (edit)="editarTenant($event)"
+                (remove)="eliminarTenant($event)"
+              ></app-admin-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button

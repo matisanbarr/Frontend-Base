@@ -8,6 +8,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -25,11 +26,19 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
+    AdminListComponent,
   ],
   templateUrl: './admin-tenants.component.html',
   styleUrls: ['./admin-tenants.component.scss'],
 })
 export class AdminTenantsComponent {
+  // Funciones para el componente de lista genérico
+  tenantNombreFn = (tenant: Tenant) => tenant.nombre;
+  tenantCorreoFn = (tenant: Tenant) => tenant.correo || null;
+  tenantTelefonoFn = (tenant: Tenant) => tenant.telefono || null;
+  tenantDireccionFn = (tenant: Tenant) => tenant.direccion || null;
+  tenantEstadoFn = (tenant: Tenant) => (tenant.activo ? 'Activo' : 'Inactivo');
+
   modoEdicion: boolean = false;
   tenantEditandoId: string | null = null;
   tenantForm: FormGroup;

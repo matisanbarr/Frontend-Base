@@ -11,7 +11,6 @@ import { TenantPlanService } from './services/tenant-plan.service';
 import { TenantService } from './services/tenant.service';
 import { UsuarioService } from './services/usuario.service';
 // Guards
-import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { RoleGuard } from './guards/role.guard';
 import { TokenGuard } from './guards/token.guard';
@@ -31,7 +30,6 @@ export const CORE_PROVIDERS = [
   TenantPlanService,
   TenantService,
   UsuarioService,
-  AuthGuard,
   LoginGuard,
   RoleGuard,
   TokenGuard,

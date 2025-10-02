@@ -46,13 +46,7 @@
     display: block !important;
     margin: 0 !important;
   }
-  .d-flex.justify-content-between {
-    flex-direction: column !important;
-    gap: 0.5rem;
-  }
-  .d-flex.justify-content-between > div {
-    width: 100%;
-  }
+  // Eliminado: estilos de botones de acción reemplazados por componente genérico
 }
 // Corrección: campos 100% ancho, switch alineado sin estirarse (mobile/tablet)
 @media (max-width: 767px) {
@@ -167,46 +161,5 @@
   .form-check {
     margin-bottom: 0.75rem;
     min-height: 2rem;
-  }
-}
-// Responsive para la lista de usuarios
-.list-group-item {
-  flex-wrap: wrap;
-  word-break: break-word;
-}
-.list-group-item .d-flex {
-  flex-wrap: wrap;
-}
-.list-group-item .flex-grow-1 {
-  min-width: 0;
-}
-.list-group-item .gap-2 {
-  flex-wrap: wrap;
-}
-
-@media (max-width: 767px) {
-  .list-group-item.d-flex {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.5rem !important;
-  }
-  .list-group-item .d-flex {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.5rem !important;
-  }
-  .list-group-item .flex-grow-1 {
-    width: 100%;
-  }
-  .list-group-item .gap-2 {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: flex-start;
-    margin-top: 0.5rem;
-  }
-  .list-group-item button {
-    width: 100%;
-    margin-bottom: 0.25rem;
   }
 }

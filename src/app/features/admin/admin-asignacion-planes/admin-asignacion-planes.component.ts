@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { FechaLargaPipe } from '../../../shared/pipes/fecha-larga.pipe';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -9,6 +8,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -30,12 +30,20 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ConfirmModalComponent,
     RouterModule,
     ToastAlertsComponent,
-    FechaLargaPipe,
+    AdminListComponent,
   ],
   templateUrl: './admin-asignacion-planes.component.html',
   styleUrls: ['./admin-asignacion-planes.component.scss'],
 })
 export class AdminAsignacionPlanesComponent {
+  // Funciones para AdminListComponent
+  asignacionEmpresaFn = (a: TenantPlan) => this.getTenantNombre(a.tenantId) || null;
+  asignacionSubscripcionFn = (a: TenantPlan) => this.getPlanNombre(a.planId) || null;
+  asignacionFechaInicioFn = (a: TenantPlan) => this.fechaLarga(a.fechaInicio!) || null;
+  asignacionFechaFinFn = (a: TenantPlan) => this.fechaLarga(a.fechaFin!) || null;
+  asignacionEstadoFn = (a: TenantPlan) => (a.activo ? 'Activo' : 'Inactivo');
+  asignacionDiasRestantesFn = (a: TenantPlan) => this.getDiasRestantes(a) || null;
+
   modoEdicion: boolean = false;
   asignacionEditandoId: string | null = null;
   asignacionForm: FormGroup;
@@ -128,6 +136,12 @@ export class AdminAsignacionPlanesComponent {
     this.asignacionForm.reset({ activo: true });
     this.tenantSeleccionado = null;
     this.planSeleccionado = null;
+  }
+
+  private fechaLarga(date: Date | string): string {
+    if (!date) return '';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    return d.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
   guardarAsignacion() {

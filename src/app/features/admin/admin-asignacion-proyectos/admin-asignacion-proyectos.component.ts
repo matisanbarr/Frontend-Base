@@ -8,6 +8,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
+import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
@@ -25,11 +26,22 @@ import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPagin
 @Component({
   selector: 'app-admin-asignacion-proyectos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, ToastAlertsComponent, FormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    ToastAlertsComponent,
+    FormsModule,
+    AdminListComponent,
+  ],
   templateUrl: './admin-asignacion-proyectos.component.html',
   styleUrls: ['./admin-asignacion-proyectos.component.scss'],
 })
 export class AdminAsignacionProyectosComponent {
+  // Funciones para AdminListComponent
+  asignacionEmpresaFn = (a: any) => a.tenantNombre;
+  asignacionProyectosFn = (a: any) =>
+    Array.isArray(a.proyectos) ? a.proyectos.map((p: any) => p.nombre) : [];
   asignacionForm: FormGroup;
   empresas: Tenant[] = [];
   proyectos: Proyecto[] = [];

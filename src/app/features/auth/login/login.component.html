@@ -1,115 +1,96 @@
-<div class="d-flex align-items-center justify-content-center bg-light" style="min-height: 90vh">
-  <div class="container">
-    <div class="row justify-content-center align-items-center">
-      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-        <div class="card border-0 shadow-lg rounded-4">
-          <div class="card-header text-center card-header-info">
-            <i class="bi bi-person-circle icon-xl"></i>
-            <h2 class="fw-bold mt-3 mb-2">Iniciar Sesión</h2>
-          </div>
-          <div class="card-body p-4">
-            <div class="text-center mb-4">
-              <p class="text-muted mb-0">Ingresa tus credenciales para continuar</p>
-            </div>
-
-            <!-- Login Form -->
-            <form (ngSubmit)="onLogin()" #loginForm="ngForm" novalidate>
-              <!-- Usuario -->
-              <div class="mb-3">
-                <label for="nombreUsuario" class="form-label fw-semibold">
-                  <i class="bi bi-person me-2"></i>Usuario
-                </label>
-                <input
-                  type="text"
-                  id="nombreUsuario"
-                  name="nombreUsuario"
-                  class="form-control"
-                  [(ngModel)]="loginData.usuario"
-                  required
-                  placeholder="Ingresa tu usuario"
-                  [disabled]="isLoading"
-                  [class.is-invalid]="nombreUsuario.invalid && nombreUsuario.touched"
-                  #nombreUsuario="ngModel"
-                />
-                <div
-                  class="invalid-feedback"
-                  *ngIf="nombreUsuario.invalid && nombreUsuario.touched"
-                >
-                  El usuario es requerido
-                </div>
-              </div>
-
-              <!-- Contraseña -->
-              <div class="mb-3">
-                <label for="password" class="form-label fw-semibold">
-                  <i class="bi bi-lock me-2"></i>Contraseña
-                </label>
-                <div class="input-group">
-                  <input
-                    [type]="showPassword ? 'text' : 'password'"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    [(ngModel)]="loginData.password"
-                    required
-                    placeholder="Ingresa tu contraseña"
-                    [disabled]="isLoading"
-                    [class.is-invalid]="password.invalid && password.touched"
-                    #password="ngModel"
-                  />
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary"
-                    (click)="togglePassword()"
-                    [disabled]="isLoading"
-                  >
-                    <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                  </button>
-                  <div class="invalid-feedback" *ngIf="password.invalid && password.touched">
-                    La contraseña es requerida
-                  </div>
-                </div>
-              </div>
-
-              <!-- Recordar sesión -->
-              <div class="form-check mb-3">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="rememberMe"
-                  [(ngModel)]="rememberMe"
-                  name="rememberMe"
-                />
-                <label class="form-check-label" for="rememberMe"> Recordar sesión </label>
-              </div>
-
-              <!-- Mensajes -->
-              <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center py-2">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>{{ errorMessage }}</div>
-              </div>
-              <div
-                *ngIf="successMessage"
-                class="alert alert-success d-flex align-items-center py-2"
-              >
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <div>{{ successMessage }}</div>
-              </div>
-
-              <!-- Botón -->
-              <button
-                type="submit"
-                class="btn btn-primary w-100"
-                [disabled]="isLoading || !loginForm.valid"
-              >
-                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-                <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i>
-                {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+<div class="login-bg d-flex align-items-center justify-content-center">
+  <div class="login-card card border-0 shadow rounded-4 p-3">
+    <div class="text-center mb-3">
+      <i class="bi bi-person-circle login-avatar"></i>
     </div>
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm" novalidate>
+      <div class="mb-3 d-flex align-items-center gap-2 same-width-group">
+        <div class="position-relative flex-grow-1">
+          <span class="login-icon"><i class="bi bi-person"></i></span>
+          <input
+            type="text"
+            id="nombreUsuario"
+            name="nombreUsuario"
+            class="form-control ps-5"
+            [(ngModel)]="loginData.usuario"
+            required
+            placeholder="Usuario o Correo"
+            [disabled]="isLoading"
+            [class.is-invalid]="nombreUsuario.invalid && nombreUsuario.touched"
+            #nombreUsuario="ngModel"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn btn-link login-eye-out invisible"
+          tabindex="-1"
+          aria-hidden="true"
+          disabled
+          style="pointer-events: none"
+        >
+          <i class="bi bi-eye" style="font-size: 1.2rem"></i>
+        </button>
+      </div>
+      <div class="mb-3 d-flex align-items-center gap-2">
+        <div class="position-relative flex-grow-1">
+          <span class="login-icon"><i class="bi bi-lock"></i></span>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            class="form-control ps-5"
+            [(ngModel)]="loginData.password"
+            required
+            placeholder="Contraseña"
+            [disabled]="isLoading"
+            [class.is-invalid]="password.invalid && password.touched"
+            #password="ngModel"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn btn-link login-eye-out"
+          (click)="togglePassword()"
+          [disabled]="isLoading"
+          tabindex="-1"
+        >
+          <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" style="font-size: 1.2rem"></i>
+        </button>
+      </div>
+      <div class="invalid-feedback" *ngIf="password.invalid && password.touched">
+        <!-- Sin icono -->
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center py-2 small">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>{{ errorMessage }}</div>
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center py-2 small">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div>{{ successMessage }}</div>
+      </div>
+      <div class="mb-3 d-flex align-items-center gap-2 same-width-group">
+        <div class="flex-grow-1">
+          <button
+            type="submit"
+            class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 text-center"
+            [disabled]="isLoading || !loginForm.valid"
+          >
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+            <span *ngIf="!isLoading">Iniciar Sesión</span>
+            <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right"></i>
+          </button>
+        </div>
+        <button
+          type="button"
+          class="btn btn-link login-eye-out invisible"
+          tabindex="-1"
+          aria-hidden="true"
+          disabled
+          style="pointer-events: none"
+        >
+          <i class="bi bi-eye" style="font-size: 1.2rem"></i>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

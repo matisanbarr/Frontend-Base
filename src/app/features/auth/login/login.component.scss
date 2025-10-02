@@ -1,0 +1,95 @@
+// Igualar ancho de los grupos de usuario y password
+.same-width-group {
+  min-width: 0;
+}
+// Fondo y centrado que ocupa el alto disponible entre navbar y footer
+.login-bg {
+  min-height: calc(100vh - 128px); // 64px navbar + 64px footer (ajusta si es necesario)
+  height: calc(100vh - 128px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+// Card más pequeña
+.login-card {
+  width: 340px;
+  max-width: 92vw;
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  background: #fff;
+}
+
+.login-avatar {
+  font-size: 3.5rem;
+  color: #0d6efd;
+  margin-bottom: 0.5rem;
+}
+
+.login-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 1.2rem;
+  z-index: 2;
+}
+
+.invalid-feedback.position-absolute {
+  left: auto;
+  right: 2.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #dc3545;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+.login-eye {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 1.1rem;
+  z-index: 2;
+  padding: 0 0.25rem;
+  border: none;
+}
+
+.login-eye-out {
+  color: #adb5bd;
+  font-size: 1.1rem;
+  border: none;
+  background: transparent;
+  padding: 0 0.25rem;
+  margin-left: 0;
+  margin-right: 0.2rem;
+  box-shadow: none;
+}
+
+.form-control {
+  border-radius: 1.2rem;
+  padding-left: 2.2rem;
+  font-size: 1rem;
+  min-height: 2.3rem;
+}
+
+.btn-primary {
+  border-radius: 1.2rem;
+  font-size: 1.1rem;
+  min-height: 2.3rem;
+}
+
+.invalid-feedback {
+  font-size: 0.9rem;
+  color: #dc3545;
+  left: 2.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}

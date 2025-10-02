@@ -35,75 +35,20 @@
           </ng-container>
           <ng-template #listaAsignaciones>
             <div class="planes-scroll">
-              <ul class="list-group list-group-flush">
-                <ng-container *ngFor="let asignacion of asignaciones">
-                  <li
-                    class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom"
-                  >
-                    <div class="flex-grow-1 text-start d-flex align-items-center gap-2">
-                      <div>
-                        <span
-                          class="status-circle me-2"
-                          [ngClass]="asignacion.activo ? 'status-active' : 'status-inactive'"
-                          title="{{ asignacion.activo ? 'Activo' : 'Inactivo' }}"
-                        ></span>
-                      </div>
-                      <div>
-                        <div class="fw-bold mb-0">
-                          {{ getTenantNombre(asignacion.tenantId) }}
-                        </div>
-                        <div class="text-muted small">
-                          Subscripción: {{ getPlanNombre(asignacion.planId) }}
-                        </div>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                          <span>Inicio: {{ asignacion.fechaInicio | fechaLarga }}</span>
-                          <span *ngIf="asignacion.fechaFin"
-                            >| Fin: {{ asignacion.fechaFin | fechaLarga }}</span
-                          >
-                          <span
-                            *ngIf="getDiasRestantes(asignacion) !== null"
-                            [ngClass]="
-                              getDiasRestantes(asignacion) == null
-                                ? ''
-                                : getDiasRestantes(asignacion)! > 15
-                                  ? 'badge bg-success text-white'
-                                  : getDiasRestantes(asignacion)! <= 15 &&
-                                      getDiasRestantes(asignacion)! >= 6
-                                    ? 'badge bg-warning text-white'
-                                    : getDiasRestantes(asignacion)! <= 5
-                                      ? 'badge bg-danger text-white'
-                                      : ''
-                            "
-                            class="badge"
-                          >
-                            {{ getDiasRestantes(asignacion) }} días restantes
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button
-                        class="btn btn-warning btn-sm text-white"
-                        (click)="editarAsignacion(asignacion)"
-                      >
-                        <i class="fas fa-edit me-1"></i> Modificar
-                      </button>
-                      <button
-                        class="btn btn-danger btn-sm text-white"
-                        (click)="eliminarAsignacion(asignacion)"
-                      >
-                        <i class="fas fa-trash me-1"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                </ng-container>
-                <li
-                  *ngIf="asignaciones.length === 0"
-                  class="list-group-item text-center text-muted border-0"
-                >
-                  No hay asignaciones registradas.
-                </li>
-              </ul>
+              <app-admin-list
+                [items]="asignaciones"
+                [nombreFn]="asignacionEmpresaFn"
+                [subscripcionFn]="asignacionSubscripcionFn"
+                [estadoFn]="asignacionEstadoFn"
+                [fechaInicioFn]="asignacionFechaInicioFn"
+                [fechaFinFn]="asignacionFechaFinFn"
+                [diasRestantesFn]="asignacionDiasRestantesFn"
+                [loading]="loading"
+                [emptyText]="'No hay asignaciones registradas.'"
+                (edit)="editarAsignacion($event)"
+                (remove)="eliminarAsignacion($event)"
+              >
+              </app-admin-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
@@ -168,7 +113,7 @@
               </select>
             </div>
             <div class="row mb-3">
-              <div class="col-12 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <label for="fechaInicio" class="form-label">Fecha de inicio</label>
                 <input
                   type="date"
@@ -177,7 +122,7 @@
                   formControlName="fechaInicio"
                 />
               </div>
-              <div class="col-12">
+              <div class="col-12 col-md-6">
                 <label for="fechaFin" class="form-label">Fecha de fin</label>
                 <input type="date" class="form-control" id="fechaFin" formControlName="fechaFin" />
               </div>

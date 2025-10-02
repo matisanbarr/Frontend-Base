@@ -4,7 +4,7 @@ export interface TenantPlan {
   nombreTenant?: string;
   planId: string; // Guid
   nombrePlan?: string;
-  fechaInicio: Date;
+  fechaInicio?: Date;
   fechaFin?: Date;
   activo: boolean;
 }

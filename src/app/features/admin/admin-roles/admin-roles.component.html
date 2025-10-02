@@ -25,7 +25,7 @@
             />
           </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 bg-light">
           <ng-container *ngIf="loading; else listaRoles">
             <div class="text-center py-4">
               <div class="spinner-border text-primary" role="status">
@@ -34,32 +34,17 @@
             </div>
           </ng-container>
           <ng-template #listaRoles>
-            <ul class="list-group list-group-flush">
-              <div class="roles-scroll">
-                <ul class="list-group list-group-flush">
-                  <li
-                    *ngFor="let rol of roles"
-                    class="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    <div class="flex-grow-1 text-start">
-                      <div class="fw-bold">{{ rol.nombre }}</div>
-                      <div class="text-muted">{{ rol.descripcion || 'Sin descripción' }}</div>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-warning btn-sm text-white" (click)="editarRol(rol)">
-                        <i class="fas fa-edit"></i> Modificar
-                      </button>
-                      <button class="btn btn-danger btn-sm text-white" (click)="eliminarRol(rol)">
-                        <i class="fas fa-trash"></i> Eliminar
-                      </button>
-                    </div>
-                  </li>
-                  <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted">
-                    No hay roles registrados.
-                  </li>
-                </ul>
-              </div>
-            </ul>
+            <div class="planes-scroll">
+              <app-admin-list
+                [items]="roles"
+                [nombreFn]="rolNombreFn"
+                [descriptionFn]="rolDescriptionFn"
+                [loading]="loading"
+                [emptyText]="'No hay roles registrados.'"
+                (edit)="editarRol($event)"
+                (remove)="eliminarRol($event)"
+              ></app-admin-list>
+            </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
                 *ngIf="paginaActual > 1"
@@ -83,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12 col-md-6 col-lg-6">
       <div class="card">
         <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
           <h5 class="mb-0">{{ modoEdicion ? 'Modificar Rol' : 'Crear Nuevo Rol' }}</h5>
