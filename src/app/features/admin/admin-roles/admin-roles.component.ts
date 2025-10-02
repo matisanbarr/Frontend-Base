@@ -18,7 +18,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   styleUrls: ['./admin-roles.component.scss']
 })
 export class AdminRolesComponent {
-  readonly alertService = inject(AlertService);
   modoEdicion: boolean = false;
   rolEditandoId: string | null = null;
   rolForm: FormGroup;
@@ -34,6 +33,7 @@ export class AdminRolesComponent {
 
   readonly rolService = inject(RolService);
   readonly fb = inject(FormBuilder);
+  readonly alertService = inject(AlertService);
 
   constructor() {
     this.rolForm = this.fb.group({

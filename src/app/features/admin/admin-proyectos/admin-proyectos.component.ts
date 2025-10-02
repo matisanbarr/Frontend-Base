@@ -19,7 +19,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   styleUrls: ['./admin-proyectos.component.scss']
 })
 export class AdminProyectosComponent {
-  readonly alertService = inject(AlertService);
   modoEdicion: boolean = false;
   proyectoEditandoId: string | null = null;
   proyectoForm: FormGroup;
@@ -35,6 +34,7 @@ export class AdminProyectosComponent {
 
   readonly proyectoService = inject(ProyectoService);
   readonly fb = inject(FormBuilder);
+  readonly alertService = inject(AlertService);
 
   constructor() {
     this.proyectoForm = this.fb.group({

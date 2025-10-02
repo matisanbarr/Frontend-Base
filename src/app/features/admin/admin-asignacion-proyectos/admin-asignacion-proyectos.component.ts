@@ -21,11 +21,6 @@ import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPagin
   styleUrls: ['./admin-asignacion-proyectos.component.scss']
 })
 export class AdminAsignacionProyectosComponent {
-  readonly alertService = inject(AlertService);
-  readonly proyectoService = inject(ProyectoService);
-  readonly tenantService = inject(TenantService);
-  readonly fb = inject(FormBuilder);
-
   asignacionForm: FormGroup;
   empresas: Tenant[] = [];
   proyectos: Proyecto[] = [];
@@ -40,7 +35,10 @@ export class AdminAsignacionProyectosComponent {
   paginaActual: number = 1;
   totalPaginas: number = 1;
 
-  // No hay edición
+  readonly alertService = inject(AlertService);
+  readonly proyectoService = inject(ProyectoService);
+  readonly tenantService = inject(TenantService);
+  readonly fb = inject(FormBuilder);
 
   constructor() {
     this.asignacionForm = this.fb.group({

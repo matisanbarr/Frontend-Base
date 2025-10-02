@@ -22,21 +22,7 @@ import { PaginacionDto } from '../../../models/compartidos';
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss']
 })
-export class AdminUsersComponent {
-  generarNombreUsuario(): void {
-    this.sugerirNombreUsuario();
-    const nombreControl = this.usuarioForm.get('nombre');
-    nombreControl?.markAsDirty(); // Marca como modificado para que el formulario detecte el cambio
-  }
-  getTenantName(tenantId: string | null | undefined): string {
-    if (!tenantId) return 'Sin empresa';
-    const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
-    return tenant ? tenant.nombre : 'Empresa desconocida';
-  }
-  get estadoActivoControl(): FormControl {
-    return this.usuarioForm.get('estadoActivo') as FormControl;
-  }
-  readonly alertService = inject(AlertService);
+export class AdminUsersComponent {  
   modoEdicion: boolean = false;
   usuarioEditandoId: string | null = null;
   usuarioForm: FormGroup;
@@ -59,6 +45,7 @@ export class AdminUsersComponent {
   readonly rolService = inject(RolService);
   readonly tenantService = inject(TenantService);
   readonly fb = inject(FormBuilder);
+  readonly alertService = inject(AlertService);
 
   generos = [
     { value: 0, label: 'No especificado' },
@@ -410,5 +397,19 @@ export class AdminUsersComponent {
     this.showConfirmModal = false;
     this.usuarioAEliminar = null;
     this.usuarioANombreEliminar = null;
+  }
+
+  generarNombreUsuario(): void {
+    this.sugerirNombreUsuario();
+    const nombreControl = this.usuarioForm.get('nombre');
+    nombreControl?.markAsDirty(); // Marca como modificado para que el formulario detecte el cambio
+  }
+  getTenantName(tenantId: string | null | undefined): string {
+    if (!tenantId) return 'Sin empresa';
+    const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
+    return tenant ? tenant.nombre : 'Empresa desconocida';
+  }
+  get estadoActivoControl(): FormControl {
+    return this.usuarioForm.get('estadoActivo') as FormControl;
   }
 }

@@ -17,7 +17,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   styleUrls: ['./admin-planes.component.scss']
 })
 export class AdminPlanesComponent {
-  readonly alertService = inject(AlertService);
   modoEdicion: boolean = false;
   planEditandoId: string | null = null;
   planForm: FormGroup;
@@ -33,6 +32,7 @@ export class AdminPlanesComponent {
 
   readonly planService = inject(PlanService);
   readonly fb = inject(FormBuilder);
+  readonly alertService = inject(AlertService);
 
   constructor() {
     this.planForm = this.fb.group({

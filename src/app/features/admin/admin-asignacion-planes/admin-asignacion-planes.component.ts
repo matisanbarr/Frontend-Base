@@ -22,12 +22,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   styleUrls: ['./admin-asignacion-planes.component.scss']
 })
 export class AdminAsignacionPlanesComponent {
-  readonly alertService = inject(AlertService);
-  readonly tenantPlanService = inject(TenantPlanService);
-  readonly tenantService = inject(TenantService);
-  readonly planService = inject(PlanService);
-  readonly fb = inject(FormBuilder);
-
   modoEdicion: boolean = false;
   asignacionEditandoId: string | null = null;
   asignacionForm: FormGroup;
@@ -49,6 +43,12 @@ export class AdminAsignacionPlanesComponent {
   planesFiltrados: Plan[] = [];
   planSeleccionado: Plan | null = null;
   filtroPlan: string = '';
+
+  readonly alertService = inject(AlertService);
+  readonly tenantPlanService = inject(TenantPlanService);
+  readonly tenantService = inject(TenantService);
+  readonly planService = inject(PlanService);
+  readonly fb = inject(FormBuilder);
 
   constructor() {
     this.asignacionForm = this.fb.group({

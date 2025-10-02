@@ -16,11 +16,7 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   templateUrl: './admin-tenants.component.html',
   styleUrls: ['./admin-tenants.component.scss']
 })
-export class AdminTenantsComponent {
-  goToPanel() {
-    window.location.href = '/dashboard';
-  }
-  readonly alertService = inject(AlertService);
+export class AdminTenantsComponent { 
   modoEdicion: boolean = false;
   tenantEditandoId: string | null = null;
   tenantForm: FormGroup;
@@ -36,6 +32,7 @@ export class AdminTenantsComponent {
 
   readonly tenantService = inject(TenantService);
   readonly fb = inject(FormBuilder);
+  readonly alertService = inject(AlertService);
 
   constructor() {
     this.tenantForm = this.fb.group({
@@ -137,5 +134,9 @@ export class AdminTenantsComponent {
     if (pagina < 1 || pagina > this.totalPaginas) return;
     this.paginaActual = pagina;
     this.cargarTenants();
+  }
+
+  goToPanel() {
+    window.location.href = '/dashboard';
   }
 }
