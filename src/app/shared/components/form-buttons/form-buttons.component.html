@@ -1,22 +1,21 @@
-<div class="d-flex justify-content-between align-items-center mt-4">
-  <div>
+<div class="form-buttons-row mt-4">
+  <div class="form-buttons-col">
     <button
       *ngIf="modoEdicion && limpiarVisible"
       type="button"
-      class="btn btn-secondary"
+      class="btn btn-secondary w-100"
       (click)="onLimpiar()"
     >
       <i class="fas fa-eraser me-1"></i> Limpiar
     </button>
   </div>
-  <div>
+  <div class="form-buttons-col">
     <button
       type="submit"
-      class="btn"
+      class="btn w-100"
       [class.btn-primary]="!modoEdicion"
       [class.btn-warning]="modoEdicion"
       [disabled]="formInvalid || loading || (modoEdicion && !hayCambios)"
-      (click)="onSubmit()"
     >
       <i class="fas fa-save me-1"></i>
       {{ modoEdicion ? modificarLabel : crearLabel }}

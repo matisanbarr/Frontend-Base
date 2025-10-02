@@ -15,6 +15,8 @@ import { AlertService } from '../../../core/services/alert.service';
 import { TenantService } from '../../../core/services/tenant.service';
 import { Tenant } from '../../../models/tenant.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-tenants',
@@ -27,6 +29,8 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     RouterModule,
     ToastAlertsComponent,
     AdminListComponent,
+    FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-tenants.component.html',
   styleUrls: ['./admin-tenants.component.scss'],

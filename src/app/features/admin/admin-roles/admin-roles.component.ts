@@ -10,6 +10,8 @@ import { Rol } from '../../../models/rol.model';
 import { AlertService } from '../../../core/services/alert.service';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-roles',
@@ -22,6 +24,8 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     RouterModule,
     ToastAlertsComponent,
     AdminListComponent,
+    FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-roles.component.html',
   styleUrls: ['./admin-roles.component.scss'],

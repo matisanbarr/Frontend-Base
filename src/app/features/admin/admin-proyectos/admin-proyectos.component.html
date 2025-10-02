@@ -71,9 +71,14 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card">
-        <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
-          <h5 class="mb-0">{{ modoEdicion ? 'Modificar Proyecto' : 'Crear Nuevo Proyecto' }}</h5>
-        </div>
+        <app-admin-form-header
+          icon="bi bi-kanban"
+          [titulo]="'Proyecto'"
+          [modoEdicion]="modoEdicion"
+          [labelCrear]="'Crear Nuevo'"
+          [labelEditar]="'Modificar'"
+          [mostrarEstado]="false"
+        ></app-admin-form-header>
         <div class="card-body">
           <form [formGroup]="proyectoForm" (ngSubmit)="guardarProyecto()">
             <div class="mb-3">
@@ -122,30 +127,16 @@
                 La descripción es opcional (3-200 caracteres).
               </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <div>
-                <button
-                  *ngIf="modoEdicion"
-                  type="button"
-                  class="btn btn-secondary"
-                  (click)="cancelarEdicion()"
-                >
-                  <i class="fas fa-eraser me-1"></i> Limpiar
-                </button>
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  class="btn"
-                  [class.btn-primary]="!modoEdicion"
-                  [class.btn-warning]="modoEdicion"
-                  [disabled]="proyectoForm.invalid || loading"
-                >
-                  <i class="fas fa-save me-1"></i>
-                  {{ modoEdicion ? 'Modificar Proyecto' : 'Crear Proyecto' }}
-                </button>
-              </div>
-            </div>
+            <app-form-buttons
+              [modoEdicion]="modoEdicion"
+              [formInvalid]="proyectoForm.invalid"
+              [loading]="loading"
+              [crearLabel]="'Crear Proyecto'"
+              [modificarLabel]="'Modificar Proyecto'"
+              [hayCambios]="true"
+              (limpiar)="cancelarEdicion()"
+              (submit)="guardarProyecto()"
+            ></app-form-buttons>
           </form>
         </div>
       </div>

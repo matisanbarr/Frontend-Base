@@ -70,9 +70,14 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card">
-        <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
-          <h5 class="mb-0">{{ modoEdicion ? 'Modificar Rol' : 'Crear Nuevo Rol' }}</h5>
-        </div>
+        <app-admin-form-header
+          icon="bi bi-shield-lock"
+          [titulo]="'Rol'"
+          [modoEdicion]="modoEdicion"
+          [labelCrear]="'Crear Nuevo'"
+          [labelEditar]="'Modificar'"
+          [mostrarEstado]="false"
+        ></app-admin-form-header>
         <div class="card-body">
           <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
             <div class="mb-3">
@@ -118,30 +123,16 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <div>
-                <button
-                  *ngIf="modoEdicion"
-                  type="button"
-                  class="btn btn-secondary"
-                  (click)="limpiarFormulario()"
-                >
-                  <i class="fas fa-eraser me-1"></i> Limpiar
-                </button>
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  class="btn"
-                  [class.btn-primary]="!modoEdicion"
-                  [class.btn-warning]="modoEdicion"
-                  [disabled]="rolForm.invalid || loading"
-                >
-                  <i class="fas fa-save me-1"></i>
-                  {{ modoEdicion ? 'Modificar Rol' : 'Crear Rol' }}
-                </button>
-              </div>
-            </div>
+            <app-form-buttons
+              [modoEdicion]="modoEdicion"
+              [formInvalid]="rolForm.invalid"
+              [loading]="loading"
+              [crearLabel]="'Crear Rol'"
+              [modificarLabel]="'Modificar Rol'"
+              [hayCambios]="true"
+              (limpiar)="limpiarFormulario()"
+              (submit)="crearRol()"
+            ></app-form-buttons>
           </form>
         </div>
       </div>

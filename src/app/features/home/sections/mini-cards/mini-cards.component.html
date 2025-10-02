@@ -1,27 +1,35 @@
 <div class="mini-cards-grid w-100">
-  <div class="mini-card">
-    <div class="mini-card-icon">👤</div>
-    <div class="mini-card-label">Clientes activos</div>
-    <div class="mini-card-value">0</div>
-  </div>
-  <div class="mini-card">
-    <div class="mini-card-icon">🏢</div>
-    <div class="mini-card-label">Empresas con proyectos</div>
-    <div class="mini-card-value">0</div>
-  </div>
-  <div class="mini-card">
-    <div class="mini-card-icon">💡</div>
-    <div class="mini-card-label">Empresas Plan Lite</div>
-    <div class="mini-card-value">0</div>
-  </div>
-  <div class="mini-card">
-    <div class="mini-card-icon">🚀</div>
-    <div class="mini-card-label">Empresas Plan Pro</div>
-    <div class="mini-card-value">0</div>
-  </div>
-  <div class="mini-card">
-    <div class="mini-card-icon">🌟</div>
-    <div class="mini-card-label">Empresas Plan Ultimate</div>
-    <div class="mini-card-value">0</div>
-  </div>
+  <ng-container *ngIf="!loading && !error && summary">
+    <div class="mini-card">
+      <div class="mini-card-icon">👤</div>
+      <div class="mini-card-label">Clientes activos</div>
+      <div class="mini-card-value">{{ summary.usuariosActivos }}</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-icon">🏢</div>
+      <div class="mini-card-label">Empresas con proyectos</div>
+      <div class="mini-card-value">{{ summary.empresasConProyectos }}</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-icon">💡</div>
+      <div class="mini-card-label">Empresas Plan Lite</div>
+      <div class="mini-card-value">{{ summary.empresasPlanLite }}</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-icon">🚀</div>
+      <div class="mini-card-label">Empresas Plan Pro</div>
+      <div class="mini-card-value">{{ summary.empresasPlanPro }}</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-card-icon">🌟</div>
+      <div class="mini-card-label">Empresas Plan Ultimate</div>
+      <div class="mini-card-value">{{ summary.empresasPlanUltimate }}</div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="loading">
+    <div class="mini-card text-center w-100">Cargando...</div>
+  </ng-container>
+  <ng-container *ngIf="!loading && error">
+    <div class="mini-card text-danger w-100">{{ error }}</div>
+  </ng-container>
 </div>

@@ -1,7 +1,41 @@
 <div class="card-info w-100">
-  <h3 class="card-title">Subscripciones de empresas próximas a vencer</h3>
+  <h3 class="card-title">Empresas con suscripción próxima a vencer</h3>
   <div class="card-list">
-    <!-- Aquí irá la lista visual de empresas por vencer -->
-    <p class="placeholder">Sin datos (demo)</p>
+    <ng-container *ngIf="loading">
+      <div class="text-center py-3">
+        <span class="spinner-border spinner-border-sm"></span> Cargando...
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && error">
+      <p class="text-danger">{{ error }}</p>
+    </ng-container>
+    <ng-container *ngIf="!loading && !error">
+      <ng-container *ngIf="tenantPlanes.length > 0; else sinVencimientos">
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex align-items-center py-3"
+            *ngFor="let plan of tenantPlanes"
+          >
+            <div class="flex-grow-1 ms-1">
+              <div class="fw-bold mb-1">
+                {{ plan.nombreTenant || 'Empresa desconocida' }}
+              </div>
+              <div class="text-muted small mb-1">
+                <b>Plan:</b> {{ plan.nombrePlan || 'Sin plan' }}
+              </div>
+              <div class="text-secondary small mb-1" *ngIf="plan.fechaFin">
+                <b>Vence:</b> {{ plan.fechaFin | date: 'd MMMM yyyy' : '' : 'es-CL' }}
+                <span class="text-danger ms-2"
+                  >(faltan {{ diasRestantes(plan.fechaFin) }} días)</span
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #sinVencimientos>
+        <p class="placeholder">No hay suscripciones próximas a vencer.</p>
+      </ng-template>
+    </ng-container>
   </div>
 </div>

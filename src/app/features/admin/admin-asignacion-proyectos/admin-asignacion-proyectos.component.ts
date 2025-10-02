@@ -22,6 +22,8 @@ import {
 } from '../../../models/asignar-proyectos-tenant.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPaginadaDto.model';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-asignacion-proyectos',
@@ -33,11 +35,30 @@ import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPagin
     ToastAlertsComponent,
     FormsModule,
     AdminListComponent,
+    FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-asignacion-proyectos.component.html',
   styleUrls: ['./admin-asignacion-proyectos.component.scss'],
 })
 export class AdminAsignacionProyectosComponent {
+  limpiarFormulario() {
+    this.asignacionForm.reset();
+    this.proyectosSeleccionados = [];
+    this.modoEdicion = false;
+    this.asignacionEditandoId = null;
+  }
+  modoEdicion = false;
+  asignacionEditandoId: string | null = null;
+  editarAsignacion(asignacion: TenantConProyecto) {
+    this.modoEdicion = true;
+    this.asignacionEditandoId = asignacion.tenantId;
+    this.asignacionForm.patchValue({
+      empresaId: asignacion.tenantId,
+    });
+    // Selecciona los proyectos asignados
+    this.proyectosSeleccionados = (asignacion.proyectos || []).map((p: Proyecto) => p.id || '');
+  }
   // Funciones para AdminListComponent
   asignacionEmpresaFn = (a: any) => a.tenantNombre;
   asignacionProyectosFn = (a: any) =>

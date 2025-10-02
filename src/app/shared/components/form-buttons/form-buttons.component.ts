@@ -1,8 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-form-buttons',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './form-buttons.component.html',
   styleUrls: ['./form-buttons.component.scss'],
 })

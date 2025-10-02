@@ -2,9 +2,8 @@
   <ng-container *ngFor="let item of items">
     <li class="list-group-item border-0 border-bottom">
       <div class="d-none d-md-flex justify-content-between align-items-center">
-        <div class="flex-grow-1 text-start d-flex align-items-center gap-2 pe-3">
-          <!-- Círculo de estado como primera columna si se provee estadoFn -->
-          <div *ngIf="estadoFn && estadoFn(item)" class="me-2">
+        <ng-container *ngIf="estadoFn && estadoFn(item)">
+          <div class="adminlist-estado-col d-flex align-items-center justify-content-center">
             <span
               class="estado-circulo"
               [ngClass]="{
@@ -15,6 +14,8 @@
               title="{{ estadoFn(item) }}"
             ></span>
           </div>
+        </ng-container>
+        <div class="flex-grow-1 text-start d-flex align-items-center gap-2 pe-3">
           <div>
             <div *ngIf="nombreFn && nombreFn(item)" class="text-muted small text-truncate">
               <div class="fw-bold mb-0 text-truncate">{{ nombreFn(item) }}</div>
@@ -99,9 +100,9 @@
       </div>
       <!-- Mobile/tablet: botones debajo y centrados -->
       <div class="d-block d-md-none w-100">
-        <div class="w-100">
-          <div class="flex-grow-1 text-start gap-2 pe-3">
-            <div *ngIf="estadoFn && estadoFn(item)" class="me-2">
+        <div class="d-flex align-items-center w-100">
+          <div class="adminlist-estado-col d-flex align-items-center justify-content-center me-2">
+            <ng-container *ngIf="estadoFn && estadoFn(item)">
               <span
                 class="estado-circulo"
                 [ngClass]="{
@@ -111,43 +112,43 @@
                 }"
                 title="{{ estadoFn(item) }}"
               ></span>
+            </ng-container>
+          </div>
+          <div class="flex-grow-1 text-start gap-2 pe-3">
+            <div *ngIf="nombreFn && nombreFn(item)" class="text-muted small text-truncate">
+              <div class="fw-bold mb-0 text-truncate">{{ nombreFn(item) }}</div>
             </div>
-            <div>
-              <div *ngIf="nombreFn && nombreFn(item)" class="text-muted small text-truncate">
-                <div class="fw-bold mb-0 text-truncate">{{ nombreFn(item) }}</div>
-              </div>
-              <div
-                *ngIf="descriptionFn && descriptionFn(item)"
-                class="text-muted small adminlist-descripcion py-2"
+            <div
+              *ngIf="descriptionFn && descriptionFn(item)"
+              class="text-muted small adminlist-descripcion py-2"
+            >
+              Descripción: {{ descriptionFn(item) }}
+            </div>
+            <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
+              Correo: {{ correoFn(item) }}
+            </div>
+            <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
+              Teléfono: {{ telefonoFn(item) }}
+            </div>
+            <div *ngIf="direccionFn && direccionFn(item)" class="text-muted small">
+              Dirección: {{ direccionFn(item) }}
+            </div>
+            <div *ngIf="precioFn && precioFn(item)" class="text-muted small">
+              Precio: {{ precioFn(item) }}
+            </div>
+            <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
+              Máximo de usuarios: {{ maximoUsuariosFn(item) }}
+            </div>
+            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
+              <span
+                *ngFor="let rol of rolesFn(item)"
+                class="badge me-1"
+                [ngClass]="
+                  rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
+                "
               >
-                Descripción: {{ descriptionFn(item) }}
-              </div>
-              <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
-                Correo: {{ correoFn(item) }}
-              </div>
-              <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
-                Teléfono: {{ telefonoFn(item) }}
-              </div>
-              <div *ngIf="direccionFn && direccionFn(item)" class="text-muted small">
-                Dirección: {{ direccionFn(item) }}
-              </div>
-              <div *ngIf="precioFn && precioFn(item)" class="text-muted small">
-                Precio: {{ precioFn(item) }}
-              </div>
-              <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
-                Máximo de usuarios: {{ maximoUsuariosFn(item) }}
-              </div>
-              <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
-                <span
-                  *ngFor="let rol of rolesFn(item)"
-                  class="badge me-1"
-                  [ngClass]="
-                    rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
-                  "
-                >
-                  {{ rol }}
-                </span>
-              </div>
+                {{ rol }}
+              </span>
             </div>
           </div>
         </div>

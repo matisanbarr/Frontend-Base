@@ -33,4 +33,10 @@ export class TenantPlanService {
       params: paginacion as any,
     });
   }
+
+  listarPlanesPorVencer(dias: number): Observable<TenantPlan[]> {
+    return this.http.get<TenantPlan[]>(this.apiUrl + '/planes-por-vencer', {
+      params: { dias } as any,
+    });
+  }
 }

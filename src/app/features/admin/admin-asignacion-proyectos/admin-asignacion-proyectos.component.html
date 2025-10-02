@@ -99,8 +99,8 @@
                 [loading]="loading"
                 [emptyText]="'No hay asignaciones registradas.'"
                 (remove)="eliminarAsignacion($event)"
-              >
-              </app-admin-list>
+                (edit)="editarAsignacion($event)"
+              ></app-admin-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
@@ -128,9 +128,14 @@
     <!-- Formulario de asignación -->
     <div class="col-12 col-md-6">
       <div class="card">
-        <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
-          <h5 class="mb-0">Asignar Proyectos a Empresa</h5>
-        </div>
+        <app-admin-form-header
+          icon="bi bi-diagram-3"
+          [titulo]="'Asignación de Proyectos'"
+          [modoEdicion]="modoEdicion"
+          [labelCrear]="'Asignar Proyectos'"
+          [labelEditar]="'Modificar asignación'"
+          [mostrarEstado]="false"
+        ></app-admin-form-header>
         <div class="card-body">
           <form [formGroup]="asignacionForm" (ngSubmit)="guardarAsignacion()">
             <div class="mb-3">
@@ -144,33 +149,39 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Proyectos</label>
-              <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto">
-                <div *ngFor="let proyecto of proyectos">
-                  <div class="form-check">
+              <div
+                class="proyectos-cards-list border rounded p-2"
+                style="max-height: 200px; overflow-y: auto"
+              >
+                <div *ngFor="let proyecto of proyectos" class="proyecto-card-wrapper">
+                  <label
+                    class="proyecto-card"
+                    [class.selected]="proyectosSeleccionados.includes(proyecto.id || '')"
+                  >
                     <input
-                      class="form-check-input"
                       type="checkbox"
+                      class="form-check-input visually-hidden"
                       [value]="proyecto.id || ''"
                       (change)="onProyectoCheck($event, proyecto.id || '')"
                       [checked]="proyectosSeleccionados.includes(proyecto.id || '')"
+                      tabindex="-1"
                     />
-                    <label class="form-check-label">{{ proyecto.nombre }}</label>
-                  </div>
+                    <span class="proyecto-card-content">{{ proyecto.nombre }}</span>
+                  </label>
                 </div>
               </div>
             </div>
-            <div class="d-flex justify-content-end align-items-center mt-4">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="
-                  asignacionForm.invalid || proyectosSeleccionados.length === 0 || loading
-                "
-              >
-                <i class="fas fa-save me-1"></i>
-                Asignar Proyectos
-              </button>
-            </div>
+            <app-form-buttons
+              [modoEdicion]="modoEdicion"
+              [formInvalid]="asignacionForm.invalid || proyectosSeleccionados.length === 0"
+              [loading]="loading"
+              [crearLabel]="'Asignar Proyectos'"
+              [modificarLabel]="'Modificar asignación'"
+              [hayCambios]="true"
+              [limpiarVisible]="modoEdicion"
+              (limpiar)="limpiarFormulario()"
+              (submit)="guardarAsignacion()"
+            ></app-form-buttons>
           </form>
         </div>
       </div>

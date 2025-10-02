@@ -1,3 +1,75 @@
+// Tarjetas táctiles para selección de proyectos (mobile/tablet)
+.proyectos-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.proyecto-card-wrapper {
+  width: 100%;
+}
+
+.proyecto-card {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e0e0e0;
+  background: #fafbfc;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+  user-select: none;
+  position: relative;
+}
+.proyecto-card.selected {
+  background: #e3f2fd;
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+}
+.proyecto-card:hover {
+  border-color: #90caf9;
+}
+.proyecto-card-content {
+  flex: 1;
+  font-size: 1rem;
+  color: #222;
+}
+.proyecto-card .form-check-input {
+  margin-right: 1rem;
+  accent-color: #2196f3;
+}
+.proyecto-card .form-check-input.visually-hidden {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.2em;
+  height: 1.2em;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .proyectos-cards-list {
+    gap: 0.75rem;
+  }
+  .proyecto-card {
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+    border-radius: 1rem;
+    min-height: 3.2rem;
+  }
+  .proyecto-card.selected {
+    background: #bbdefb;
+    border-color: #1976d2;
+  }
+  .proyecto-card-content {
+    font-size: 1.08rem;
+  }
+}
 .form-check {
   display: flex;
   align-items: center;

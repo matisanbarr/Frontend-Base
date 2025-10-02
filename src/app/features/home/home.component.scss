@@ -53,6 +53,8 @@
   justify-content: stretch;
   min-height: 180px;
   min-width: 0;
+  /* El alto lo controla el hijo para scroll */
+  overflow: visible;
 }
 .admin-home-section-full {
   flex: 1 1 100%;

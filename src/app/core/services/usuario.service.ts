@@ -62,4 +62,17 @@ export class UsuarioService {
       })
     );
   }
+
+  proximosCumpleaños(dias: number): Observable<Usuario[]> {
+    return this.http
+      .get<Usuario[]>(this.apiUrl + '/cumpleanios-proximos', {
+        params: { dias: dias.toString() },
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error en obtener próximos cumpleaños:', error);
+          throw error;
+        })
+      );
+  }
 }

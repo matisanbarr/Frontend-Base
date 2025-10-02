@@ -1,7 +1,45 @@
 <div class="card-info w-100">
   <h3 class="card-title">Clientes de cumpleaños</h3>
   <div class="card-list">
-    <!-- Aquí irá la lista de clientes de cumpleaños -->
-    <p class="placeholder">Sin datos (demo)</p>
+    <ng-container *ngIf="loading">
+      <div class="text-center py-3">
+        <span class="spinner-border spinner-border-sm"></span> Cargando...
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && error">
+      <p class="text-danger">{{ error }}</p>
+    </ng-container>
+    <ng-container *ngIf="!loading && !error">
+      <ng-container *ngIf="usuarios.length > 0; else sinCumples">
+        <ul class="list-group list-group-flush">
+          <li
+            class="list-group-item d-flex align-items-center py-3"
+            *ngFor="let usuario of usuarios"
+          >
+            <span class="fiesta-icon me-2" aria-label="Fiesta">🎉</span>
+            <div class="cumple-avatar me-3">
+              <span>{{ usuario.primerNombre[0] }}{{ usuario.primerApellido[0] }}</span>
+            </div>
+            <div class="flex-grow-1">
+              <div class="fw-bold">
+                {{ usuario.primerNombre }} {{ usuario.primerApellido }}
+                <span class="text-primary ms-2" *ngIf="usuario.fechaNacimiento"
+                  >({{ calcularEdad(usuario.fechaNacimiento) }} años)</span
+                >
+              </div>
+              <div class="text-muted small">
+                {{ usuario.fechaNacimiento | date: 'd ' }}de{{
+                  usuario.fechaNacimiento | date: ' MMMM' : '' : 'es-CL'
+                }}
+              </div>
+              <div *ngIf="usuario.email" class="text-secondary small mt-1">{{ usuario.email }}</div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #sinCumples>
+        <p class="placeholder">No hay cumpleaños próximos.</p>
+      </ng-template>
+    </ng-container>
   </div>
 </div>

@@ -15,6 +15,8 @@ import { AlertService } from '../../../core/services/alert.service';
 import { PlanService } from '../../../core/services/plan.service';
 import { Plan } from '../../../models/plan.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-planes',
@@ -27,6 +29,8 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     RouterModule,
     ToastAlertsComponent,
     AdminListComponent,
+    FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-planes.component.html',
   styleUrls: ['./admin-planes.component.scss'],

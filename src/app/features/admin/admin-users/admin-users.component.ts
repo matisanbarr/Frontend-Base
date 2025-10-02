@@ -21,6 +21,7 @@ import { RolService } from '../../../core/services/rol.service';
 import { PaginacionDto } from '../../../models/compartidos';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -34,6 +35,7 @@ import { FormButtonsComponent } from '../../../shared/components/form-buttons/fo
     ToastAlertsComponent,
     AdminListComponent,
     FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss'],

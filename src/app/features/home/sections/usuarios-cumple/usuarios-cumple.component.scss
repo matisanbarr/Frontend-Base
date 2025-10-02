@@ -1,1 +1,63 @@
+.fiesta-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  vertical-align: middle;
+}
 /* Usa solo clases globales */
+
+.cumple-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb300 60%, #ff7043 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(255, 167, 38, 0.15);
+}
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+}
+.list-group-item:last-child {
+  border-bottom: none;
+}
+.badge.bg-primary {
+  background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
+  color: #fff;
+  font-size: 0.95em;
+  padding: 0.5em 0.8em;
+}
+.card-list {
+  padding: 1rem 1rem 0.5rem 1rem;
+  max-height: 32vh;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.list-group {
+  flex: 1 1 auto;
+  max-height: 26vh;
+  overflow-y: auto;
+  margin-bottom: 0;
+  min-height: 0;
+}
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.98rem;
+}
+.cumple-avatar {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+}
+.fiesta-icon {
+  font-size: 1.2rem;
+}

@@ -19,6 +19,8 @@ import { TenantPlan } from '../../../models/asignacion-plan.model';
 import { Tenant } from '../../../models/tenant.model';
 import { Plan } from '../../../models/plan.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
+import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
   selector: 'app-admin-asignacion-planes',
@@ -31,6 +33,8 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     RouterModule,
     ToastAlertsComponent,
     AdminListComponent,
+    FormButtonsComponent,
+    AdminFormHeaderComponent,
   ],
   templateUrl: './admin-asignacion-planes.component.html',
   styleUrls: ['./admin-asignacion-planes.component.scss'],
