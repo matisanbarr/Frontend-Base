@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { LoginRequest, LoginResponse, User } from '../../models';
+import { LoginRequest, LoginResponse } from '../../models';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +14,7 @@ export class AuthService {
 	private readonly USER_KEY = 'current_user';
 	private readonly USER_ROLES_KEY = 'user_roles';
 
-	private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUser());
+	private currentUserSubject = new BehaviorSubject<any | null>(this.getCurrentUser());
 	public currentUser$ = this.currentUserSubject.asObservable();
 
 	private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthState());
@@ -65,7 +65,7 @@ export class AuthService {
 		return localStorage.getItem(this.REFRESH_TOKEN_KEY);
 	}
 
-	getCurrentUser(): User | null {
+	getCurrentUser(): any | null {
 		const userStr = localStorage.getItem(this.USER_KEY);
 		if (!userStr || userStr === 'undefined') return null;
 		try {
@@ -125,6 +125,10 @@ export class AuthService {
 					// Extraer claims relevantes
 					const tenantId = decoded.tenantId || authResult.tenantId;
 					const isGlobal = decoded.isGlobal !== undefined ? decoded.isGlobal : authResult.isGlobal;
+					const PrimerNombre = decoded.PrimerNombre !== undefined ? decoded.PrimerNombre : authResult.primerNombre;
+					const SegundoNombre = decoded.SegundoNombre !== undefined ? decoded.SegundoNombre : authResult.segundoNombre;
+					const PrimerApellido = decoded.PrimerApellido !== undefined ? decoded.PrimerApellido : authResult.primerApellido;
+					const SegundoApellido = decoded.SegundoApellido !== undefined ? decoded.SegundoApellido : authResult.segundoApellido;
 					const email = decoded.email || decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
 					const name = decoded.name || decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
 					let roles = decoded.roles || decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
@@ -143,7 +147,11 @@ export class AuthService {
 						name,
 						tenantId,
 						isGlobal,
-						roles
+						roles,
+						primerNombre: decoded.PrimerNombre || decoded.primerNombre || authResult.primerNombre || '',
+						segundoNombre: decoded.SegundoNombre || decoded.segundoNombre || authResult.segundoNombre || '',
+						primerApellido: decoded.PrimerApellido || decoded.primerApellido || authResult.primerApellido || '',
+						segundoApellido: decoded.SegundoApellido || decoded.segundoApellido || authResult.segundoApellido || ''
 					};
 					localStorage.setItem(this.USER_KEY, JSON.stringify(user));
 					this.currentUserSubject.next(user);

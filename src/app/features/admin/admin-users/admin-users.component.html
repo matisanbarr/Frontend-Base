@@ -16,7 +16,7 @@
 				<div class="card-header card-header-info">
 					<h5 class="mb-0"><i class="bi bi-people me-2"></i>Usuarios registrados</h5>
 					<div class="mt-2">
-						<input type="text" class="form-control" placeholder="Buscar usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
+						<input type="text" class="form-control" placeholder="Buscar nombre usuario..." [(ngModel)]="filtroBusqueda" (input)="buscarUsuarios()">
 					</div>
 				</div>
 				<div class="card-body p-0 bg-light">
@@ -99,13 +99,48 @@
 				<div class="card-body bg-light">
 					<form [formGroup]="usuarioForm" (ngSubmit)="modoEdicion ? actualizarUsuarioYRoles() : registrarUsuario()">
 						<!-- El switch de estadoActivo ahora está en el header del formulario -->
-						<div class="mb-3">
-							<label for="nombre" class="form-label">Nombre</label>
-							<input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Ej: Juan Pérez" [class.is-invalid]="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched">
-							<div *ngIf="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched" class="invalid-feedback">
-								El nombre es requerido (3-50 caracteres).
+						<div class="row mb-3">
+							<div class="col-md-6 mb-2 mb-md-0">
+								<label for="primerNombre" class="form-label">Primer Nombre</label>
+								<input type="text" class="form-control" id="primerNombre" formControlName="primerNombre" placeholder="Ej: Juan" [class.is-invalid]="usuarioForm.get('primerNombre')?.invalid && usuarioForm.get('primerNombre')?.touched">
+								<div *ngIf="usuarioForm.get('primerNombre')?.invalid && usuarioForm.get('primerNombre')?.touched" class="invalid-feedback">
+									Requerido (2-30 caracteres).
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label for="segundoNombre" class="form-label">Segundo Nombre</label>
+								<input type="text" class="form-control" id="segundoNombre" formControlName="segundoNombre" placeholder="Ej: Carlos" [class.is-invalid]="usuarioForm.get('segundoNombre')?.invalid && usuarioForm.get('segundoNombre')?.touched">
+								<div *ngIf="usuarioForm.get('segundoNombre')?.invalid && usuarioForm.get('segundoNombre')?.touched" class="invalid-feedback">
+									Máximo 30 caracteres.
+								</div>
 							</div>
 						</div>
+						<div class="row mb-3">
+							<div class="col-md-6 mb-2 mb-md-0">
+								<label for="primerApellido" class="form-label">Primer Apellido</label>
+								<input type="text" class="form-control" id="primerApellido" formControlName="primerApellido" placeholder="Ej: Pérez" [class.is-invalid]="usuarioForm.get('primerApellido')?.invalid && usuarioForm.get('primerApellido')?.touched">
+								<div *ngIf="usuarioForm.get('primerApellido')?.invalid && usuarioForm.get('primerApellido')?.touched" class="invalid-feedback">
+									Requerido (2-30 caracteres).
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label for="segundoApellido" class="form-label">Segundo Apellido</label>
+								<input type="text" class="form-control" id="segundoApellido" formControlName="segundoApellido" placeholder="Ej: Gómez" [class.is-invalid]="usuarioForm.get('segundoApellido')?.invalid && usuarioForm.get('segundoApellido')?.touched">
+								<div *ngIf="usuarioForm.get('segundoApellido')?.invalid && usuarioForm.get('segundoApellido')?.touched" class="invalid-feedback">
+									Máximo 30 caracteres.
+								</div>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label for="nombre" class="form-label">Nombre usuario</label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Ej: jperez">
+								<button type="button" class="btn btn-outline-secondary" (click)="generarNombreUsuario()" title="Generar sugerencia">
+									<i class="bi bi-magic"></i>
+								</button>
+							</div>
+						</div>
+														
 						<div class="mb-3">
 							<label for="email" class="form-label">Email</label>
 							<input type="email" class="form-control" id="email" formControlName="email" placeholder="Ej: usuario@email.com" [class.is-invalid]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched">
@@ -136,11 +171,11 @@
 							<div *ngIf="modoEdicion" class="form-text">Si escribes una nueva contraseña, se actualizará. Si la dejas vacía, no se modifica.</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-6">
+							<div class="col-12 col-md-6 mb-3 mb-md-0">
 								<label for="fechaNacimiento" class="form-label">Fecha de cumpleaños</label>
-								<input id="fechaNacimiento" type="date" class="form-control" formControlName="fechaNacimiento" style="min-width: 140px;">
+								<input id="fechaNacimiento" type="date" class="form-control" formControlName="fechaNacimiento">
 							</div>
-							<div class="col-6">
+							<div class="col-12 col-md-6">
 								<label for="genero" class="form-label">Género</label>
 								<select id="genero" class="form-select" formControlName="genero">
 									<option *ngFor="let g of generos" [value]="g.value">{{ g.label }}</option>

@@ -94,14 +94,14 @@
 							<textarea class="form-control" id="descripcion" formControlName="descripcion" placeholder="Ej: Acceso a funcionalidades básicas"></textarea>
 						</div>
 									<div class="row mb-3">
-										<div class="col-6">
+										<div class="col-12 col-md-6 mb-3 mb-md-0">
 											<label for="precio" class="form-label">Precio</label>
 											<input type="number" class="form-control" id="precio" formControlName="precio" placeholder="Ej: 100" min="0">
 											<div *ngIf="planForm.get('precio')?.value < 0" class="invalid-feedback d-block">
 												El precio no puede ser negativo.
 											</div>
 										</div>
-										<div class="col-6">
+										<div class="col-12 col-md-6">
 											<label for="maximoUsuarios" class="form-label">Máximo de usuarios</label>
 											<input type="number" class="form-control" id="maximoUsuarios" formControlName="maximoUsuarios" placeholder="Ej: 10" min="1">
 											<div *ngIf="planForm.get('maximoUsuarios')?.value < 1" class="invalid-feedback d-block">

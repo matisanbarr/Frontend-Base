@@ -5,10 +5,19 @@
   color: #fff;
   transition: width 0.2s;
   min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   position: relative;
+  height: 100%;
   box-shadow: 2px 0 8px rgba(0,0,0,0.04);
   z-index: 10;
+  padding-bottom: 0;
 }
+.sidebar + * {
+  margin-left: 260px;
+}
+
 .sidebar.collapsed {
   width: 70px;
 }

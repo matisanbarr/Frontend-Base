@@ -23,6 +23,11 @@ import { PaginacionDto } from '../../../models/compartidos';
   styleUrl: './admin-users.component.scss'
 })
 export class AdminUsersComponent {
+  generarNombreUsuario(): void {
+    this.sugerirNombreUsuario();
+    const nombreControl = this.usuarioForm.get('nombre');
+    nombreControl?.markAsDirty(); // Marca como modificado para que el formulario detecte el cambio
+  }
   getTenantName(tenantId: string | null | undefined): string {
     if (!tenantId) return 'Sin empresa';
     const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
@@ -64,6 +69,10 @@ export class AdminUsersComponent {
 
   constructor() {
     this.usuarioForm = this.fb.group({
+      primerNombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+      segundoNombre: ['', [Validators.maxLength(30)]],
+      primerApellido: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+      segundoApellido: ['', [Validators.maxLength(30)]],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.minLength(6)]],
@@ -85,6 +94,34 @@ export class AdminUsersComponent {
     this.cargarUsuarios();
     this.cargarRoles();
     this.cargarTenants();
+    // Sugerir nombre de usuario automáticamente (solo si el usuario no lo ha modificado manualmente)
+    this.usuarioForm.get('primerNombre')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm.get('segundoNombre')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm.get('primerApellido')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm.get('segundoApellido')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+  }
+
+
+  private sugerirNombreUsuario(): void {
+    const nombreControl = this.usuarioForm.get('nombre');
+    // Solo sugerir si el usuario no ha escrito manualmente o si el campo está vacío
+    if (nombreControl?.dirty && nombreControl.value) return;
+    const primerNombre = (this.usuarioForm.get('primerNombre')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
+    const primerApellido = (this.usuarioForm.get('primerApellido')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
+    const segundoApellido = (this.usuarioForm.get('segundoApellido')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
+    let sugerido = '';
+    if (primerNombre && primerApellido) {
+      sugerido = primerNombre.charAt(0) + primerApellido;
+      if (segundoApellido) {
+        sugerido += segundoApellido.charAt(0);
+      }
+    } else if (primerNombre) {
+      sugerido = primerNombre;
+    } else if (primerApellido) {
+      sugerido = primerApellido;
+    }
+    nombreControl?.setValue(sugerido, { emitEvent: false });
+    nombreControl?.markAsPristine();
   }
 
   cargarTenants(): void {
@@ -173,6 +210,10 @@ export class AdminUsersComponent {
     this.modoEdicion = true;
     this.usuarioEditandoId = usuario.id || null;
     this.usuarioForm.patchValue({
+      primerNombre: usuario.primerNombre || '',
+      segundoNombre: usuario.segundoNombre || '',
+      primerApellido: usuario.primerApellido || '',
+      segundoApellido: usuario.segundoApellido || '',
       nombre: usuario.nombre,
       email: usuario.email,
       password: '',

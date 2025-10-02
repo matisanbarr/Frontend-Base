@@ -97,14 +97,14 @@
 							</div>
 						</div>
 						<div class="row mb-3">
-							<div class="col-6">
+							<div class="col-12 col-md-6 mb-3 mb-md-0">
 								<label for="telefono" class="form-label">Teléfono</label>
 								<input type="text" class="form-control" id="telefono" formControlName="telefono" placeholder="Ej: 555123456" [class.is-invalid]="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched" minlength="7" maxlength="20">
 								<div *ngIf="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched" class="invalid-feedback">
 									Teléfono entre 7 y 20 caracteres.
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-12 col-md-6">
 								<label for="direccion" class="form-label">Dirección</label>
 								<input type="text" class="form-control" id="direccion" formControlName="direccion" placeholder="Ej: Calle 123, Ciudad" [class.is-invalid]="tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched" maxlength="200">
 								<div *ngIf="tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched" class="invalid-feedback">

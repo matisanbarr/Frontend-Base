@@ -12,6 +12,17 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./main-navbar.component.scss']
 })
 export class MainNavbarComponent {
+
+  get nombreBienvenida(): string {
+    if (!this.currentUser) return '';
+    const pn = this.currentUser.primerNombre || '';
+    const pa = this.currentUser.primerApellido || '';
+    const sa = this.currentUser.segundoApellido || '';
+    let nombre = pn;
+    if (pa) nombre += ' ' + pa;
+    if (sa) nombre += ' ' + sa.charAt(0).toUpperCase() + '.';
+    return nombre.trim();
+  }
   isLoggedIn = false;
   hasAdminRole = false;
   hasUserRole = false;

@@ -1,10 +1,16 @@
-// .admin-home-grid ya no se usa, pero se deja por compatibilidad
-.admin-home-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
+@media (max-width: 991px) {
+  .admin-home-grid-custom {
+    gap: 1rem;
+  }
+  .admin-home-row {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
+  .admin-home-section {
+    padding: 1rem;
+    min-height: 120px;
+    border-radius: 0.75rem;
+  }
 }
 .home-admin-wrapper {
   position: relative;
@@ -20,7 +26,6 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 2.5rem;
   height: 100%;
   min-height: 0;
 }
@@ -53,28 +58,16 @@
   flex: 1 1 100%;
   min-width: 0;
 }
-.bienvenido-admin-static {
+.bienvenido-admin {
   width: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0.2rem 1rem 0 0;
+  padding: 1rem 1rem 1rem 0;
   font-size: 0.98rem;
   color: #888;
   font-weight: 500;
   line-height: 1.2;
-}
-.admin-home-grid-full {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 2rem;
-  width: 100vw;
-  height: 100vh;
-  align-items: stretch;
-  justify-items: stretch;
-  padding: 4rem 2.5rem 2.5rem 2.5rem;
-  box-sizing: border-box;
 }
 .display-4 {
   color: #388e3c;

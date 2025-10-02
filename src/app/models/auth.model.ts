@@ -9,19 +9,6 @@ export interface RegisterUserRequest {
   isGlobal?: boolean;
   roles?: Role[];
 }
-// Modelo de Usuario según tu backend
-export interface User {
-  id?: string; // guid
-  nombre: string;
-  password?: string;
-  email: string;
-  fechaNacimiento?: string;
-  genero?: number;
-  estadoActivo?: boolean;
-  isGlobal?: boolean;
-  tenantId?: string;
-  roles?: Role[];
-}
 
 // Modelo para Login Request según tu backend
 export interface LoginRequest {
@@ -33,10 +20,13 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string;
   refreshToken?: string;
-  user: User;
   expiresIn: number;
   tenantId: string;
   isGlobal: boolean;
+  primerNombre?: string;
+  segundoNombre?: string;
+  primerApellido?: string;
+  segundoApellido?: string;
 }
 
 // Modelo de Rol

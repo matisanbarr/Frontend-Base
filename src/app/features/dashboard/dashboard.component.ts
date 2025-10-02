@@ -18,6 +18,14 @@ import { HomeComponent } from '../home/home.component';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  showHamburger = true;
+  // Métodos para controlar visibilidad del botón hamburguesa
+  onOffcanvasShown() {
+    this.showHamburger = false;
+  }
+  onOffcanvasHidden() {
+    this.showHamburger = true;
+  }
   private userSub?: Subscription;
   currentUser$ = this.authService.currentUser$;
   userName: string|null = null;

@@ -1,3 +1,20 @@
+body {
+  padding-right: 0 !important;
+}
+// Layout principal para que sidebar y contenido ocupen toda la altura
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 // Texto de bienvenida admin
 .bienvenido-admin {
   display: block;
