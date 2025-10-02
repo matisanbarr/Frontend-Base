@@ -8,3 +8,5 @@ export * from './proyecto.model';
 export * from './rol.model';
 export * from './tenant.model';
 export * from './usuario.model';
+export * from './asignar-proyectos-tenant.model';
+export * from './compartidos';

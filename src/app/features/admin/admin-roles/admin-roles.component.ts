@@ -15,7 +15,7 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent],
   templateUrl: './admin-roles.component.html',
-  styleUrl: './admin-roles.component.scss'
+  styleUrls: ['./admin-roles.component.scss']
 })
 export class AdminRolesComponent {
   readonly alertService = inject(AlertService);
