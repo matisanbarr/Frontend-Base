@@ -10,13 +10,13 @@ import { CommonModule } from '@angular/common';
       <div class="alert alert-success">
         <h4>¡Componente cargando correctamente!</h4>
         <p>Si ves esto, Angular está funcionando bien.</p>
-        <hr>
+        <hr />
         <p class="mb-0">
           <a routerLink="/auth/login" class="btn btn-primary">Ir al Login</a>
           <a routerLink="/dashboard" class="btn btn-secondary ms-2">Ir al Dashboard</a>
         </p>
       </div>
     </div>
-  `
+  `,
 })
 export class TestComponent {}

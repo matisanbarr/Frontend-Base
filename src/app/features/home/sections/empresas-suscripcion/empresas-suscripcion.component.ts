@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-empresas-suscripcion',
   standalone: true,
   templateUrl: './empresas-suscripcion.component.html',
-  styleUrls: ['./empresas-suscripcion.component.scss']
+  styleUrls: ['./empresas-suscripcion.component.scss'],
 })
 export class EmpresasSuscripcionComponent {}

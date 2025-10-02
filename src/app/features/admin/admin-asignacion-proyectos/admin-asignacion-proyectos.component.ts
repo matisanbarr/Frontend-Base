@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
@@ -9,7 +15,10 @@ import { ProyectoService } from '../../../core/services/proyecto.service';
 import { TenantService } from '../../../core/services/tenant.service';
 import { Proyecto } from '../../../models/proyecto.model';
 import { Tenant } from '../../../models/tenant.model';
-import { AsignarProyectosTenant, TenantConProyecto } from '../../../models/asignar-proyectos-tenant.model';
+import {
+  AsignarProyectosTenant,
+  TenantConProyecto,
+} from '../../../models/asignar-proyectos-tenant.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPaginadaDto.model';
 
@@ -18,7 +27,7 @@ import { RespuestaPaginadaDto } from '../../../models/compartidos/respuestaPagin
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, ToastAlertsComponent, FormsModule],
   templateUrl: './admin-asignacion-proyectos.component.html',
-  styleUrls: ['./admin-asignacion-proyectos.component.scss']
+  styleUrls: ['./admin-asignacion-proyectos.component.scss'],
 })
 export class AdminAsignacionProyectosComponent {
   asignacionForm: FormGroup;
@@ -42,11 +51,11 @@ export class AdminAsignacionProyectosComponent {
 
   constructor() {
     this.asignacionForm = this.fb.group({
-      empresaId: ['', Validators.required]
+      empresaId: ['', Validators.required],
     });
     this.cargarEmpresas();
     this.cargarProyectos();
-  this.cargarAsignaciones();
+    this.cargarAsignaciones();
   }
 
   cargarEmpresas() {
@@ -67,7 +76,7 @@ export class AdminAsignacionProyectosComponent {
       pagina: this.paginaActual,
       tamano: 10,
       filtro: this.filtroBusqueda,
-      descendente: false
+      descendente: false,
     };
     this.proyectoService.listarAsignacionesProyectosPaginado(paginacion).subscribe({
       next: (resp: RespuestaPaginadaDto) => {
@@ -79,7 +88,7 @@ export class AdminAsignacionProyectosComponent {
       error: () => {
         this.loading = false;
         this.alertService.error('Error al cargar asignaciones');
-      }
+      },
     });
   }
 
@@ -94,7 +103,7 @@ export class AdminAsignacionProyectosComponent {
         this.proyectosSeleccionados.push(proyectoId);
       }
     } else {
-      this.proyectosSeleccionados = this.proyectosSeleccionados.filter(id => id !== proyectoId);
+      this.proyectosSeleccionados = this.proyectosSeleccionados.filter((id) => id !== proyectoId);
     }
   }
 
@@ -102,7 +111,7 @@ export class AdminAsignacionProyectosComponent {
     if (this.asignacionForm.invalid || this.proyectosSeleccionados.length === 0) return;
     const payload: AsignarProyectosTenant = {
       tenantId: this.asignacionForm.value.empresaId,
-      proyectoIds: this.proyectosSeleccionados
+      proyectoIds: this.proyectosSeleccionados,
     };
     this.loading = true;
     this.proyectoService.agregarAUnTenant(payload).subscribe({
@@ -116,7 +125,7 @@ export class AdminAsignacionProyectosComponent {
       error: () => {
         this.alertService.error('Error al guardar la asignación');
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -143,20 +152,22 @@ export class AdminAsignacionProyectosComponent {
   }
 
   confirmarEliminacion() {
-    debugger
+    debugger;
     if (!this.empresaIdAEliminar || !this.asignacionAEliminarProyectoId) return;
     this.loading = true;
-    this.proyectoService.eliminarAsignacionProyecto(this.empresaIdAEliminar, this.asignacionAEliminarProyectoId).subscribe({
-      next: () => {
-        this.cargarAsignaciones();
-        this.alertService.success('Asignación eliminada correctamente');
-        this.loading = false;
-      },
-      error: () => {
-        this.alertService.error('Error al eliminar la asignación');
-        this.loading = false;
-      }
-    });
+    this.proyectoService
+      .eliminarAsignacionProyecto(this.empresaIdAEliminar, this.asignacionAEliminarProyectoId)
+      .subscribe({
+        next: () => {
+          this.cargarAsignaciones();
+          this.alertService.success('Asignación eliminada correctamente');
+          this.loading = false;
+        },
+        error: () => {
+          this.alertService.error('Error al eliminar la asignación');
+          this.loading = false;
+        },
+      });
     this.showConfirmModal = false;
   }
 

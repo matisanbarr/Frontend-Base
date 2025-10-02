@@ -30,10 +30,9 @@ import { Router } from '@angular/router';
         </div>
       </div>
     </div>
-  `
+  `,
 })
 export class AccessDeniedComponent {
-  
   constructor(private router: Router) {}
 
   goBack(): void {

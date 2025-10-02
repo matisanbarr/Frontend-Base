@@ -4,10 +4,9 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpConfigService {
-
   constructor(private authService: AuthService) {}
 
   /**
@@ -16,7 +15,7 @@ export class HttpConfigService {
   getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'x-api-key': environment.apiKey
+      'x-api-key': environment.apiKey,
     });
 
     const token = this.authService.getToken();
@@ -33,7 +32,7 @@ export class HttpConfigService {
   getPublicHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'x-api-key': environment.apiKey
+      'x-api-key': environment.apiKey,
     });
   }
 
@@ -42,6 +41,6 @@ export class HttpConfigService {
    */
   requiresAuth(endpoint: string): boolean {
     const publicEndpoints = ['/auth/login', '/usuarios'];
-    return !publicEndpoints.some(public_endpoint => endpoint.includes(public_endpoint));
+    return !publicEndpoints.some((public_endpoint) => endpoint.includes(public_endpoint));
   }
 }

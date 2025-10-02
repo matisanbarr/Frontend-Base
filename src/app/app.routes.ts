@@ -5,36 +5,36 @@ export const routes: Routes = [
   // Ruta de testing
   {
     path: 'test',
-    loadComponent: () => import('./test.component').then(m => m.TestComponent)
+    loadComponent: () => import('./test.component').then((m) => m.TestComponent),
   },
 
   // Ruta por defecto - redirigir al login
   {
     path: '',
     redirectTo: '/auth/login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
-  
+
   // Rutas de autenticación (públicas)
   {
     path: 'auth',
     children: [
       {
         path: 'login',
-        loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),
-        canActivate: [LoginGuard] // No permitir acceso si ya está autenticado
-      }
-    ]
+        loadComponent: () =>
+          import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+        canActivate: [LoginGuard], // No permitir acceso si ya está autenticado
+      },
+    ],
   },
-
 
   // Rutas protegidas (dashboard y sus hijos)
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    loadComponent: () =>
+      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
     canActivate: [TokenGuard, AuthGuard],
     children: [
-
       // Rutas de administración (requieren rol admin)
       {
         path: 'admin',
@@ -43,52 +43,79 @@ export const routes: Routes = [
         children: [
           {
             path: 'users',
-            loadComponent: () => import('./features/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent)
+            loadComponent: () =>
+              import('./features/admin/admin-users/admin-users.component').then(
+                (m) => m.AdminUsersComponent
+              ),
           },
           {
             path: 'roles',
-            loadComponent: () => import('./features/admin/admin-roles/admin-roles.component').then(m => m.AdminRolesComponent)
+            loadComponent: () =>
+              import('./features/admin/admin-roles/admin-roles.component').then(
+                (m) => m.AdminRolesComponent
+              ),
           },
           {
             path: 'planes',
-            loadComponent: () => import('./features/admin/admin-planes/admin-planes.component').then(m => m.AdminPlanesComponent)
+            loadComponent: () =>
+              import('./features/admin/admin-planes/admin-planes.component').then(
+                (m) => m.AdminPlanesComponent
+              ),
           },
           {
             path: 'tenants',
-            loadComponent: () => import('./features/admin/admin-tenants/admin-tenants.component').then(m => m.AdminTenantsComponent)
+            loadComponent: () =>
+              import('./features/admin/admin-tenants/admin-tenants.component').then(
+                (m) => m.AdminTenantsComponent
+              ),
           },
           {
             path: 'proyectos',
-            loadComponent: () => import('./features/admin/admin-proyectos/admin-proyectos.component').then(m => m.AdminProyectosComponent)
+            loadComponent: () =>
+              import('./features/admin/admin-proyectos/admin-proyectos.component').then(
+                (m) => m.AdminProyectosComponent
+              ),
           },
           {
             path: 'asignacion-planes',
-            loadComponent: () => import('./features/admin/admin-asignacion-planes/admin-asignacion-planes.component').then(m => m.AdminAsignacionPlanesComponent)
+            loadComponent: () =>
+              import(
+                './features/admin/admin-asignacion-planes/admin-asignacion-planes.component'
+              ).then((m) => m.AdminAsignacionPlanesComponent),
           },
           {
             path: 'asignacion-proyectos',
-            loadComponent: () => import('./features/admin/admin-asignacion-proyectos/admin-asignacion-proyectos.component').then(m => m.AdminAsignacionProyectosComponent)
+            loadComponent: () =>
+              import(
+                './features/admin/admin-asignacion-proyectos/admin-asignacion-proyectos.component'
+              ).then((m) => m.AdminAsignacionProyectosComponent),
           },
           {
             path: 'register',
-            loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
-          }
-        ]
+            loadComponent: () =>
+              import('./features/auth/register/register.component').then(
+                (m) => m.RegisterComponent
+              ),
+          },
+        ],
       },
       // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.
-    ]
+    ],
   },
-
 
   // Página de acceso denegado
   {
     path: 'access-denied',
-    loadComponent: () => import('./shared/components/access-denied/access-denied.component').then(m => m.AccessDeniedComponent)
+    loadComponent: () =>
+      import('./shared/components/access-denied/access-denied.component').then(
+        (m) => m.AccessDeniedComponent
+      ),
   },
 
   // Página 404
   {
     path: '**',
-    loadComponent: () => import('./shared/components/not-found/not-found.component').then(m => m.NotFoundComponent)
-  }
+    loadComponent: () =>
+      import('./shared/components/not-found/not-found.component').then((m) => m.NotFoundComponent),
+  },
 ];

@@ -6,7 +6,6 @@ import { LoadingService } from '../services/loading.service';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-
   constructor(private loadingService: LoadingService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -34,8 +33,10 @@ export class LoadingInterceptor implements HttpInterceptor {
     // - Refresh token
     // - Peticiones de logout
     // - Peticiones con header específico
-    return req.url.includes('/auth/refresh') ||
-           req.url.includes('/auth/logout') ||
-           req.headers.has('X-Skip-Loading');
+    return (
+      req.url.includes('/auth/refresh') ||
+      req.url.includes('/auth/logout') ||
+      req.headers.has('X-Skip-Loading')
+    );
   }
 }

@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
@@ -12,11 +18,18 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 @Component({
   selector: 'app-admin-tenants',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+  ],
   templateUrl: './admin-tenants.component.html',
-  styleUrls: ['./admin-tenants.component.scss']
+  styleUrls: ['./admin-tenants.component.scss'],
 })
-export class AdminTenantsComponent { 
+export class AdminTenantsComponent {
   modoEdicion: boolean = false;
   tenantEditandoId: string | null = null;
   tenantForm: FormGroup;
@@ -40,7 +53,7 @@ export class AdminTenantsComponent {
       correo: ['', [Validators.email]],
       telefono: ['', [Validators.minLength(7), Validators.maxLength(20)]],
       direccion: ['', [Validators.maxLength(200)]],
-      activo: [true]
+      activo: [true],
     });
     this.cargarTenants();
   }
@@ -52,7 +65,7 @@ export class AdminTenantsComponent {
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
     this.tenantService.listarPaginadoTenants(filtro).subscribe({
-      next: (respuesta: { datos: Tenant[], total: number }) => {
+      next: (respuesta: { datos: Tenant[]; total: number }) => {
         this.tenants = respuesta.datos;
         this.totalRegistros = respuesta.total;
         this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
@@ -60,7 +73,7 @@ export class AdminTenantsComponent {
       },
       error: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -92,7 +105,7 @@ export class AdminTenantsComponent {
           this.cancelarEdicion();
           this.cargarTenants();
         },
-        error: () => this.alertService.error('Error al actualizar el tenant')
+        error: () => this.alertService.error('Error al actualizar el tenant'),
       });
     } else {
       this.tenantService.crearTenant(tenant).subscribe({
@@ -101,7 +114,7 @@ export class AdminTenantsComponent {
           this.tenantForm.reset({ activo: true });
           this.cargarTenants();
         },
-        error: () => this.alertService.error('Error al crear el tenant')
+        error: () => this.alertService.error('Error al crear el tenant'),
       });
     }
   }
@@ -119,7 +132,7 @@ export class AdminTenantsComponent {
         this.alertService.success('Tenant eliminado correctamente');
         this.cargarTenants();
       },
-      error: () => this.alertService.error('Error al eliminar el tenant')
+      error: () => this.alertService.error('Error al eliminar el tenant'),
     });
     this.cerrarModal();
   }

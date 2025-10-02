@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
@@ -10,7 +9,7 @@ import { MainFooterComponent } from './shared/components/layout/main-footer.comp
   standalone: true,
   imports: [RouterOutlet, MainNavbarComponent, MainFooterComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'Grimat Labs';
@@ -20,7 +19,7 @@ export class AppComponent {
 
   constructor(private authService: AuthService) {
     // Suscribirse a los cambios de autenticación
-    this.authService.isAuthenticated$.subscribe(auth => {
+    this.authService.isAuthenticated$.subscribe((auth) => {
       this.isLoggedIn = this.authService.isLoggedIn();
       this.hasAdminRole = this.authService.hasAnyRole(['Admin Global']);
       this.hasUserRole = this.authService.hasAnyRole(['Usuario']);

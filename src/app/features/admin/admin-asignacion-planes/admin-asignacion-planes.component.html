@@ -16,7 +16,13 @@
         <div class="card-header card-header-info">
           <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i>Asignaciones registradas</h5>
           <div class="mt-2">
-            <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="filtroBusqueda" (input)="buscarAsignaciones()">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar..."
+              [(ngModel)]="filtroBusqueda"
+              (input)="buscarAsignaciones()"
+            />
           </div>
         </div>
         <div class="card-body p-0 bg-light">
@@ -31,46 +37,92 @@
             <div class="planes-scroll">
               <ul class="list-group list-group-flush">
                 <ng-container *ngFor="let asignacion of asignaciones">
-                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom">
+                  <li
+                    class="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom"
+                  >
                     <div class="flex-grow-1 text-start d-flex align-items-center gap-2">
                       <div>
-                        <span class="status-circle me-2" [ngClass]="asignacion.activo ? 'status-active' : 'status-inactive'" title="{{ asignacion.activo ? 'Activo' : 'Inactivo' }}"></span>
-											</div>
-											<div>
+                        <span
+                          class="status-circle me-2"
+                          [ngClass]="asignacion.activo ? 'status-active' : 'status-inactive'"
+                          title="{{ asignacion.activo ? 'Activo' : 'Inactivo' }}"
+                        ></span>
+                      </div>
+                      <div>
                         <div class="fw-bold mb-0">
                           {{ getTenantNombre(asignacion.tenantId) }}
                         </div>
                         <div class="text-muted small">
                           Subscripción: {{ getPlanNombre(asignacion.planId) }}
                         </div>
-                          <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span>Inicio: {{ asignacion.fechaInicio | fechaLarga }}</span>
-                            <span *ngIf="asignacion.fechaFin">| Fin: {{ asignacion.fechaFin | fechaLarga }}</span>
-                            <span *ngIf="getDiasRestantes(asignacion) !== null" [ngClass]="getDiasRestantes(asignacion) == null ? '' : getDiasRestantes(asignacion)! > 15 ? 'badge bg-success text-white' : getDiasRestantes(asignacion)! <= 15 && getDiasRestantes(asignacion)! >= 6 ? 'badge bg-warning text-white' : getDiasRestantes(asignacion)! <= 5 ? 'badge bg-danger text-white' : ''" class="badge">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                          <span>Inicio: {{ asignacion.fechaInicio | fechaLarga }}</span>
+                          <span *ngIf="asignacion.fechaFin"
+                            >| Fin: {{ asignacion.fechaFin | fechaLarga }}</span
+                          >
+                          <span
+                            *ngIf="getDiasRestantes(asignacion) !== null"
+                            [ngClass]="
+                              getDiasRestantes(asignacion) == null
+                                ? ''
+                                : getDiasRestantes(asignacion)! > 15
+                                  ? 'badge bg-success text-white'
+                                  : getDiasRestantes(asignacion)! <= 15 &&
+                                      getDiasRestantes(asignacion)! >= 6
+                                    ? 'badge bg-warning text-white'
+                                    : getDiasRestantes(asignacion)! <= 5
+                                      ? 'badge bg-danger text-white'
+                                      : ''
+                            "
+                            class="badge"
+                          >
                             {{ getDiasRestantes(asignacion) }} días restantes
                           </span>
-                          </div>
                         </div>
                       </div>
+                    </div>
                     <div class="d-flex gap-2">
-                      <button class="btn btn-warning btn-sm text-white" (click)="editarAsignacion(asignacion)">
+                      <button
+                        class="btn btn-warning btn-sm text-white"
+                        (click)="editarAsignacion(asignacion)"
+                      >
                         <i class="fas fa-edit me-1"></i> Modificar
                       </button>
-                      <button class="btn btn-danger btn-sm text-white" (click)="eliminarAsignacion(asignacion)">
+                      <button
+                        class="btn btn-danger btn-sm text-white"
+                        (click)="eliminarAsignacion(asignacion)"
+                      >
                         <i class="fas fa-trash me-1"></i> Eliminar
                       </button>
                     </div>
                   </li>
                 </ng-container>
-                <li *ngIf="asignaciones.length === 0" class="list-group-item text-center text-muted border-0">
+                <li
+                  *ngIf="asignaciones.length === 0"
+                  class="list-group-item text-center text-muted border-0"
+                >
                   No hay asignaciones registradas.
                 </li>
               </ul>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
-              <button *ngIf="paginaActual > 1" class="btn btn-outline-info btn-sm rounded-pill me-2 px-3" (click)="cambiarPagina(paginaActual - 1)">Anterior</button>
-              <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
-              <button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3" (click)="cambiarPagina(paginaActual + 1)">Siguiente</button>
+              <button
+                *ngIf="paginaActual > 1"
+                class="btn btn-outline-info btn-sm rounded-pill me-2 px-3"
+                (click)="cambiarPagina(paginaActual - 1)"
+              >
+                Anterior
+              </button>
+              <span class="flex-grow-1 text-center"
+                >Página {{ paginaActual }} de {{ totalPaginas }}</span
+              >
+              <button
+                *ngIf="paginaActual < totalPaginas"
+                class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3"
+                (click)="cambiarPagina(paginaActual + 1)"
+              >
+                Siguiente
+              </button>
             </div>
           </ng-template>
         </div>
@@ -79,12 +131,20 @@
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
         <form [formGroup]="asignacionForm" (ngSubmit)="guardarAsignacion()">
-          <div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+          <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
             <div>
-              <h5 class="mb-0 text-center"><i class="bi bi-link-45deg me-2"></i>{{ modoEdicion ? 'Modificar Asignación' : 'Asignar Nueva Subscripción' }}</h5>
+              <h5 class="mb-0 text-center">
+                <i class="bi bi-link-45deg me-2"></i
+                >{{ modoEdicion ? 'Modificar Asignación' : 'Asignar Nueva Subscripción' }}
+              </h5>
             </div>
             <div class="form-check form-switch mt-2 mx-auto">
-              <input class="form-check-input" type="checkbox" id="activoSwitch" formControlName="activo">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="activoSwitch"
+                formControlName="activo"
+              />
               <label class="form-check-label" for="activoSwitch">
                 {{ asignacionForm.get('activo')?.value ? 'Activo' : 'Inactivo' }}
               </label>
@@ -95,7 +155,9 @@
               <label for="tenantSelect" class="form-label">Empresa</label>
               <select class="form-select" id="tenantSelect" formControlName="tenantId">
                 <option value="" disabled selected>Selecciona una empresa</option>
-                <option *ngFor="let tenant of tenants" [value]="tenant.id">{{ tenant.nombre }}</option>
+                <option *ngFor="let tenant of tenants" [value]="tenant.id">
+                  {{ tenant.nombre }}
+                </option>
               </select>
             </div>
             <div class="mb-3">
@@ -108,21 +170,37 @@
             <div class="row mb-3">
               <div class="col-12 mb-3">
                 <label for="fechaInicio" class="form-label">Fecha de inicio</label>
-                <input type="date" class="form-control" id="fechaInicio" formControlName="fechaInicio">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="fechaInicio"
+                  formControlName="fechaInicio"
+                />
               </div>
               <div class="col-12">
                 <label for="fechaFin" class="form-label">Fecha de fin</label>
-                <input type="date" class="form-control" id="fechaFin" formControlName="fechaFin">
+                <input type="date" class="form-control" id="fechaFin" formControlName="fechaFin" />
               </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mt-4">
               <div>
-                <button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="cancelarEdicion()">
+                <button
+                  *ngIf="modoEdicion"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="cancelarEdicion()"
+                >
                   <i class="fas fa-eraser me-1"></i> Limpiar
                 </button>
               </div>
               <div>
-                <button type="submit" class="btn" [class.btn-primary]="!modoEdicion" [class.btn-warning]="modoEdicion" [disabled]="asignacionForm.invalid || loading">
+                <button
+                  type="submit"
+                  class="btn"
+                  [class.btn-primary]="!modoEdicion"
+                  [class.btn-warning]="modoEdicion"
+                  [disabled]="asignacionForm.invalid || loading"
+                >
                   <i class="fas fa-save me-1"></i>
                   {{ modoEdicion ? 'Modificar Asignación' : 'Asignar Subscripción' }}
                 </button>
@@ -133,4 +211,4 @@
       </div>
     </div>
   </div>
- </div>
+</div>

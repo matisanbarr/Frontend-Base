@@ -12,7 +12,9 @@ import { CommonModule } from '@angular/common';
           <div class="card">
             <div class="card-body">
               <h2 class="card-title text-center mb-4">Registrar Nuevo Usuario</h2>
-              <p class="text-center text-muted">Componente de registro de usuarios - próximo a implementar</p>
+              <p class="text-center text-muted">
+                Componente de registro de usuarios - próximo a implementar
+              </p>
               <div class="alert alert-info">
                 <i class="bi bi-info-circle"></i>
                 <strong>Nota:</strong> Solo Admin Globales pueden registrar nuevos usuarios.
@@ -22,7 +24,7 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
     </div>
-  `
+  `,
 })
 export class RegisterComponent {
   constructor() {}

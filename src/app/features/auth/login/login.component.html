@@ -1,4 +1,4 @@
-<div class="d-flex align-items-center justify-content-center bg-light" style="min-height:90vh;">
+<div class="d-flex align-items-center justify-content-center bg-light" style="min-height: 90vh">
   <div class="container">
     <div class="row justify-content-center align-items-center">
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
@@ -19,7 +19,7 @@
                 <label for="nombreUsuario" class="form-label fw-semibold">
                   <i class="bi bi-person me-2"></i>Usuario
                 </label>
-                <input 
+                <input
                   type="text"
                   id="nombreUsuario"
                   name="nombreUsuario"
@@ -29,12 +29,15 @@
                   placeholder="Ingresa tu usuario"
                   [disabled]="isLoading"
                   [class.is-invalid]="nombreUsuario.invalid && nombreUsuario.touched"
-                  #nombreUsuario="ngModel">
-                <div class="invalid-feedback" *ngIf="nombreUsuario.invalid && nombreUsuario.touched">
+                  #nombreUsuario="ngModel"
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="nombreUsuario.invalid && nombreUsuario.touched"
+                >
                   El usuario es requerido
                 </div>
               </div>
-
 
               <!-- Contraseña -->
               <div class="mb-3">
@@ -42,7 +45,7 @@
                   <i class="bi bi-lock me-2"></i>Contraseña
                 </label>
                 <div class="input-group">
-                  <input 
+                  <input
                     [type]="showPassword ? 'text' : 'password'"
                     id="password"
                     name="password"
@@ -52,12 +55,14 @@
                     placeholder="Ingresa tu contraseña"
                     [disabled]="isLoading"
                     [class.is-invalid]="password.invalid && password.touched"
-                    #password="ngModel">
-                  <button 
+                    #password="ngModel"
+                  />
+                  <button
                     type="button"
                     class="btn btn-outline-secondary"
                     (click)="togglePassword()"
-                    [disabled]="isLoading">
+                    [disabled]="isLoading"
+                  >
                     <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                   </button>
                   <div class="invalid-feedback" *ngIf="password.invalid && password.touched">
@@ -68,10 +73,14 @@
 
               <!-- Recordar sesión -->
               <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="rememberMe" [(ngModel)]="rememberMe" name="rememberMe">
-                <label class="form-check-label" for="rememberMe">
-                  Recordar sesión
-                </label>
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="rememberMe"
+                  [(ngModel)]="rememberMe"
+                  name="rememberMe"
+                />
+                <label class="form-check-label" for="rememberMe"> Recordar sesión </label>
               </div>
 
               <!-- Mensajes -->
@@ -79,16 +88,20 @@
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 <div>{{ errorMessage }}</div>
               </div>
-              <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center py-2">
+              <div
+                *ngIf="successMessage"
+                class="alert alert-success d-flex align-items-center py-2"
+              >
                 <i class="bi bi-check-circle-fill me-2"></i>
                 <div>{{ successMessage }}</div>
               </div>
 
               <!-- Botón -->
-              <button 
+              <button
                 type="submit"
                 class="btn btn-primary w-100"
-                [disabled]="isLoading || !loginForm.valid">
+                [disabled]="isLoading || !loginForm.valid"
+              >
                 <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
                 <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i>
                 {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}

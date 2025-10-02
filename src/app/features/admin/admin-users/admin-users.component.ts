@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components';
 import { RoleColorPipe } from '../pipes/role-color.pipe';
@@ -18,11 +24,19 @@ import { PaginacionDto } from '../../../models/compartidos';
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent, RoleColorPipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+    RoleColorPipe,
+  ],
   templateUrl: './admin-users.component.html',
-  styleUrls: ['./admin-users.component.scss']
+  styleUrls: ['./admin-users.component.scss'],
 })
-export class AdminUsersComponent {  
+export class AdminUsersComponent {
   modoEdicion: boolean = false;
   usuarioEditandoId: string | null = null;
   usuarioForm: FormGroup;
@@ -51,14 +65,17 @@ export class AdminUsersComponent {
     { value: 0, label: 'No especificado' },
     { value: 1, label: 'Masculino' },
     { value: 2, label: 'Femenino' },
-    { value: 3, label: 'Otro' }
+    { value: 3, label: 'Otro' },
   ];
 
   constructor() {
     this.usuarioForm = this.fb.group({
       primerNombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
       segundoNombre: ['', [Validators.maxLength(30)]],
-      primerApellido: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+      primerApellido: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(30)],
+      ],
       segundoApellido: ['', [Validators.maxLength(30)]],
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
@@ -68,7 +85,7 @@ export class AdminUsersComponent {
       isGlobal: [false],
       tenantId: [null, Validators.required],
       roles: [[]],
-      estadoActivo: [true]
+      estadoActivo: [true],
     });
     this.usuarioForm.get('isGlobal')?.valueChanges.subscribe((isGlobal: boolean) => {
       if (isGlobal) {
@@ -83,19 +100,30 @@ export class AdminUsersComponent {
     this.cargarTenants();
     // Sugerir nombre de usuario automáticamente (solo si el usuario no lo ha modificado manualmente)
     this.usuarioForm.get('primerNombre')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm.get('segundoNombre')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm.get('primerApellido')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm.get('segundoApellido')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm
+      .get('segundoNombre')
+      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm
+      .get('primerApellido')
+      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
+    this.usuarioForm
+      .get('segundoApellido')
+      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
   }
-
 
   private sugerirNombreUsuario(): void {
     const nombreControl = this.usuarioForm.get('nombre');
     // Solo sugerir si el usuario no ha escrito manualmente o si el campo está vacío
     if (nombreControl?.dirty && nombreControl.value) return;
-    const primerNombre = (this.usuarioForm.get('primerNombre')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
-    const primerApellido = (this.usuarioForm.get('primerApellido')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
-    const segundoApellido = (this.usuarioForm.get('segundoApellido')?.value || '').toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
+    const primerNombre = (this.usuarioForm.get('primerNombre')?.value || '')
+      .toLowerCase()
+      .replace(/[^a-záéíóúüñ]/gi, '');
+    const primerApellido = (this.usuarioForm.get('primerApellido')?.value || '')
+      .toLowerCase()
+      .replace(/[^a-záéíóúüñ]/gi, '');
+    const segundoApellido = (this.usuarioForm.get('segundoApellido')?.value || '')
+      .toLowerCase()
+      .replace(/[^a-záéíóúüñ]/gi, '');
     let sugerido = '';
     if (primerNombre && primerApellido) {
       sugerido = primerNombre.charAt(0) + primerApellido;
@@ -118,7 +146,7 @@ export class AdminUsersComponent {
       },
       error: () => {
         this.tenants = [];
-      }
+      },
     });
   }
 
@@ -129,7 +157,7 @@ export class AdminUsersComponent {
       },
       error: () => {
         this.rolesDisponibles = [];
-      }
+      },
     });
   }
 
@@ -140,7 +168,7 @@ export class AdminUsersComponent {
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
     this.usuarioService.listarPaginadoUsuarios(filtro).subscribe({
-      next: (respuesta: { datos: Usuario[], total: number }) => {
+      next: (respuesta: { datos: Usuario[]; total: number }) => {
         this.usuarios = respuesta.datos;
         this.totalRegistros = respuesta.total;
         this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
@@ -149,7 +177,7 @@ export class AdminUsersComponent {
       error: () => {
         this.loading = false;
         this.alertService.error('Error al cargar usuarios');
-      }
+      },
     });
   }
 
@@ -176,7 +204,7 @@ export class AdminUsersComponent {
     }
     const usuario: Usuario = {
       ...this.usuarioForm.value,
-      roles: [] // No se asignan roles al crear
+      roles: [], // No se asignan roles al crear
     };
     this.loading = true;
     this.usuarioService.registro(usuario).subscribe({
@@ -189,7 +217,7 @@ export class AdminUsersComponent {
       error: () => {
         this.alertService.error('Error al registrar usuario');
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -208,8 +236,8 @@ export class AdminUsersComponent {
       genero: usuario.genero ?? 0,
       isGlobal: usuario.isGlobal ?? false,
       tenantId: usuario.isGlobal ? null : (usuario.tenantId ?? null),
-      roles: usuario.roles.map(r => r.id),
-      estadoActivo: usuario.estadoActivo ?? true
+      roles: usuario.roles.map((r) => r.id),
+      estadoActivo: usuario.estadoActivo ?? true,
     });
     if (usuario.isGlobal) {
       this.usuarioForm.get('tenantId')?.disable();
@@ -217,7 +245,7 @@ export class AdminUsersComponent {
       this.usuarioForm.get('tenantId')?.enable();
     }
     this.usuarioForm.markAsPristine();
-    this.rolesSeleccionadosOriginal = usuario.roles.map(r => r.id ?? '').filter(id => !!id);
+    this.rolesSeleccionadosOriginal = usuario.roles.map((r) => r.id ?? '').filter((id) => !!id);
     this.rolesSeleccionadosTemp = [...this.rolesSeleccionadosOriginal];
     this.rolesCambiados = false;
   }
@@ -228,7 +256,7 @@ export class AdminUsersComponent {
         this.rolesSeleccionadosTemp.push(rolId);
       }
     } else {
-      this.rolesSeleccionadosTemp = this.rolesSeleccionadosTemp.filter(id => id !== rolId);
+      this.rolesSeleccionadosTemp = this.rolesSeleccionadosTemp.filter((id) => id !== rolId);
     }
     this.rolesCambiados = this.detectarCambiosRoles();
     if (this.modoEdicion) {
@@ -244,8 +272,12 @@ export class AdminUsersComponent {
 
   guardarRoles(): void {
     if (!this.usuarioEditandoId) return;
-    const rolesAAsignar = this.rolesSeleccionadosTemp.filter(id => !this.rolesSeleccionadosOriginal.includes(id));
-    const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(id => !this.rolesSeleccionadosTemp.includes(id));
+    const rolesAAsignar = this.rolesSeleccionadosTemp.filter(
+      (id) => !this.rolesSeleccionadosOriginal.includes(id)
+    );
+    const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(
+      (id) => !this.rolesSeleccionadosTemp.includes(id)
+    );
     const usuarioId = this.usuarioEditandoId;
     let peticiones = [];
     if (rolesAAsignar.length > 0) {
@@ -256,16 +288,18 @@ export class AdminUsersComponent {
     }
     if (peticiones.length === 0) return;
     this.loading = true;
-    Promise.all(peticiones.map(p => p.toPromise())).then(() => {
-      this.alertService.success('Roles actualizados correctamente');
-      this.cargarUsuarios();
-      this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
-      this.rolesCambiados = false;
-      this.loading = false;
-    }).catch(() => {
-      this.alertService.error('Error al actualizar roles');
-      this.loading = false;
-    });
+    Promise.all(peticiones.map((p) => p.toPromise()))
+      .then(() => {
+        this.alertService.success('Roles actualizados correctamente');
+        this.cargarUsuarios();
+        this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
+        this.rolesCambiados = false;
+        this.loading = false;
+      })
+      .catch(() => {
+        this.alertService.error('Error al actualizar roles');
+        this.loading = false;
+      });
   }
 
   // Detecta cambios en el formulario o roles para mostrar el botón de modificar
@@ -297,7 +331,10 @@ export class AdminUsersComponent {
       return;
     }
     // El password solo es requerido al crear, no al modificar
-    if (!this.modoEdicion && (!this.usuarioForm.get('password')?.value || this.usuarioForm.get('password')?.invalid)) {
+    if (
+      !this.modoEdicion &&
+      (!this.usuarioForm.get('password')?.value || this.usuarioForm.get('password')?.invalid)
+    ) {
       this.alertService.error('La contraseña es requerida y debe tener al menos 6 caracteres.');
       this.usuarioForm.get('password')?.markAsTouched();
       return;
@@ -305,33 +342,45 @@ export class AdminUsersComponent {
     const usuario: Usuario = {
       ...this.usuarioForm.value,
       id: this.usuarioEditandoId,
-      roles: this.rolesDisponibles.filter(r => r.id && this.rolesSeleccionadosTemp.includes(r.id!))
+      roles: this.rolesDisponibles.filter(
+        (r) => r.id && this.rolesSeleccionadosTemp.includes(r.id!)
+      ),
     };
     this.loading = true;
     this.usuarioService.modificar(usuario).subscribe({
       next: () => {
         // Actualizar roles si hay cambios
-        const rolesAAsignar = this.rolesSeleccionadosTemp.filter(id => !this.rolesSeleccionadosOriginal.includes(id));
-        const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(id => !this.rolesSeleccionadosTemp.includes(id));
+        const rolesAAsignar = this.rolesSeleccionadosTemp.filter(
+          (id) => !this.rolesSeleccionadosOriginal.includes(id)
+        );
+        const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(
+          (id) => !this.rolesSeleccionadosTemp.includes(id)
+        );
         let peticiones = [];
         if (rolesAAsignar.length > 0) {
-          peticiones.push(this.usuarioService.asignarRoles({ usuarioId: usuario.id!, rolesId: rolesAAsignar }));
+          peticiones.push(
+            this.usuarioService.asignarRoles({ usuarioId: usuario.id!, rolesId: rolesAAsignar })
+          );
         }
         if (rolesAQuitar.length > 0) {
-          peticiones.push(this.usuarioService.aquitarRoles({ usuarioId: usuario.id!, rolesId: rolesAQuitar }));
+          peticiones.push(
+            this.usuarioService.aquitarRoles({ usuarioId: usuario.id!, rolesId: rolesAQuitar })
+          );
         }
         if (peticiones.length > 0) {
-          Promise.all(peticiones.map(p => p.toPromise())).then(() => {
-            this.alertService.success('Usuario y roles actualizados correctamente');
-            this.cargarUsuarios();
-            this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
-            this.rolesCambiados = false;
-            this.loading = false;
-            this.limpiarFormulario();
-          }).catch(() => {
-            this.alertService.error('Error al actualizar roles');
-            this.loading = false;
-          });
+          Promise.all(peticiones.map((p) => p.toPromise()))
+            .then(() => {
+              this.alertService.success('Usuario y roles actualizados correctamente');
+              this.cargarUsuarios();
+              this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
+              this.rolesCambiados = false;
+              this.loading = false;
+              this.limpiarFormulario();
+            })
+            .catch(() => {
+              this.alertService.error('Error al actualizar roles');
+              this.loading = false;
+            });
         } else {
           this.alertService.success('Usuario actualizado correctamente');
           this.cargarUsuarios();
@@ -342,7 +391,7 @@ export class AdminUsersComponent {
       error: () => {
         this.alertService.error('Error al actualizar usuario');
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -356,7 +405,7 @@ export class AdminUsersComponent {
       isGlobal: false,
       tenantId: null,
       roles: [],
-      estadoActivo: true
+      estadoActivo: true,
     });
     this.usuarioForm.get('tenantId')?.enable();
     this.modoEdicion = false;
@@ -389,7 +438,7 @@ export class AdminUsersComponent {
         this.alertService.error('Error al eliminar usuario');
         this.loading = false;
         this.cerrarModal();
-      }
+      },
     });
   }
 

@@ -4,20 +4,18 @@ import { Observable, map, take } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginGuard implements CanActivate {
-
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    
     const token = this.authService.getToken();
     const isAuthenticated = !!token;
-    
+
     if (isAuthenticated) {
       console.log('LoginGuard: Usuario ya autenticado, redirigiendo al dashboard');
       this.router.navigate(['/dashboard']);

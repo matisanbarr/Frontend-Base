@@ -29,6 +29,8 @@ export class PlanService {
   }
 
   listarPaginadoPlanes(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+      params: paginacion as any,
+    });
   }
 }

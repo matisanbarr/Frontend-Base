@@ -65,14 +65,14 @@
   }
 }
 @media (max-width: 991px) {
-  .dropdown-menu[aria-labelledby="userMenu"] {
+  .dropdown-menu[aria-labelledby='userMenu'] {
     margin-bottom: 2rem !important;
   }
 }
 .navbar {
   font-size: 1rem;
   border-radius: 0 0 1rem 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 .navbar-brand {
   font-weight: bold;
@@ -81,7 +81,8 @@
 .nav-link {
   transition: color 0.2s;
 }
-.nav-link:hover, .dropdown-item:hover {
+.nav-link:hover,
+.dropdown-item:hover {
   color: #0d6efd;
   background: #f4f8ff;
 }

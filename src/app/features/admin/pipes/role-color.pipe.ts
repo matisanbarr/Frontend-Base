@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'roleColor',
-  standalone: true
+  standalone: true,
 })
 export class RoleColorPipe implements PipeTransform {
   private colorClasses = [
@@ -15,11 +15,11 @@ export class RoleColorPipe implements PipeTransform {
     'bg-dark',
     'bg-light',
     'bg-purple',
-    'bg-orange'
+    'bg-orange',
   ];
 
   transform(rolNombre: string, rolesDisponibles: any[]): string {
-    const idx = rolesDisponibles.findIndex(r => r.nombre === rolNombre);
+    const idx = rolesDisponibles.findIndex((r) => r.nombre === rolNombre);
     if (idx === -1) return 'bg-info';
     return this.colorClasses[idx % this.colorClasses.length];
   }

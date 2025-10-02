@@ -31,7 +31,9 @@ export class ProyectoService {
   }
 
   listarPaginadoProyectos(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+      params: paginacion as any,
+    });
   }
 
   agregarAUnTenant(asignarProyectoTenant: AsignarProyectosTenant): Observable<any> {
@@ -39,13 +41,14 @@ export class ProyectoService {
   }
 
   listarAsignacionesProyectosPaginado(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/asignaciones-paginadas', { params: paginacion as any });
-  }
-
-  eliminarAsignacionProyecto(tenantId: string, proyectoId: string): Observable<any> {
-    return this.http.delete(this.apiUrl+ '/asignacion', {
-      params: { tenantId, proyectoId }
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/asignaciones-paginadas', {
+      params: paginacion as any,
     });
   }
 
+  eliminarAsignacionProyecto(tenantId: string, proyectoId: string): Observable<any> {
+    return this.http.delete(this.apiUrl + '/asignacion', {
+      params: { tenantId, proyectoId },
+    });
+  }
 }

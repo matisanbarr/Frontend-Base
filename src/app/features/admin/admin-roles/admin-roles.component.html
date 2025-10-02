@@ -1,5 +1,3 @@
-
-
 <!-- Modal de confirmación -->
 <app-confirm-modal
   *ngIf="showConfirmModal"
@@ -15,10 +13,16 @@
   <div class="row">
     <div class="col-12 col-md-6 col-lg-6 mb-4">
       <div class="card">
-  <div class="card-header card-header-info">
+        <div class="card-header card-header-info">
           <h5 class="mb-0">Roles registrados</h5>
           <div class="mt-2">
-            <input type="text" class="form-control" placeholder="Buscar rol..." [(ngModel)]="filtroBusqueda" (input)="buscarRoles()">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar rol..."
+              [(ngModel)]="filtroBusqueda"
+              (input)="buscarRoles()"
+            />
           </div>
         </div>
         <div class="card-body p-0">
@@ -33,74 +37,127 @@
             <ul class="list-group list-group-flush">
               <div class="roles-scroll">
                 <ul class="list-group list-group-flush">
-                  <li *ngFor="let rol of roles" class="list-group-item d-flex justify-content-between align-items-center">
-                      <div class="flex-grow-1 text-start">
-                        <div class="fw-bold">{{ rol.nombre }}</div>
-                        <div class="text-muted">{{ rol.descripcion || 'Sin descripción' }}</div>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <button class="btn btn-warning btn-sm text-white" (click)="editarRol(rol)">
-                          <i class="fas fa-edit"></i> Modificar
-                        </button>
-                        <button class="btn btn-danger btn-sm text-white" (click)="eliminarRol(rol)">
-                          <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                      </div>
-              </li>
-              <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted">
-                No hay roles registrados.
-              </li>
+                  <li
+                    *ngFor="let rol of roles"
+                    class="list-group-item d-flex justify-content-between align-items-center"
+                  >
+                    <div class="flex-grow-1 text-start">
+                      <div class="fw-bold">{{ rol.nombre }}</div>
+                      <div class="text-muted">{{ rol.descripcion || 'Sin descripción' }}</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-warning btn-sm text-white" (click)="editarRol(rol)">
+                        <i class="fas fa-edit"></i> Modificar
+                      </button>
+                      <button class="btn btn-danger btn-sm text-white" (click)="eliminarRol(rol)">
+                        <i class="fas fa-trash"></i> Eliminar
+                      </button>
+                    </div>
+                  </li>
+                  <li *ngIf="roles.length === 0" class="list-group-item text-center text-muted">
+                    No hay roles registrados.
+                  </li>
                 </ul>
               </div>
             </ul>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
-              <button *ngIf="paginaActual > 1" class="btn btn-outline-primary me-2" (click)="paginaAnterior()">Anterior</button>
-              <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
-              <button *ngIf="paginaActual < totalPaginas" class="btn btn-outline-primary ms-2" (click)="paginaSiguiente()">Siguiente</button>
+              <button
+                *ngIf="paginaActual > 1"
+                class="btn btn-outline-primary me-2"
+                (click)="paginaAnterior()"
+              >
+                Anterior
+              </button>
+              <span class="flex-grow-1 text-center"
+                >Página {{ paginaActual }} de {{ totalPaginas }}</span
+              >
+              <button
+                *ngIf="paginaActual < totalPaginas"
+                class="btn btn-outline-primary ms-2"
+                (click)="paginaSiguiente()"
+              >
+                Siguiente
+              </button>
             </div>
           </ng-template>
         </div>
       </div>
     </div>
-  <div class="col-12">
+    <div class="col-12">
       <div class="card">
-        <div class="card-header" style="background-color:#e8f5e9;color:#388e3c;">
+        <div class="card-header" style="background-color: #e8f5e9; color: #388e3c">
           <h5 class="mb-0">{{ modoEdicion ? 'Modificar Rol' : 'Crear Nuevo Rol' }}</h5>
         </div>
         <div class="card-body">
           <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
             <div class="mb-3">
               <label for="rolNombre" class="form-label">Nombre del Rol</label>
-              <input type="text" class="form-control" id="rolNombre" formControlName="nombre" placeholder="Ej: Admin Global" [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched">
-              <div *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched" class="invalid-feedback">
+              <input
+                type="text"
+                class="form-control"
+                id="rolNombre"
+                formControlName="nombre"
+                placeholder="Ej: Admin Global"
+                [class.is-invalid]="
+                  rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched
+                "
+              />
+              <div
+                *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched"
+                class="invalid-feedback"
+              >
                 El nombre es requerido (3-50 caracteres).
               </div>
-            </div>          
+            </div>
             <div class="mb-3">
               <label for="rolDescripcion" class="form-label">Descripción del Rol</label>
-              <textarea class="form-control" id="rolDescripcion" formControlName="descripcion" placeholder="Ej: Acceso completo al sistema" maxlength="200" rows="3" [class.is-invalid]="rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched"></textarea>
+              <textarea
+                class="form-control"
+                id="rolDescripcion"
+                formControlName="descripcion"
+                placeholder="Ej: Acceso completo al sistema"
+                maxlength="200"
+                rows="3"
+                [class.is-invalid]="
+                  rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched
+                "
+              ></textarea>
               <div class="text-end text-muted small">
                 {{ rolForm.get('descripcion')?.value?.length || 0 }}/200 caracteres
               </div>
-              <div *ngIf="rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched" class="invalid-feedback">
+              <div
+                *ngIf="rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched"
+                class="invalid-feedback"
+              >
                 La descripción es opcional (3-200 caracteres).
               </div>
             </div>
-            
+
             <div class="d-flex justify-content-between align-items-center mt-4">
               <div>
-                <button *ngIf="modoEdicion" type="button" class="btn btn-secondary" (click)="limpiarFormulario()">
+                <button
+                  *ngIf="modoEdicion"
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="limpiarFormulario()"
+                >
                   <i class="fas fa-eraser me-1"></i> Limpiar
                 </button>
               </div>
               <div>
-                <button type="submit" class="btn" [class.btn-primary]="!modoEdicion" [class.btn-warning]="modoEdicion" [disabled]="rolForm.invalid || loading">
+                <button
+                  type="submit"
+                  class="btn"
+                  [class.btn-primary]="!modoEdicion"
+                  [class.btn-warning]="modoEdicion"
+                  [disabled]="rolForm.invalid || loading"
+                >
                   <i class="fas fa-save me-1"></i>
                   {{ modoEdicion ? 'Modificar Rol' : 'Crear Rol' }}
                 </button>
               </div>
             </div>
-          </form>        
+          </form>
         </div>
       </div>
     </div>

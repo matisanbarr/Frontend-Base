@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
         {{ mascota.nombre }} ({{ mascota.especie }})
       </li>
     </ul>
-  `
+  `,
 })
 export class MascotaListPage {
   mascotas$: Observable<Mascota[]>;

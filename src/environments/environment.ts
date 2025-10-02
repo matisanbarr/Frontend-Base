@@ -11,7 +11,7 @@ export const environment = {
   // Configuraciones específicas para desarrollo
   enableDebugMode: true,
   tokenExpirationBuffer: 300000, // 5 minutos en ms
-  autoRefreshToken: true
+  autoRefreshToken: true,
 };
 
 /*

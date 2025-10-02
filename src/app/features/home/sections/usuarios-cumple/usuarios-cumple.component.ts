@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-usuarios-cumple',
   standalone: true,
   templateUrl: './usuarios-cumple.component.html',
-  styleUrls: ['./usuarios-cumple.component.scss']
+  styleUrls: ['./usuarios-cumple.component.scss'],
 })
 export class UsuariosCumpleComponent {}

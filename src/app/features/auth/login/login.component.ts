@@ -11,12 +11,12 @@ import { LoadingService } from '../../../core/services/loading.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginData: LoginRequest = {
     usuario: '',
-    password: ''
+    password: '',
   };
 
   errorMessage: string = '';
@@ -57,7 +57,7 @@ export class LoginComponent {
             error: () => {
               this.errorMessage = 'Sesión expirada, por favor inicia sesión nuevamente.';
               this.authService.logout();
-            }
+            },
           });
         } else {
           // Token válido, redirigir al dashboard
@@ -66,16 +66,21 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err?.message || err?.mensaje || err?.error?.mensaje || err?.error?.message || 'Error al iniciar sesión';
+        this.errorMessage =
+          err?.message ||
+          err?.mensaje ||
+          err?.error?.mensaje ||
+          err?.error?.message ||
+          'Error al iniciar sesión';
         this.successMessage = '';
         this.loadingService.hide();
       },
       complete: () => {
         this.isLoading = false;
         this.loadingService.hide();
-    }
+      },
     });
-}
+  }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;

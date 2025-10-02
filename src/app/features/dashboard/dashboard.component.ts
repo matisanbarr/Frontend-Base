@@ -1,4 +1,3 @@
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -15,7 +14,7 @@ import { HomeComponent } from '../home/home.component';
   standalone: true,
   imports: [CommonModule, RouterModule, SidebarComponent, HomeComponent],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   showHamburger = true;
@@ -28,10 +27,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   private userSub?: Subscription;
   currentUser$ = this.authService.currentUser$;
-  userName: string|null = null;
+  userName: string | null = null;
   userRoles: string[] = [];
   isLoggedIn: boolean = false;
-  isAdminGlobal: boolean|null = null;
+  isAdminGlobal: boolean | null = null;
   proyectos: Proyecto[] = [];
   sidebarCollapsed = false;
   adminMenuOpen = true;
@@ -47,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userSub = this.authService.currentUser$.subscribe(user => {
+    this.userSub = this.authService.currentUser$.subscribe((user) => {
       this.userName = (user as any)?.nombre || (user as any)?.name || '';
       const roles = (user as any)?.roles || [];
       this.isAdminGlobal = Array.isArray(roles) && roles.includes('Admin Global');
@@ -83,7 +82,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   toggleProyectoMenu(proyecto: any): void {
     // Acepta tanto Proyecto como Event, pero solo actúa si es Proyecto
     if (proyecto && (proyecto.nombre || proyecto.id)) {
-      this.proyectosMenuOpen[proyecto.id || proyecto.nombre] = !this.proyectosMenuOpen[proyecto.id || proyecto.nombre];
+      this.proyectosMenuOpen[proyecto.id || proyecto.nombre] =
+        !this.proyectosMenuOpen[proyecto.id || proyecto.nombre];
     }
   }
 
@@ -95,8 +95,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Devuelve los componentes/links de cada proyecto
     // Puedes personalizar según la estructura de cada proyecto
     return [
-      { label: 'Dashboard', route: `/proyectos/${proyecto.id || proyecto.nombre}/dashboard`, icon: 'bi-speedometer2' },
-      { label: 'Módulo 1', route: `/proyectos/${proyecto.id || proyecto.nombre}/modulo1`, icon: 'bi-box' },
+      {
+        label: 'Dashboard',
+        route: `/proyectos/${proyecto.id || proyecto.nombre}/dashboard`,
+        icon: 'bi-speedometer2',
+      },
+      {
+        label: 'Módulo 1',
+        route: `/proyectos/${proyecto.id || proyecto.nombre}/modulo1`,
+        icon: 'bi-box',
+      },
       // Agrega más módulos/componentes según tu app
     ];
   }

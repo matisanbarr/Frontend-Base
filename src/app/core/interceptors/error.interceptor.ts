@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -51,7 +56,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           status: error.status,
           message: errorMessage,
           url: error.url,
-          error: error.error
+          error: error.error,
         });
 
         // Opcional: Mostrar toast/notification del error
@@ -60,7 +65,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         return throwError(() => ({
           status: error.status,
           message: errorMessage,
-          originalError: error
+          originalError: error,
         }));
       })
     );
@@ -72,10 +77,10 @@ export class ErrorInterceptor implements HttpInterceptor {
   private getValidationErrors(errorResponse: any): string {
     if (errorResponse?.errors) {
       const errors: string[] = [];
-      
+
       // Si es un objeto con propiedades de error
       if (typeof errorResponse.errors === 'object') {
-        Object.keys(errorResponse.errors).forEach(key => {
+        Object.keys(errorResponse.errors).forEach((key) => {
           const fieldErrors = errorResponse.errors[key];
           if (Array.isArray(fieldErrors)) {
             errors.push(...fieldErrors);
@@ -88,10 +93,10 @@ export class ErrorInterceptor implements HttpInterceptor {
       else if (Array.isArray(errorResponse.errors)) {
         errors.push(...errorResponse.errors);
       }
-      
+
       return errors.length > 0 ? errors.join(', ') : 'Datos de entrada inválidos';
     }
-    
+
     return errorResponse?.message || 'Datos de entrada inválidos';
   }
 }

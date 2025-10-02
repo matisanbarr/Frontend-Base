@@ -14,22 +14,22 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   registro(usuario: Usuario): Observable<boolean> {
-			return this.http.post<boolean>(this.apiUrl, usuario).pipe(
-			catchError(error => {
-				console.error('Error en registro:', error);
-				throw error;
-			})
-		);
-	}
+    return this.http.post<boolean>(this.apiUrl, usuario).pipe(
+      catchError((error) => {
+        console.error('Error en registro:', error);
+        throw error;
+      })
+    );
+  }
 
   modificar(userData: Usuario): Observable<boolean> {
-			return this.http.put<boolean>(`${this.apiUrl}/${userData.id}`, userData).pipe(
-			catchError(error => {
-				console.error('Error en modificar usuario:', error);
-				throw error;
-			})
-		);
-	}
+    return this.http.put<boolean>(`${this.apiUrl}/${userData.id}`, userData).pipe(
+      catchError((error) => {
+        console.error('Error en modificar usuario:', error);
+        throw error;
+      })
+    );
+  }
 
   listarUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl);
@@ -40,24 +40,26 @@ export class UsuarioService {
   }
 
   listarPaginadoUsuarios(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+      params: paginacion as any,
+    });
   }
 
   asignarRoles(userData: AsignarRolesDto): Observable<boolean> {
-			return this.http.post<boolean>(this.apiUrl + '/asignar-roles', userData).pipe(
-			catchError(error => {
-				console.error('Error en asignar roles:', error);
-				throw error;
-			})
-		);
-	}
+    return this.http.post<boolean>(this.apiUrl + '/asignar-roles', userData).pipe(
+      catchError((error) => {
+        console.error('Error en asignar roles:', error);
+        throw error;
+      })
+    );
+  }
 
   aquitarRoles(userData: AsignarRolesDto): Observable<boolean> {
-			return this.http.post<boolean>(this.apiUrl + '/quitar-roles', userData).pipe(
-			catchError(error => {
-				console.error('Error en quitar roles:', error);
-				throw error;
-			})
-		);
-	}
+    return this.http.post<boolean>(this.apiUrl + '/quitar-roles', userData).pipe(
+      catchError((error) => {
+        console.error('Error en quitar roles:', error);
+        throw error;
+      })
+    );
+  }
 }

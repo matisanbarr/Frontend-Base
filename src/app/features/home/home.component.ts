@@ -8,13 +8,19 @@ import { MiniCardsComponent } from './sections/mini-cards/mini-cards.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, EmpresasSuscripcionComponent, UsuariosCumpleComponent, MiniCardsComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    EmpresasSuscripcionComponent,
+    UsuariosCumpleComponent,
+    MiniCardsComponent,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  @Input() isAdminGlobal: boolean|null = null;
-  @Input() userName: string|null = null;
+  @Input() isAdminGlobal: boolean | null = null;
+  @Input() userName: string | null = null;
   homeImageExists = false;
 
   constructor() {}

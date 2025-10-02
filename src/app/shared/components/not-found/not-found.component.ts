@@ -16,10 +16,9 @@ import { Router } from '@angular/router';
         <i class="bi bi-house"></i> Ir al Inicio
       </button>
     </div>
-  `
+  `,
 })
 export class NotFoundComponent {
-  
   constructor(private router: Router) {}
 
   goBack(): void {

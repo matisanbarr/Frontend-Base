@@ -13,9 +13,16 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 @Component({
   selector: 'app-admin-roles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+  ],
   templateUrl: './admin-roles.component.html',
-  styleUrls: ['./admin-roles.component.scss']
+  styleUrls: ['./admin-roles.component.scss'],
 })
 export class AdminRolesComponent {
   modoEdicion: boolean = false;
@@ -38,7 +45,7 @@ export class AdminRolesComponent {
   constructor() {
     this.rolForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]]
+      descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]],
     });
     this.cargarRoles();
   }
@@ -50,7 +57,7 @@ export class AdminRolesComponent {
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
     this.rolService.listarPaginadoRoles(filtro).subscribe({
-      next: (respuesta: { datos: Rol[], total: number }) => {
+      next: (respuesta: { datos: Rol[]; total: number }) => {
         this.roles = respuesta.datos;
         this.totalRegistros = respuesta.total;
         this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
@@ -58,7 +65,7 @@ export class AdminRolesComponent {
       },
       error: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -90,7 +97,7 @@ export class AdminRolesComponent {
       const rolModificado: Rol = {
         id: this.rolEditandoId,
         nombre: this.rolForm.value.nombre,
-        descripcion: this.rolForm.value.descripcion
+        descripcion: this.rolForm.value.descripcion,
       };
       this.rolService.modificarRol(rolModificado).subscribe({
         next: () => {
@@ -102,11 +109,14 @@ export class AdminRolesComponent {
         },
         error: (err) => {
           this.alertService.error('No se pudo modificar el rol. Intenta nuevamente.');
-        }
+        },
       });
     } else {
       // Crear nuevo rol
-      const nuevoRol: Rol = { nombre: this.rolForm.value.nombre, descripcion: this.rolForm.value.descripcion };
+      const nuevoRol: Rol = {
+        nombre: this.rolForm.value.nombre,
+        descripcion: this.rolForm.value.descripcion,
+      };
       this.rolService.crearRol(nuevoRol).subscribe({
         next: () => {
           this.cargarRoles();
@@ -115,7 +125,7 @@ export class AdminRolesComponent {
         },
         error: (err) => {
           this.alertService.error('No se pudo crear el rol. Intenta nuevamente.');
-        }
+        },
       });
     }
   }
@@ -125,17 +135,17 @@ export class AdminRolesComponent {
     this.rolEditandoId = rol.id || null;
     this.rolForm.patchValue({
       nombre: rol.nombre,
-      descripcion: rol.descripcion || ''
+      descripcion: rol.descripcion || '',
     });
   }
 
   eliminarRol(rol: Rol): void {
-      this.rolAEliminar = rol.id!;
-      this.rolANombreEliminar = rol.nombre;
-      this.showConfirmModal = true;
-    }
+    this.rolAEliminar = rol.id!;
+    this.rolANombreEliminar = rol.nombre;
+    this.showConfirmModal = true;
+  }
 
-    confirmarEliminacion(): void {
+  confirmarEliminacion(): void {
     if (!this.rolAEliminar) return;
     this.rolService.eliminarRol(this.rolAEliminar).subscribe({
       next: () => {
@@ -146,9 +156,9 @@ export class AdminRolesComponent {
       error: (err) => {
         this.cerrarModal();
         this.alertService.error('No se pudo eliminar el rol. Intenta nuevamente.');
-      }
+      },
     });
-    }
+  }
 
   limpiarFormulario(): void {
     this.rolForm.reset();

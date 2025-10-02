@@ -22,13 +22,15 @@ export class RolService {
 
   listarRoles(): Observable<Rol[]> {
     return this.http.get<Rol[]>(this.apiUrl);
-  }  
+  }
 
   eliminarRol(nombre: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${nombre}`);
   }
 
   listarPaginadoRoles(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', { params: paginacion as any });
+    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+      params: paginacion as any,
+    });
   }
 }

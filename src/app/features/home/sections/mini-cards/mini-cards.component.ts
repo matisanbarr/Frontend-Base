@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-mini-cards',
   standalone: true,
   templateUrl: './mini-cards.component.html',
-  styleUrls: ['./mini-cards.component.scss']
+  styleUrls: ['./mini-cards.component.scss'],
 })
 export class MiniCardsComponent {}

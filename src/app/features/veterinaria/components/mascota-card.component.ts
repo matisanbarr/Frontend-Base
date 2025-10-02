@@ -14,7 +14,16 @@ import { Mascota } from '../models/mascota.model';
       <p *ngIf="mascota.edad">Edad: {{ mascota.edad }} años</p>
     </div>
   `,
-  styles: [`.mascota-card { border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;}`]
+  styles: [
+    `
+      .mascota-card {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+    `,
+  ],
 })
 export class MascotaCardComponent {
   @Input() mascota!: Mascota;

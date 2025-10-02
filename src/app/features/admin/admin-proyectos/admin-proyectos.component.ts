@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
@@ -14,9 +20,16 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 @Component({
   selector: 'app-admin-proyectos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+  ],
   templateUrl: './admin-proyectos.component.html',
-  styleUrls: ['./admin-proyectos.component.scss']
+  styleUrls: ['./admin-proyectos.component.scss'],
 })
 export class AdminProyectosComponent {
   modoEdicion: boolean = false;
@@ -39,12 +52,10 @@ export class AdminProyectosComponent {
   constructor() {
     this.proyectoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]]
+      descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]],
     });
     this.cargarProyectos();
   }
-
-
 
   cargarProyectos(): void {
     this.loading = true;
@@ -61,7 +72,7 @@ export class AdminProyectosComponent {
       },
       error: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -93,7 +104,7 @@ export class AdminProyectosComponent {
           this.cancelarEdicion();
           this.cargarProyectos();
         },
-        error: () => this.alertService.error('Error al actualizar el proyecto')
+        error: () => this.alertService.error('Error al actualizar el proyecto'),
       });
     } else {
       this.proyectoService.crearProyecto(proyecto).subscribe({
@@ -102,7 +113,7 @@ export class AdminProyectosComponent {
           this.proyectoForm.reset();
           this.cargarProyectos();
         },
-        error: () => this.alertService.error('Error al crear el proyecto')
+        error: () => this.alertService.error('Error al crear el proyecto'),
       });
     }
   }
@@ -120,7 +131,7 @@ export class AdminProyectosComponent {
         this.alertService.success('Proyecto eliminado correctamente');
         this.cargarProyectos();
       },
-      error: () => this.alertService.error('Error al eliminar el proyecto')
+      error: () => this.alertService.error('Error al eliminar el proyecto'),
     });
     this.cerrarModal();
   }
@@ -137,7 +148,7 @@ export class AdminProyectosComponent {
     this.cargarProyectos();
   }
 
-   limpiarFormulario(): void {
+  limpiarFormulario(): void {
     this.proyectoForm.reset();
     this.modoEdicion = false;
     this.proyectoEditandoId = null;

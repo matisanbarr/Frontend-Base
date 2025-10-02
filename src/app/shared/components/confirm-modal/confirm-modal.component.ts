@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-confirm-modal',
   standalone: true,
   templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.scss']
+  styleUrls: ['./confirm-modal.component.scss'],
 })
 export class ConfirmModalComponent {
   @Input() message: string = '¿Estás seguro que deseas eliminar?';

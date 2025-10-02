@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
@@ -12,9 +18,16 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 @Component({
   selector: 'app-admin-planes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+  ],
   templateUrl: './admin-planes.component.html',
-  styleUrls: ['./admin-planes.component.scss']
+  styleUrls: ['./admin-planes.component.scss'],
 })
 export class AdminPlanesComponent {
   modoEdicion: boolean = false;
@@ -40,7 +53,7 @@ export class AdminPlanesComponent {
       descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]],
       precio: [0, [Validators.required, Validators.min(0)]],
       maximoUsuarios: [1, [Validators.required, Validators.min(1)]],
-      estaActivo: [true]
+      estaActivo: [true],
     });
     this.cargarPlanes();
   }
@@ -52,7 +65,7 @@ export class AdminPlanesComponent {
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
     this.planService.listarPaginadoPlanes(filtro).subscribe({
-      next: (respuesta: { datos: Plan[], total: number }) => {
+      next: (respuesta: { datos: Plan[]; total: number }) => {
         this.planes = respuesta.datos;
         this.totalRegistros = respuesta.total;
         this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
@@ -60,7 +73,7 @@ export class AdminPlanesComponent {
       },
       error: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -92,7 +105,7 @@ export class AdminPlanesComponent {
           this.cancelarEdicion();
           this.cargarPlanes();
         },
-        error: () => this.alertService.error('Error al actualizar el plan')
+        error: () => this.alertService.error('Error al actualizar el plan'),
       });
     } else {
       this.planService.crearPlan(plan).subscribe({
@@ -101,7 +114,7 @@ export class AdminPlanesComponent {
           this.planForm.reset({ estaActivo: true });
           this.cargarPlanes();
         },
-        error: () => this.alertService.error('Error al crear el plan')
+        error: () => this.alertService.error('Error al crear el plan'),
       });
     }
   }
@@ -119,7 +132,7 @@ export class AdminPlanesComponent {
         this.alertService.success('Plan eliminado correctamente');
         this.cargarPlanes();
       },
-      error: () => this.alertService.error('Error al eliminar el plan')
+      error: () => this.alertService.error('Error al eliminar el plan'),
     });
     this.cerrarModal();
   }

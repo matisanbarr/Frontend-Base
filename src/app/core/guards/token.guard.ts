@@ -5,17 +5,15 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenGuard implements CanActivate {
-
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    
     // Si no hay token, permitir que otros guards manejen la situación
     if (!this.authService.getToken()) {
       return true;
@@ -28,7 +26,7 @@ export class TokenGuard implements CanActivate {
 
     // Token expirado, intentar refrescar
     console.log('TokenGuard: Token expirado, intentando refrescar...');
-    
+
     const refreshToken = this.authService.getRefreshToken();
     if (!refreshToken) {
       // No hay refresh token, cerrar sesión
@@ -42,7 +40,7 @@ export class TokenGuard implements CanActivate {
         console.log('TokenGuard: Token refrescado exitosamente');
         return of(true);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('TokenGuard: Error al refrescar token', error);
         this.authService.logout();
         return of(false);

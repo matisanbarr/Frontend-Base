@@ -1,7 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FechaLargaPipe } from '../../../shared/pipes/fecha-larga.pipe';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
@@ -17,9 +23,17 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 @Component({
   selector: 'app-admin-asignacion-planes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ConfirmModalComponent, RouterModule, ToastAlertsComponent, FechaLargaPipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ConfirmModalComponent,
+    RouterModule,
+    ToastAlertsComponent,
+    FechaLargaPipe,
+  ],
   templateUrl: './admin-asignacion-planes.component.html',
-  styleUrls: ['./admin-asignacion-planes.component.scss']
+  styleUrls: ['./admin-asignacion-planes.component.scss'],
 })
 export class AdminAsignacionPlanesComponent {
   modoEdicion: boolean = false;
@@ -56,7 +70,7 @@ export class AdminAsignacionPlanesComponent {
       planId: ['', Validators.required],
       fechaInicio: ['', Validators.required],
       fechaFin: [''],
-      activo: [true]
+      activo: [true],
     });
     this.cargarAsignaciones();
     this.cargarTenants();
@@ -78,7 +92,7 @@ export class AdminAsignacionPlanesComponent {
       },
       error: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -102,10 +116,10 @@ export class AdminAsignacionPlanesComponent {
     this.asignacionForm.patchValue({
       ...asignacion,
       fechaInicio: toDateInput(asignacion.fechaInicio),
-      fechaFin: toDateInput(asignacion.fechaFin)
+      fechaFin: toDateInput(asignacion.fechaFin),
     });
-    this.tenantSeleccionado = this.tenants.find(t => t.id === asignacion.tenantId) || null;
-    this.planSeleccionado = this.planes.find(p => p.id === asignacion.planId) || null;
+    this.tenantSeleccionado = this.tenants.find((t) => t.id === asignacion.tenantId) || null;
+    this.planSeleccionado = this.planes.find((p) => p.id === asignacion.planId) || null;
   }
 
   cancelarEdicion() {
@@ -119,12 +133,12 @@ export class AdminAsignacionPlanesComponent {
   guardarAsignacion() {
     if (this.asignacionForm.invalid) return;
     const formValue = this.asignacionForm.value;
-    const tenant = this.tenants.find(t => t.id === formValue.tenantId);
-    const plan = this.planes.find(p => p.id === formValue.planId);
+    const tenant = this.tenants.find((t) => t.id === formValue.tenantId);
+    const plan = this.planes.find((p) => p.id === formValue.planId);
     const asignacion: TenantPlan = {
       ...formValue,
       nombreTenant: tenant?.nombre || '',
-      nombrePlan: plan?.nombre || ''
+      nombrePlan: plan?.nombre || '',
     };
     if (this.modoEdicion && this.asignacionEditandoId) {
       asignacion.id = this.asignacionEditandoId;
@@ -134,7 +148,7 @@ export class AdminAsignacionPlanesComponent {
           this.cancelarEdicion();
           this.cargarAsignaciones();
         },
-        error: () => this.alertService.error('Error al actualizar la asignación')
+        error: () => this.alertService.error('Error al actualizar la asignación'),
       });
     } else {
       this.tenantPlanService.asignarPlan(asignacion).subscribe({
@@ -143,7 +157,7 @@ export class AdminAsignacionPlanesComponent {
           this.asignacionForm.reset({ activo: true });
           this.cargarAsignaciones();
         },
-        error: () => this.alertService.error('Error al asignar el plan')
+        error: () => this.alertService.error('Error al asignar el plan'),
       });
     }
   }
@@ -160,7 +174,7 @@ export class AdminAsignacionPlanesComponent {
         this.alertService.success('Asignación eliminada correctamente');
         this.cargarAsignaciones();
       },
-      error: () => this.alertService.error('Error al eliminar la asignación')
+      error: () => this.alertService.error('Error al eliminar la asignación'),
     });
     this.cerrarModal();
   }
@@ -181,7 +195,7 @@ export class AdminAsignacionPlanesComponent {
       next: (tenants) => {
         this.tenants = tenants;
         this.tenantsFiltrados = tenants;
-      }
+      },
     });
   }
 
@@ -190,7 +204,7 @@ export class AdminAsignacionPlanesComponent {
       next: (planes) => {
         this.planes = planes;
         this.planesFiltrados = planes;
-      }
+      },
     });
   }
 
@@ -199,7 +213,7 @@ export class AdminAsignacionPlanesComponent {
     if (!filtro) {
       this.tenantsFiltrados = this.tenants;
     } else {
-      this.tenantsFiltrados = this.tenants.filter(t => t.nombre.toLowerCase().includes(filtro));
+      this.tenantsFiltrados = this.tenants.filter((t) => t.nombre.toLowerCase().includes(filtro));
     }
     this.asignacionForm.patchValue({ tenantId: '' });
     this.tenantSeleccionado = null;
@@ -210,20 +224,20 @@ export class AdminAsignacionPlanesComponent {
     if (!filtro) {
       this.planesFiltrados = this.planes;
     } else {
-      this.planesFiltrados = this.planes.filter(p => p.nombre.toLowerCase().includes(filtro));
+      this.planesFiltrados = this.planes.filter((p) => p.nombre.toLowerCase().includes(filtro));
     }
     this.asignacionForm.patchValue({ planId: '' });
     this.planSeleccionado = null;
   }
 
   onSelectTenant(id: string) {
-    const found = this.tenants.find(t => t.id === id) || null;
+    const found = this.tenants.find((t) => t.id === id) || null;
     this.tenantSeleccionado = found;
     this.asignacionForm.patchValue({ tenantId: id });
   }
 
   onSelectPlan(id: string) {
-    const found = this.planes.find(p => p.id === id) || null;
+    const found = this.planes.find((p) => p.id === id) || null;
     this.planSeleccionado = found;
     this.asignacionForm.patchValue({ planId: id });
   }
@@ -243,20 +257,20 @@ export class AdminAsignacionPlanesComponent {
   }
 
   getTenantNombre(id: string): string {
-    return this.tenants.find(t => t.id === id)?.nombre || 'Empresa';
+    return this.tenants.find((t) => t.id === id)?.nombre || 'Empresa';
   }
 
   getPlanNombre(id: string): string {
-    return this.planes.find(p => p.id === id)?.nombre || 'Subscripción';
+    return this.planes.find((p) => p.id === id)?.nombre || 'Subscripción';
   }
 
   getDiasRestantes(asignacion: TenantPlan): number | null {
     if (!asignacion.fechaFin) return null;
     const hoy = new Date();
     const fin = new Date(asignacion.fechaFin);
-    hoy.setHours(0,0,0,0);
-    fin.setHours(0,0,0,0);
+    hoy.setHours(0, 0, 0, 0);
+    fin.setHours(0, 0, 0, 0);
     const diff = fin.getTime() - hoy.getTime();
     return Math.max(Math.ceil(diff / (1000 * 60 * 60 * 24)), 0);
-  }  
+  }
 }

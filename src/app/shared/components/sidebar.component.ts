@@ -8,11 +8,11 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
   @Input() sidebarCollapsed = false;
-  @Input() isAdminGlobal: boolean|null = null;
+  @Input() isAdminGlobal: boolean | null = null;
   @Input() adminMenuOpen = true;
   @Input() proyectos: Proyecto[] = [];
   @Input() proyectosMenuOpen: { [id: string]: boolean } = {};
@@ -20,7 +20,9 @@ export class SidebarComponent {
   @Output() toggleAdminMenuEvent = new EventEmitter<void>();
   @Output() toggleProyectoMenuEvent = new EventEmitter<Proyecto>();
 
-  @Input() getComponentesProyecto: (proyecto: Proyecto) => { label: string; route: string; icon: string }[] = () => [];
+  @Input() getComponentesProyecto: (
+    proyecto: Proyecto
+  ) => { label: string; route: string; icon: string }[] = () => [];
   @Input() isProyectoMenuOpen: (proyecto: Proyecto) => boolean = () => false;
 
   toggleSidebar() {

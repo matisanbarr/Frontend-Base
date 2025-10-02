@@ -3,8 +3,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'fechaLarga', standalone: true })
 export class FechaLargaPipe implements PipeTransform {
   private meses = [
-    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+    'enero',
+    'febrero',
+    'marzo',
+    'abril',
+    'mayo',
+    'junio',
+    'julio',
+    'agosto',
+    'septiembre',
+    'octubre',
+    'noviembre',
+    'diciembre',
   ];
   transform(value: Date | string | undefined | null): string {
     if (!value) return '';
