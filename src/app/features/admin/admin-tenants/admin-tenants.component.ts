@@ -36,6 +36,9 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-tenants.component.scss'],
 })
 export class AdminTenantsComponent {
+  get activoControl(): import('@angular/forms').FormControl {
+    return this.tenantForm.get('activo') as import('@angular/forms').FormControl;
+  }
   // Funciones para el componente de lista genérico
   tenantNombreFn = (tenant: Tenant) => tenant.nombre;
   tenantCorreoFn = (tenant: Tenant) => tenant.correo || null;

@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
   FormsModule,
+  FormControl,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
@@ -40,6 +41,9 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-asignacion-planes.component.scss'],
 })
 export class AdminAsignacionPlanesComponent {
+  get activoControl(): FormControl {
+    return this.asignacionForm.get('activo') as FormControl;
+  }
   // Funciones para AdminListComponent
   asignacionEmpresaFn = (a: TenantPlan) => this.getTenantNombre(a.tenantId) || null;
   asignacionSubscripcionFn = (a: TenantPlan) => this.getPlanNombre(a.planId) || null;

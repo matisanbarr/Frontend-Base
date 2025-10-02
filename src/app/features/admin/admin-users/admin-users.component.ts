@@ -41,6 +41,9 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-users.component.scss'],
 })
 export class AdminUsersComponent {
+  get estadoActivoControl(): import('@angular/forms').FormControl {
+    return this.usuarioForm.get('estadoActivo') as import('@angular/forms').FormControl;
+  }
   // Funciones para el componente reutilizable de lista
   usuarioNombreFn = (usuario: Usuario) => usuario.nombre || null;
   usuarioCorreoFn = (usuario: Usuario) => usuario.email || null;
@@ -467,8 +470,5 @@ export class AdminUsersComponent {
     if (!tenantId) return 'Sin empresa';
     const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
     return tenant ? tenant.nombre : 'Empresa desconocida';
-  }
-  get estadoActivoControl(): FormControl {
-    return this.usuarioForm.get('estadoActivo') as FormControl;
   }
 }

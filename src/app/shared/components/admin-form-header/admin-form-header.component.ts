@@ -15,6 +15,6 @@ export class AdminFormHeaderComponent {
   @Input() modoEdicion: boolean = false;
   @Input() labelCrear: string = 'Registrar';
   @Input() labelEditar: string = 'Modificar';
-  @Input() estadoControl?: FormControl<boolean> | AbstractControl | null;
+  @Input() estadoControl?: FormControl<any> | null;
   @Input() mostrarEstado: boolean = false;
 }

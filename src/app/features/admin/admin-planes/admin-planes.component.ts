@@ -36,6 +36,9 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-planes.component.scss'],
 })
 export class AdminPlanesComponent {
+  get estaActivoControl(): import('@angular/forms').FormControl {
+    return this.planForm.get('estaActivo') as import('@angular/forms').FormControl;
+  }
   // Funciones para AdminListComponent
   planNombreFn = (plan: Plan) => plan.nombre || null;
   descripcionFn = (plan: Plan) => plan.descripcion || null;
