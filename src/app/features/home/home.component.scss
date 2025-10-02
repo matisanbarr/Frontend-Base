@@ -7,9 +7,60 @@
     gap: 1rem;
   }
   .admin-home-section {
-    padding: 1rem;
-    min-height: 120px;
-    border-radius: 0.75rem;
+    padding: 0.25rem 0.1rem 0.5rem 0.1rem !important;
+    min-height: 220px !important;
+    height: auto !important;
+    border-radius: 0.3rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    background: none !important;
+    margin-bottom: 0.5rem !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    display: block !important;
+  }
+  .card-info {
+    min-height: 180px !important;
+    height: auto !important;
+    overflow-y: visible !important;
+    display: block !important;
+  }
+  .admin-home-section h3,
+  .admin-home-section h4,
+  .admin-home-section h1 {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 600 !important;
+  }
+  .admin-home-section > *,
+  .admin-home-section *,
+  .admin-home-section app-usuarios-cumple *,
+  .admin-home-section app-empresas-suscripcion * {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    overflow-x: hidden !important;
+  }
+  .admin-home-section app-usuarios-cumple,
+  .admin-home-section app-empresas-suscripcion {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .admin-home-row {
+    margin-bottom: 0.5rem;
   }
 }
 .home-admin-wrapper {

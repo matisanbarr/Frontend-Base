@@ -1,4 +1,4 @@
-<div class="card-info w-100">
+<div class="card-info w-100 only-desktop">
   <h3 class="card-title">Clientes de cumpleaños</h3>
   <div class="card-list">
     <ng-container *ngIf="loading">
@@ -23,9 +23,9 @@
             <div class="flex-grow-1">
               <div class="fw-bold">
                 {{ usuario.primerNombre }} {{ usuario.primerApellido }}
-                <span class="text-primary ms-2" *ngIf="usuario.fechaNacimiento"
-                  >({{ calcularEdad(usuario.fechaNacimiento) }} años)</span
-                >
+                <span class="text-primary ms-2" *ngIf="usuario.fechaNacimiento">
+                  ({{ calcularEdad(usuario.fechaNacimiento) }} años)
+                </span>
               </div>
               <div class="text-muted small">
                 {{ usuario.fechaNacimiento | date: 'd ' }}de{{
@@ -33,6 +33,41 @@
                 }}
               </div>
               <div *ngIf="usuario.email" class="text-secondary small mt-1">{{ usuario.email }}</div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #sinCumples>
+        <p class="placeholder">No hay cumpleaños próximos.</p>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+<div class="card-info w-100 lite-mobile only-mobile">
+  <h4 class="card-title">Cumpleaños</h4>
+  <div class="card-list">
+    <ng-container *ngIf="loading">
+      <div class="text-center py-2">
+        <span class="spinner-border spinner-border-sm"></span> Cargando...
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && error">
+      <p class="text-danger">{{ error }}</p>
+    </ng-container>
+    <ng-container *ngIf="!loading && !error">
+      <ng-container *ngIf="usuarios.length > 0; else sinCumples">
+        <ul class="list-group list-group-flush simple-list">
+          <li class="list-group-item py-2" *ngFor="let usuario of usuarios">
+            <div>
+              <span class="fw-bold">{{ usuario.primerNombre }} {{ usuario.primerApellido }}</span>
+              <span class="text-primary ms-1" *ngIf="usuario.fechaNacimiento">
+                ({{ calcularEdad(usuario.fechaNacimiento) }} años)
+              </span>
+            </div>
+            <div class="text-muted small">
+              {{ usuario.fechaNacimiento | date: 'd ' }}de{{
+                usuario.fechaNacimiento | date: ' MMMM' : '' : 'es-CL'
+              }}
             </div>
           </li>
         </ul>

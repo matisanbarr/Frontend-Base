@@ -1,4 +1,4 @@
-<div class="card-info w-100">
+<div class="card-info w-100 only-desktop">
   <h3 class="card-title">Empresas con suscripción próxima a vencer</h3>
   <div class="card-list">
     <ng-container *ngIf="loading">
@@ -12,10 +12,7 @@
     <ng-container *ngIf="!loading && !error">
       <ng-container *ngIf="tenantPlanes.length > 0; else sinVencimientos">
         <ul class="list-group list-group-flush">
-          <li
-            class="list-group-item d-flex align-items-center py-3"
-            *ngFor="let plan of tenantPlanes"
-          >
+          <li class="list-group-item py-3" *ngFor="let plan of tenantPlanes">
             <div class="flex-grow-1 ms-1">
               <div class="fw-bold mb-1">
                 {{ plan.nombreTenant || 'Empresa desconocida' }}
@@ -29,6 +26,40 @@
                   >(faltan {{ diasRestantes(plan.fechaFin) }} días)</span
                 >
               </div>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #sinVencimientos>
+        <p class="placeholder">No hay suscripciones próximas a vencer.</p>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+<div class="card-info w-100 lite-mobile only-mobile">
+  <h4 class="card-title">Suscripciones por vencer</h4>
+  <div class="card-list">
+    <ng-container *ngIf="loading">
+      <div class="text-center py-2">
+        <span class="spinner-border spinner-border-sm"></span> Cargando...
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && error">
+      <p class="text-danger">{{ error }}</p>
+    </ng-container>
+    <ng-container *ngIf="!loading && !error">
+      <ng-container *ngIf="tenantPlanes.length > 0; else sinVencimientos">
+        <ul class="list-group list-group-flush simple-list">
+          <li class="list-group-item py-2" *ngFor="let plan of tenantPlanes">
+            <div>
+              <span class="fw-bold">{{ plan.nombreTenant || 'Empresa desconocida' }}</span>
+            </div>
+            <div class="text-muted small">
+              {{ plan.nombrePlan || 'Sin plan' }}
+            </div>
+            <div class="text-secondary small" *ngIf="plan.fechaFin">
+              {{ plan.fechaFin | date: 'd MMMM yyyy' : '' : 'es-CL' }}
+              <span class="text-danger ms-2"> ({{ diasRestantes(plan.fechaFin) }} días) </span>
             </div>
           </li>
         </ul>
