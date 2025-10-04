@@ -12,21 +12,15 @@ export interface RegisterUserRequest {
 
 // Modelo para Login Request según tu backend
 export interface LoginRequest {
-  usuario: string;
+  nombreUsuario: string;
   password: string;
 }
 
-// Modelo para Login Response
+// Modelo para Login/Refresh Response (TokenResponseDto)
 export interface LoginResponse {
-  token: string;
-  refreshToken?: string;
-  expiresIn: number;
-  tenantId: string;
-  isGlobal: boolean;
-  primerNombre?: string;
-  segundoNombre?: string;
-  primerApellido?: string;
-  segundoApellido?: string;
+  accessToken: string;
+  refreshToken: string;
+  expiration: string; // ISO string, se puede convertir a Date si es necesario
 }
 
 // Modelo de Rol

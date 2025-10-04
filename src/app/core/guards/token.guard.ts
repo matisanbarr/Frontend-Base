@@ -29,8 +29,9 @@ export class TokenGuard implements CanActivate {
 
     const refreshToken = this.authService.getRefreshToken();
     if (!refreshToken) {
-      // No hay refresh token, cerrar sesión
+      // No hay refresh token, cerrar sesión y redirigir con mensaje
       this.authService.logout();
+      this.router.navigate(['/auth/login'], { queryParams: { sessionExpired: 1 } });
       return false;
     }
 
@@ -43,6 +44,7 @@ export class TokenGuard implements CanActivate {
       catchError((error) => {
         console.error('TokenGuard: Error al refrescar token', error);
         this.authService.logout();
+        this.router.navigate(['/auth/login'], { queryParams: { sessionExpired: 1 } });
         return of(false);
       })
     );

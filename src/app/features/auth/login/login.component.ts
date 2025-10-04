@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../models';
 import { LoadingService } from '../../../core/services/loading.service';
@@ -15,7 +15,7 @@ import { LoadingService } from '../../../core/services/loading.service';
 })
 export class LoginComponent {
   loginData: LoginRequest = {
-    usuario: '',
+    nombreUsuario: '',
     password: '',
   };
 
@@ -28,11 +28,19 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly loadingService = inject(LoadingService);
+  private readonly route = inject(ActivatedRoute);
 
-  constructor() {}
+  constructor() {
+    // Mostrar mensaje si la sesión expiró
+    this.route.queryParams.subscribe((params) => {
+      if (params['sessionExpired']) {
+        this.errorMessage = 'Tu sesión ha expirado. Por favor inicia sesión nuevamente.';
+      }
+    });
+  }
 
   onLogin(): void {
-    if (!this.loginData.usuario || !this.loginData.password) {
+    if (!this.loginData.nombreUsuario || !this.loginData.password) {
       this.errorMessage = 'Por favor completa todos los campos.';
       this.successMessage = '';
       return;
@@ -43,25 +51,30 @@ export class LoginComponent {
     this.isLoading = true;
 
     this.authService.login(this.loginData).subscribe({
-      next: (response) => {
+      next: () => {
         this.successMessage = 'Inicio de sesión exitoso. Redirigiendo...';
         this.errorMessage = '';
         this.loadingService.show();
-        // Verificar si el token está expirado
+        // Si el token está expirado, intentar refresh
         if (this.authService.isTokenExpired()) {
-          // Intentar refrescar el token
           this.authService.refreshToken().subscribe({
             next: () => {
               this.router.navigate(['/dashboard']);
             },
             error: () => {
-              this.errorMessage = 'Sesión expirada, por favor inicia sesión nuevamente.';
+              this.errorMessage = 'La sesión expiró, por favor inicia sesión nuevamente.';
+              this.successMessage = '';
               this.authService.logout();
+            },
+            complete: () => {
+              this.isLoading = false;
+              this.loadingService.hide();
             },
           });
         } else {
-          // Token válido, redirigir al dashboard
           this.router.navigate(['/dashboard']);
+          this.isLoading = false;
+          this.loadingService.hide();
         }
       },
       error: (err) => {
@@ -73,10 +86,6 @@ export class LoginComponent {
           err?.error?.message ||
           'Error al iniciar sesión';
         this.successMessage = '';
-        this.loadingService.hide();
-      },
-      complete: () => {
-        this.isLoading = false;
         this.loadingService.hide();
       },
     });

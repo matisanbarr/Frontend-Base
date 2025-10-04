@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse } from '../../models';
@@ -11,12 +11,12 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
+  private readonly EXPIRATION_KEY = 'token_expiration';
   private readonly USER_KEY = 'current_user';
   private readonly USER_ROLES_KEY = 'user_roles';
 
   private currentUserSubject = new BehaviorSubject<any | null>(this.getCurrentUser());
   public currentUser$ = this.currentUserSubject.asObservable();
-
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthState());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -27,11 +27,40 @@ export class AuthService {
 
   // --- Sesión y autenticación ---
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
-      tap((response) => this.setSession(response)),
+  login(credentials: LoginRequest): Observable<any> {
+    // El backend devuelve RespuestaDto<TokenResponseDto>
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, credentials).pipe(
+      map((respuestaDto) => {
+        if (!respuestaDto || !respuestaDto.respuesta) {
+          throw new Error('Respuesta de login inválida');
+        }
+        this.setSession(respuestaDto.respuesta);
+        return respuestaDto;
+      }),
       catchError((error) => {
         console.error('Error en login:', error);
+        throw error;
+      })
+    );
+  }
+
+  refreshToken(): Observable<LoginResponse> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      this.logout();
+      return of();
+    }
+    return this.http.post<any>(`${environment.apiUrl}/auth/refresh`, refreshToken).pipe(
+      map((respuestaDto) => {
+        if (!respuestaDto || !respuestaDto.respuesta) {
+          throw new Error('Respuesta de refresh inválida');
+        }
+        this.setSession(respuestaDto.respuesta);
+        return respuestaDto.respuesta;
+      }),
+      catchError((error) => {
+        console.error('Error al refrescar token:', error);
+        this.logout();
         throw error;
       })
     );
@@ -42,23 +71,7 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-  refreshToken(): Observable<LoginResponse> {
-    const refreshToken = this.getRefreshToken();
-    if (!refreshToken) {
-      this.logout();
-      return of();
-    }
-    return this.http
-      .post<LoginResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken })
-      .pipe(
-        tap((response) => this.setSession(response)),
-        catchError((error) => {
-          console.error('Error al refrescar token:', error);
-          this.logout();
-          throw error;
-        })
-      );
-  }
+  // refreshToken eliminado, ya no se usa
 
   // --- Métodos de obtención de datos ---
 
@@ -69,6 +82,12 @@ export class AuthService {
   getRefreshToken(): string | null {
     return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
+
+  getTokenExpiration(): string | null {
+    return localStorage.getItem(this.EXPIRATION_KEY);
+  }
+
+  // getRefreshToken eliminado, ya no se usa
 
   getCurrentUser(): any | null {
     const userStr = localStorage.getItem(this.USER_KEY);
@@ -123,30 +142,30 @@ export class AuthService {
 
   // --- Métodos privados ---
 
-  private setSession(authResult: LoginResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, authResult.token);
+  private setSession(tokenResponse: LoginResponse): void {
+    localStorage.setItem(this.TOKEN_KEY, tokenResponse.accessToken);
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, tokenResponse.refreshToken);
+    localStorage.setItem(this.EXPIRATION_KEY, tokenResponse.expiration);
     try {
-      const decoded: any = jwtDecode(authResult.token);
-      // Extraer claims relevantes
-      const tenantId = decoded.tenantId || authResult.tenantId;
-      const isGlobal = decoded.isGlobal !== undefined ? decoded.isGlobal : authResult.isGlobal;
-      const PrimerNombre =
-        decoded.PrimerNombre !== undefined ? decoded.PrimerNombre : authResult.primerNombre;
-      const SegundoNombre =
-        decoded.SegundoNombre !== undefined ? decoded.SegundoNombre : authResult.segundoNombre;
-      const PrimerApellido =
-        decoded.PrimerApellido !== undefined ? decoded.PrimerApellido : authResult.primerApellido;
-      const SegundoApellido =
-        decoded.SegundoApellido !== undefined
-          ? decoded.SegundoApellido
-          : authResult.segundoApellido;
+      const decoded: any = jwtDecode(tokenResponse.accessToken);
+      // Extraer claims relevantes según backend
+      const usuarioId = decoded['nameidentifier'] || decoded['NameIdentifier'] || decoded['sub'];
+      const nombreUsuario = decoded['NombreUsuario'];
+      const primerNombre = decoded['PrimerNombre'];
+      const segundoNombre = decoded['SegundoNombre'];
+      const primerApellido = decoded['PrimerApellido'];
+      const segundoApellido = decoded['SegundoApellido'];
       const email =
-        decoded.email ||
+        decoded['email'] ||
+        decoded['Email'] ||
         decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
-      const name =
-        decoded.name || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+      const isGlobal = decoded['IsGlobal'] === 'true' || decoded['IsGlobal'] === true;
+      const tenantId = decoded['TenantId'] || decoded['tenantid'] || null;
       let roles =
-        decoded.roles || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        decoded['role'] ||
+        decoded['Role'] ||
+        decoded['roles'] ||
+        decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       if (roles) {
         if (typeof roles === 'string') {
           roles = [roles];
@@ -155,21 +174,17 @@ export class AuthService {
       } else {
         localStorage.removeItem(this.USER_ROLES_KEY);
       }
-      // Guardar usuario actual con claims relevantes
       const user: any = {
-        token: authResult.token,
+        usuarioId,
+        nombreUsuario,
+        primerNombre,
+        segundoNombre,
+        primerApellido,
+        segundoApellido,
         email,
-        name,
-        tenantId,
         isGlobal,
+        tenantId,
         roles,
-        primerNombre: decoded.PrimerNombre || decoded.primerNombre || authResult.primerNombre || '',
-        segundoNombre:
-          decoded.SegundoNombre || decoded.segundoNombre || authResult.segundoNombre || '',
-        primerApellido:
-          decoded.PrimerApellido || decoded.primerApellido || authResult.primerApellido || '',
-        segundoApellido:
-          decoded.SegundoApellido || decoded.segundoApellido || authResult.segundoApellido || '',
       };
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
       this.currentUserSubject.next(user);
@@ -179,15 +194,13 @@ export class AuthService {
       localStorage.removeItem(this.USER_ROLES_KEY);
       this.currentUserSubject.next(null);
     }
-    if (authResult.refreshToken) {
-      localStorage.setItem(this.REFRESH_TOKEN_KEY, authResult.refreshToken);
-    }
     this.isAuthenticatedSubject.next(true);
   }
 
   private clearSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    localStorage.removeItem(this.EXPIRATION_KEY);
     localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.USER_ROLES_KEY);
     this.currentUserSubject.next(null);
