@@ -1,4 +1,4 @@
-<ul class="list-group list-group-flush">
+<ul class="list-group list-group-flush admin-list-full-height">
   <ng-container *ngFor="let item of items">
     <li class="list-group-item border-0 border-bottom">
       <div class="d-none d-md-flex justify-content-between align-items-center">
@@ -140,7 +140,7 @@
               Dirección: {{ direccionFn(item) }}
             </div>
             <div *ngIf="precioFn && precioFn(item)" class="text-muted small">
-              Precio: {{ precioFn(item) }}
+              Precio (UF): {{ precioFn(item) }}
             </div>
             <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
               Máximo de usuarios: {{ maximoUsuariosFn(item) }}

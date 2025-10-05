@@ -7,6 +7,7 @@ import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { TenantPlan } from '../../models/asignacion-plan.model';
 import { Proyecto } from '../../models/proyecto.model';
 import { AsignarProyectosTenant } from '../../models/asignar-proyectos-tenant.model';
+import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProyectoService {
@@ -14,41 +15,25 @@ export class ProyectoService {
 
   constructor(private http: HttpClient) {}
 
-  crearProyecto(proyecto: Proyecto): Observable<any> {
-    return this.http.post(this.apiUrl, proyecto);
+  crearProyecto(proyecto: Proyecto): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl, proyecto);
   }
 
-  modificarProyecto(proyecto: Proyecto): Observable<any> {
-    return this.http.put(this.apiUrl, proyecto);
+  modificarProyecto(proyecto: Proyecto): Observable<Respuesta<any>> {
+    return this.http.put<Respuesta<any>>(this.apiUrl, proyecto);
   }
 
-  listarProyectos(): Observable<Proyecto[]> {
-    return this.http.get<Proyecto[]>(this.apiUrl);
+  listarProyectos(): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todos');
   }
 
-  eliminarProyecto(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminarProyecto(id: string): Observable<Respuesta<any>> {
+    return this.http.delete<Respuesta<any>>(`${this.apiUrl}/${id}`);
   }
 
-  listarPaginadoProyectos(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+  listarPaginadoProyectos(paginacion: PaginacionDto): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl, {
       params: paginacion as any,
-    });
-  }
-
-  agregarAUnTenant(asignarProyectoTenant: AsignarProyectosTenant): Observable<any> {
-    return this.http.post<any>(this.apiUrl + '/asignar-a-tenant', asignarProyectoTenant);
-  }
-
-  listarAsignacionesProyectosPaginado(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/asignaciones-paginadas', {
-      params: paginacion as any,
-    });
-  }
-
-  eliminarAsignacionProyecto(tenantId: string, proyectoId: string): Observable<any> {
-    return this.http.delete(this.apiUrl + '/asignacion', {
-      params: { tenantId, proyectoId },
     });
   }
 }

@@ -76,19 +76,20 @@ export const routes: Routes = [
                 (m) => m.AdminProyectosComponent
               ),
           },
+        ],
+      },
+      // Menú Asignaciones
+      {
+        path: 'asignaciones',
+        canActivate: [RoleGuard],
+        data: { roles: ['Admin Global', 'Usuario'] },
+        children: [
           {
-            path: 'asignacion-planes',
-            loadComponent: () =>
+            path: 'tenant-proyecto-plan',
+            loadChildren: () =>
               import(
-                './features/admin/admin-asignacion-planes/admin-asignacion-planes.component'
-              ).then((m) => m.AdminAsignacionPlanesComponent),
-          },
-          {
-            path: 'asignacion-proyectos',
-            loadComponent: () =>
-              import(
-                './features/admin/admin-asignacion-proyectos/admin-asignacion-proyectos.component'
-              ).then((m) => m.AdminAsignacionProyectosComponent),
+                './features/admin/admin-tenants-proyectos-planes/admin-tenants-proyectos-planes.module'
+              ).then((m) => m.AdminTenantsProyectosPlanesModule),
           },
         ],
       },

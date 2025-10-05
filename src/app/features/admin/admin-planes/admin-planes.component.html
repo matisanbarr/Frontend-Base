@@ -41,7 +41,7 @@
                 [descriptionFn]="descripcionFn"
                 [precioFn]="precioFn"
                 [maximoUsuariosFn]="maximoUsuariosFn"
-                [estadoFn]="planEstadoFn"
+                [estadoFn]="planEstadoActivoFn"
                 [loading]="loading"
                 [emptyText]="'No hay planes registrados.'"
                 (edit)="editarPlan($event)"
@@ -74,14 +74,14 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
-        <form [formGroup]="planForm" (ngSubmit)="guardarPlan()">
+        <form [formGroup]="planForm" (ngSubmit)="modoEdicion ? actualizarPlan() : registrarPlan()">
           <app-admin-form-header
             icon="bi bi-box-seam"
             [titulo]="'Plan'"
             [modoEdicion]="modoEdicion"
             [labelCrear]="'Registrar Nuevo'"
             [labelEditar]="'Modificar'"
-            [estadoControl]="estaActivoControl"
+            [estadoControl]="estadoActivoControl"
             [mostrarEstado]="true"
           ></app-admin-form-header>
           <div class="card-body bg-light">
@@ -115,31 +115,34 @@
             </div>
             <div class="row mb-3">
               <div class="col-12 col-md-6 mb-3 mb-md-0">
-                <label for="precio" class="form-label">Precio</label>
+                <label for="precioUfPorProyecto" class="form-label">Precio (UF)</label>
                 <input
                   type="number"
                   class="form-control"
-                  id="precio"
-                  formControlName="precio"
+                  id="precioUfPorProyecto"
+                  formControlName="precioUfPorProyecto"
                   placeholder="Ej: 100"
                   min="0"
                 />
-                <div *ngIf="planForm.get('precio')?.value < 0" class="invalid-feedback d-block">
+                <div
+                  *ngIf="planForm.get('precioUfPorProyecto')?.value < 0"
+                  class="invalid-feedback d-block"
+                >
                   El precio no puede ser negativo.
                 </div>
               </div>
               <div class="col-12 col-md-6">
-                <label for="maximoUsuarios" class="form-label">Máximo de usuarios</label>
+                <label for="maximoUsuariosPorProyecto" class="form-label">Máximo de usuarios</label>
                 <input
                   type="number"
                   class="form-control"
-                  id="maximoUsuarios"
-                  formControlName="maximoUsuarios"
+                  id="maximoUsuariosPorProyecto"
+                  formControlName="maximoUsuariosPorProyecto"
                   placeholder="Ej: 10"
                   min="1"
                 />
                 <div
-                  *ngIf="planForm.get('maximoUsuarios')?.value < 1"
+                  *ngIf="planForm.get('maximoUsuariosPorProyecto')?.value < 1"
                   class="invalid-feedback d-block"
                 >
                   Debe ser al menos 1.
@@ -154,7 +157,7 @@
               [modificarLabel]="'Modificar Plan'"
               [hayCambios]="true"
               (limpiar)="cancelarEdicion()"
-              (submit)="guardarPlan()"
+              (submit)="modoEdicion ? actualizarPlan() : registrarPlan()"
             ></app-form-buttons>
           </div>
         </form>

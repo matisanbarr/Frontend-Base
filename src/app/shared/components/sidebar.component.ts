@@ -20,6 +20,17 @@ export class SidebarComponent {
   @Output() toggleAdminMenuEvent = new EventEmitter<void>();
   @Output() toggleProyectoMenuEvent = new EventEmitter<Proyecto>();
 
+  mantenedoresMenuOpen = true;
+  asignacionesMenuOpen = true;
+
+  toggleMantenedoresMenu() {
+    this.mantenedoresMenuOpen = !this.mantenedoresMenuOpen;
+  }
+
+  toggleAsignacionesMenu() {
+    this.asignacionesMenuOpen = !this.asignacionesMenuOpen;
+  }
+
   @Input() getComponentesProyecto: (
     proyecto: Proyecto
   ) => { label: string; route: string; icon: string }[] = () => [];

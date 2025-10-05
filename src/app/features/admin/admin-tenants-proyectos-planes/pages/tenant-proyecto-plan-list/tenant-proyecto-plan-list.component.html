@@ -1,0 +1,27 @@
+<!-- Lista paginada de asignaciones Tenant-Proyecto-Plan -->
+<div *ngIf="loading">Cargando...</div>
+<table *ngIf="!loading && asignaciones.length > 0" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Empresa</th>
+      <th>Proyecto</th>
+      <th>Plan</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha Vencimiento</th>
+      <th>Renovación Automática</th>
+      <th>Activo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of asignaciones">
+      <td>{{ a.tenant?.nombre || a.tenantId }}</td>
+      <td>{{ a.proyecto?.nombre || a.proyectoId }}</td>
+      <td>{{ a.plan?.nombre || a.planId }}</td>
+      <td>{{ a.fechaInicio | date: 'shortDate' }}</td>
+      <td>{{ a.fechaVencimiento | date: 'shortDate' }}</td>
+      <td>{{ a.renovacionAutomatica ? 'Sí' : 'No' }}</td>
+      <td>{{ a.estadoActivo ? 'Sí' : 'No' }}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="!loading && asignaciones.length === 0">No hay asignaciones.</div>

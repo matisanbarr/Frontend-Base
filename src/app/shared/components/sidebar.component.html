@@ -9,7 +9,7 @@
     <span *ngIf="!sidebarCollapsed" class="sidebar-title">Menú</span>
   </div>
   <ul class="sidebar-menu">
-    <!-- Menú Administración solo para Admin Global -->
+    <!-- Menú Administración con 3 niveles: Mantenedores principales y Asignaciones -->
     <li *ngIf="isAdminGlobal" class="sidebar-group">
       <div class="sidebar-link" (click)="toggleAdminMenu()">
         <i class="bi bi-gear"></i>
@@ -21,30 +21,53 @@
         ></i>
       </div>
       <ul class="sidebar-submenu" *ngIf="adminMenuOpen && !sidebarCollapsed">
-        <li>
-          <a routerLink="/dashboard/admin/roles"><i class="bi bi-shield-lock"></i> Roles</a>
+        <!-- Nivel 2: Mantenedores principales -->
+        <li class="sidebar-group">
+          <div class="sidebar-link" (click)="toggleMantenedoresMenu()">
+            <i class="bi bi-list-ul"></i>
+            <span>Mantenedores principales</span>
+            <i
+              class="bi"
+              [ngClass]="mantenedoresMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+            ></i>
+          </div>
+          <ul class="sidebar-submenu" *ngIf="mantenedoresMenuOpen">
+            <li>
+              <a routerLink="/dashboard/admin/roles"><i class="bi bi-shield-lock"></i> Roles</a>
+            </li>
+            <li>
+              <a routerLink="/dashboard/admin/users"><i class="bi bi-people"></i> Clientes</a>
+            </li>
+            <li>
+              <a routerLink="/dashboard/admin/tenants"><i class="bi bi-building"></i> Empresas</a>
+            </li>
+            <li>
+              <a routerLink="/dashboard/admin/planes"
+                ><i class="bi bi-box-seam"></i> Subscripciones</a
+              >
+            </li>
+            <li>
+              <a routerLink="/dashboard/admin/proyectos"><i class="bi bi-kanban"></i> Proyectos</a>
+            </li>
+          </ul>
         </li>
-        <li>
-          <a routerLink="/dashboard/admin/users"><i class="bi bi-people"></i> Clientes</a>
-        </li>
-        <li>
-          <a routerLink="/dashboard/admin/tenants"><i class="bi bi-building"></i> Empresas</a>
-        </li>
-        <li>
-          <a routerLink="/dashboard/admin/planes"><i class="bi bi-box-seam"></i> Subscripciones</a>
-        </li>
-        <li>
-          <a routerLink="/dashboard/admin/proyectos"><i class="bi bi-kanban"></i> Proyectos</a>
-        </li>
-        <li>
-          <a routerLink="/dashboard/admin/asignacion-planes"
-            ><i class="bi bi-link-45deg"></i> Asignar Subscripciones</a
-          >
-        </li>
-        <li>
-          <a routerLink="/dashboard/admin/asignacion-proyectos"
-            ><i class="bi bi-diagram-3"></i> Asignar Proyectos</a
-          >
+        <!-- Nivel 2: Asignaciones -->
+        <li class="sidebar-group">
+          <div class="sidebar-link" (click)="toggleAsignacionesMenu()">
+            <i class="bi bi-diagram-3"></i>
+            <span>Asignaciones</span>
+            <i
+              class="bi"
+              [ngClass]="asignacionesMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+            ></i>
+          </div>
+          <ul class="sidebar-submenu" *ngIf="asignacionesMenuOpen">
+            <li>
+              <a routerLink="/dashboard/asignaciones/tenant-proyecto-plan">
+                <i class="bi bi-diagram-3"></i> Empresa-Proyecto-Plan
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </li>

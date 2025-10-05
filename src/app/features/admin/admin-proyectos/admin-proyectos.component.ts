@@ -13,9 +13,7 @@ import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
 import { ProyectoService } from '../../../core/services/proyecto.service';
-import { TenantService } from '../../../core/services/tenant.service';
 import { Proyecto } from '../../../models/proyecto.model';
-import { Tenant } from '../../../models/tenant.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
 import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
@@ -39,127 +37,220 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
 })
 export class AdminProyectosComponent {
   // Funciones para AdminListComponent
-  public proyectoNombreFn = (proyecto: Proyecto) => proyecto.nombre;
-  public proyectoDescripcionFn = (proyecto: Proyecto) => proyecto.descripcion || 'Sin descripción';
-  modoEdicion: boolean = false;
-  proyectoEditandoId: string | null = null;
+  proyectoNombreFn = (p: Proyecto) => p.nombre ?? null;
+  proyectoDescripcionFn = (p: Proyecto) => p.descripcion ?? 'Sin descripción';
+  proyectoEstadoActivoFn = (p: Proyecto) => p.estadoActivo ?? null;
+  estadoActivoControl: import('@angular/forms').FormControl;
   proyectoForm: FormGroup;
   proyectos: Proyecto[] = [];
   loading = false;
   showConfirmModal = false;
+  modoEdicion = false;
+  proyectoEditandoId: string | null = null;
   proyectoAEliminar: string | null = null;
   proyectoANombreEliminar: string | null = null;
-  filtroBusqueda: string = '';
-  paginaActual: number = 1;
-  totalPaginas: number = 1;
-  totalRegistros: number = 0;
+  filtroBusqueda = '';
+  paginaActual = 1;
+  totalPaginas = 1;
+  totalRegistros = 0;
 
   readonly proyectoService = inject(ProyectoService);
   readonly fb = inject(FormBuilder);
   readonly alertService = inject(AlertService);
 
   constructor() {
+    this.estadoActivoControl = this.fb.control(true);
     this.proyectoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      descripcion: ['', [Validators.minLength(3), Validators.maxLength(200)]],
+      descripcion: ['', [Validators.maxLength(200)]],
+      tagId: [null, [Validators.required]],
+      estadoActivo: this.estadoActivoControl,
+    });
+    // Detectar cambios en estadoActivo y marcar dirty si cambia
+    this.estadoActivoControl.valueChanges.subscribe((valor) => {
+      this.proyectoForm.get('estadoActivo')?.setValue(valor, { emitEvent: false });
+      this.estadoActivoControl.markAsDirty();
+      this.proyectoForm.markAsDirty();
     });
     this.cargarProyectos();
   }
 
-  cargarProyectos(): void {
+  cargarProyectos(): Promise<void> {
     this.loading = true;
     const filtro = new PaginacionDto();
     filtro.filtro = this.filtroBusqueda;
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
-    this.proyectoService.listarPaginadoProyectos(filtro).subscribe({
-      next: (respuesta: any) => {
-        this.proyectos = respuesta.datos;
-        this.totalRegistros = respuesta.total;
-        this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      },
+    return new Promise((resolve, reject) => {
+      this.proyectoService.listarPaginadoProyectos(filtro).subscribe({
+        next: (resp) => {
+          if (
+            resp?.codigoRespuesta === 0 &&
+            resp.respuesta &&
+            Array.isArray(resp.respuesta.datos)
+          ) {
+            this.proyectos = resp.respuesta.datos;
+            this.totalRegistros =
+              typeof resp.respuesta.total === 'number' ? resp.respuesta.total : 0;
+            this.totalPaginas = Math.ceil(this.totalRegistros / filtro.tamano);
+          } else if (resp?.codigoRespuesta === 1) {
+            this.proyectos = [];
+            this.totalRegistros = 0;
+            this.totalPaginas = 1;
+            this.alertService.info?.(resp?.glosaRespuesta || 'No se encontraron proyectos.');
+          } else {
+            this.proyectos = [];
+            this.totalRegistros = 0;
+            this.totalPaginas = 1;
+            this.alertService.error(resp?.glosaRespuesta || 'Error al cargar proyectos');
+          }
+          this.loading = false;
+          resolve();
+        },
+        error: () => {
+          this.loading = false;
+          this.proyectos = [];
+          this.totalRegistros = 0;
+          this.totalPaginas = 1;
+          this.alertService.error('Error al cargar proyectos');
+          reject();
+        },
+      });
     });
   }
 
-  buscarProyectos() {
+  buscarProyectos(): void {
     this.paginaActual = 1;
     this.cargarProyectos();
   }
 
-  editarProyecto(proyecto: Proyecto) {
-    this.modoEdicion = true;
-    this.proyectoEditandoId = proyecto.id || null;
-    this.proyectoForm.patchValue(proyecto);
-  }
-
-  cancelarEdicion() {
-    this.modoEdicion = false;
-    this.proyectoEditandoId = null;
-    this.proyectoForm.reset();
-  }
-
-  guardarProyecto() {
-    if (this.proyectoForm.invalid) return;
-    const proyecto: Proyecto = { ...this.proyectoForm.value };
-    if (this.modoEdicion && this.proyectoEditandoId) {
-      proyecto.id = this.proyectoEditandoId;
-      this.proyectoService.modificarProyecto(proyecto).subscribe({
-        next: () => {
-          this.alertService.success('Proyecto actualizado correctamente');
-          this.cancelarEdicion();
-          this.cargarProyectos();
-        },
-        error: () => this.alertService.error('Error al actualizar el proyecto'),
-      });
-    } else {
-      this.proyectoService.crearProyecto(proyecto).subscribe({
-        next: () => {
-          this.alertService.success('Proyecto creado correctamente');
-          this.proyectoForm.reset();
-          this.cargarProyectos();
-        },
-        error: () => this.alertService.error('Error al crear el proyecto'),
-      });
-    }
-  }
-
-  eliminarProyecto(proyecto: Proyecto) {
-    this.proyectoAEliminar = proyecto.id || null;
-    this.proyectoANombreEliminar = proyecto.nombre;
-    this.showConfirmModal = true;
-  }
-
-  confirmarEliminacion() {
-    if (!this.proyectoAEliminar) return;
-    this.proyectoService.eliminarProyecto(this.proyectoAEliminar).subscribe({
-      next: () => {
-        this.alertService.success('Proyecto eliminado correctamente');
-        this.cargarProyectos();
-      },
-      error: () => this.alertService.error('Error al eliminar el proyecto'),
-    });
-    this.cerrarModal();
-  }
-
-  cerrarModal() {
-    this.showConfirmModal = false;
-    this.proyectoAEliminar = null;
-    this.proyectoANombreEliminar = null;
-  }
-
-  cambiarPagina(pagina: number) {
+  cambiarPagina(pagina: number): void {
     if (pagina < 1 || pagina > this.totalPaginas) return;
     this.paginaActual = pagina;
     this.cargarProyectos();
   }
 
+  async registrarProyecto() {
+    if (this.proyectoForm.invalid) {
+      this.proyectoForm.markAllAsTouched();
+      this.alertService.error('Por favor, complete todos los campos obligatorios correctamente.');
+      return;
+    }
+    const proyecto: Proyecto = {
+      ...this.proyectoForm.value,
+    };
+    this.loading = true;
+    this.proyectoService.crearProyecto(proyecto).subscribe({
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.limpiarFormulario();
+          await this.cargarProyectos();
+          this.alertService.success(resp?.glosaRespuesta || 'Proyecto registrado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo registrar el proyecto.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al registrar proyecto');
+        }
+      },
+      error: () => this.alertService.error('Error al registrar proyecto'),
+      complete: () => (this.loading = false),
+    });
+  }
+
+  editarProyecto(proyecto: Proyecto): void {
+    this.modoEdicion = true;
+    this.proyectoEditandoId = proyecto.id || null;
+    this.proyectoForm.patchValue({
+      nombre: proyecto.nombre || '',
+      descripcion: proyecto.descripcion || '',
+      tagId: typeof proyecto.tagId === 'number' ? proyecto.tagId : null,
+      estadoActivo: proyecto.estadoActivo ?? true,
+    });
+    this.estadoActivoControl.setValue(proyecto.estadoActivo ?? true, { emitEvent: false });
+    this.proyectoForm.markAsPristine();
+  }
+
+  get hayCambios(): boolean {
+    return true;
+  }
+
+  async actualizarProyecto() {
+    if (!this.proyectoEditandoId) return;
+    if (this.proyectoForm.get('nombre')?.invalid) {
+      this.alertService.error('El nombre es requerido y debe tener entre 3 y 50 caracteres.');
+      this.proyectoForm.get('nombre')?.markAsTouched();
+      return;
+    }
+    const proyecto: Proyecto = {
+      ...this.proyectoForm.value,
+      id: this.proyectoEditandoId,
+    };
+    this.loading = true;
+    this.proyectoService.modificarProyecto(proyecto).subscribe({
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.limpiarFormulario();
+          await this.cargarProyectos();
+          this.alertService.success(resp?.glosaRespuesta || 'Proyecto actualizado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo actualizar el proyecto.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al actualizar proyecto');
+        }
+      },
+      error: () => this.alertService.error('Error al actualizar proyecto'),
+      complete: () => (this.loading = false),
+    });
+  }
+
   limpiarFormulario(): void {
-    this.proyectoForm.reset();
+    this.proyectoForm.reset({
+      nombre: '',
+      descripcion: '',
+      tagId: null,
+      estadoActivo: true,
+    });
     this.modoEdicion = false;
     this.proyectoEditandoId = null;
+  }
+
+  cancelarEdicion(): void {
+    this.limpiarFormulario();
+  }
+
+  eliminarProyecto(proyecto: Proyecto): void {
+    if (!proyecto || !proyecto.id) {
+      this.alertService.error('No se pudo identificar el proyecto a eliminar.');
+      return;
+    }
+    this.proyectoAEliminar = proyecto.id;
+    this.proyectoANombreEliminar = proyecto.nombre ?? null;
+    this.showConfirmModal = true;
+  }
+
+  async confirmarEliminacion() {
+    if (!this.proyectoAEliminar) return;
+    this.loading = true;
+    this.proyectoService.eliminarProyecto(this.proyectoAEliminar).subscribe({
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.cerrarModal();
+          await this.cargarProyectos();
+          this.alertService.success(resp?.glosaRespuesta || 'Proyecto eliminado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo eliminar el proyecto.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al eliminar proyecto');
+        }
+      },
+      error: () => this.alertService.error('Error al eliminar proyecto'),
+      complete: () => (this.loading = false),
+    });
+  }
+
+  cerrarModal(): void {
+    this.showConfirmModal = false;
+    this.proyectoAEliminar = null;
+    this.proyectoANombreEliminar = null;
   }
 }

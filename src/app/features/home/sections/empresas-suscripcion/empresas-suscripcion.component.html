@@ -22,9 +22,6 @@
               </div>
               <div class="text-secondary small mb-1" *ngIf="plan.fechaFin">
                 <b>Vence:</b> {{ plan.fechaFin | date: 'd MMMM yyyy' : '' : 'es-CL' }}
-                <span class="text-danger ms-2"
-                  >(faltan {{ diasRestantes(plan.fechaFin) }} días)</span
-                >
               </div>
             </div>
           </li>
@@ -59,7 +56,6 @@
             </div>
             <div class="text-secondary small" *ngIf="plan.fechaFin">
               {{ plan.fechaFin | date: 'd MMMM yyyy' : '' : 'es-CL' }}
-              <span class="text-danger ms-2"> ({{ diasRestantes(plan.fechaFin) }} días) </span>
             </div>
           </li>
         </ul>

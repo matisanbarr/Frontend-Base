@@ -25,7 +25,7 @@
             />
           </div>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 flex-grow-1 d-flex flex-column">
           <ng-container *ngIf="loading; else listaProyectos">
             <div class="text-center py-4">
               <div class="spinner-border text-primary" role="status">
@@ -39,6 +39,7 @@
                 [items]="proyectos"
                 [nombreFn]="proyectoNombreFn"
                 [descriptionFn]="proyectoDescripcionFn"
+                [estadoFn]="proyectoEstadoActivoFn"
                 [loading]="loading"
                 [emptyText]="'No hay proyectos registrados.'"
                 (edit)="editarProyecto($event)"
@@ -71,16 +72,20 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card">
-        <app-admin-form-header
-          icon="bi bi-kanban"
-          [titulo]="'Proyecto'"
-          [modoEdicion]="modoEdicion"
-          [labelCrear]="'Crear Nuevo'"
-          [labelEditar]="'Modificar'"
-          [mostrarEstado]="false"
-        ></app-admin-form-header>
-        <div class="card-body">
-          <form [formGroup]="proyectoForm" (ngSubmit)="guardarProyecto()">
+        <form
+          [formGroup]="proyectoForm"
+          (ngSubmit)="modoEdicion ? actualizarProyecto() : registrarProyecto()"
+        >
+          <app-admin-form-header
+            icon="bi bi-kanban"
+            [titulo]="'Proyecto'"
+            [modoEdicion]="modoEdicion"
+            [labelCrear]="'Crear Nuevo'"
+            [labelEditar]="'Modificar'"
+            [mostrarEstado]="true"
+            [estadoControl]="estadoActivoControl"
+          ></app-admin-form-header>
+          <div class="card-body">
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre</label>
               <input
@@ -127,18 +132,39 @@
                 La descripción es opcional (3-200 caracteres).
               </div>
             </div>
+            <div class="mb-3">
+              <label for="tagId" class="form-label">Tag ID</label>
+              <input
+                type="number"
+                class="form-control"
+                id="tagId"
+                formControlName="tagId"
+                placeholder="Ej: 1001"
+                [class.is-invalid]="
+                  proyectoForm.get('tagId')?.invalid && proyectoForm.get('tagId')?.touched
+                "
+              />
+              <div
+                *ngIf="proyectoForm.get('tagId')?.invalid && proyectoForm.get('tagId')?.touched"
+                class="invalid-feedback"
+              >
+                El Tag ID es requerido.
+              </div>
+            </div>
+            <!-- El control de estadoActivo ahora se gestiona desde el header-form -->
             <app-form-buttons
               [modoEdicion]="modoEdicion"
               [formInvalid]="proyectoForm.invalid"
               [loading]="loading"
               [crearLabel]="'Crear Proyecto'"
               [modificarLabel]="'Modificar Proyecto'"
-              [hayCambios]="true"
+              [hayCambios]="hayCambios"
               (limpiar)="cancelarEdicion()"
-              (submit)="guardarProyecto()"
-            ></app-form-buttons>
-          </form>
-        </div>
+              (submit)="modoEdicion ? actualizarProyecto() : registrarProyecto()"
+            >
+            </app-form-buttons>
+          </div>
+        </form>
       </div>
     </div>
   </div>

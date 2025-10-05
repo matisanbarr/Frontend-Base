@@ -1,4 +1,5 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 // Servicios
 import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
@@ -7,13 +8,14 @@ import { LoadingService } from './services/loading.service';
 import { PlanService } from './services/plan.service';
 import { RegisterService } from './services/register.service';
 import { RolService } from './services/rol.service';
-import { TenantPlanService } from './services/tenant-plan.service';
 import { TenantService } from './services/tenant.service';
 import { UsuarioService } from './services/usuario.service';
+
 // Guards
 import { LoginGuard } from './guards/login.guard';
 import { RoleGuard } from './guards/role.guard';
 import { TokenGuard } from './guards/token.guard';
+
 // Interceptores
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
@@ -27,7 +29,6 @@ export const CORE_PROVIDERS = [
   PlanService,
   RegisterService,
   RolService,
-  TenantPlanService,
   TenantService,
   UsuarioService,
   LoginGuard,

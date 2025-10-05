@@ -51,18 +51,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const roles = (user as any)?.roles || [];
       this.isAdminGlobal = Array.isArray(roles) && roles.includes('Admin Global');
     });
-    this.cargarProyectos();
   }
 
   ngOnDestroy(): void {
     this.userSub?.unsubscribe();
-  }
-
-  cargarProyectos(): void {
-    this.proyectoService.listarProyectos().subscribe((proyectos) => {
-      // Si es Admin Global ve todos, si no, filtrar según lógica de negocio
-      this.proyectos = this.isAdminGlobal ? proyectos : this.filtrarProyectosPorUsuario(proyectos);
-    });
   }
 
   filtrarProyectosPorUsuario(proyectos: Proyecto[]): Proyecto[] {

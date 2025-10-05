@@ -1,0 +1,17 @@
+<div class="mb-2">
+  <input [formControl]="search" class="form-control mb-2" placeholder="Buscar proyecto..." />
+  <div *ngIf="loading" class="text-secondary small mb-2">Buscando...</div>
+  <ul class="list-group shadow-sm" *ngIf="!loading">
+    <li
+      *ngFor="let p of proyectos"
+      (click)="seleccionarProyecto(p.id!)"
+      class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      [class.active]="value === p.id"
+      style="cursor: pointer"
+    >
+      <span>{{ p.nombre }}</span>
+      <span *ngIf="!p.estadoActivo" class="badge bg-warning text-dark ms-2">Inactivo</span>
+    </li>
+    <li *ngIf="!proyectos.length" class="list-group-item text-muted">No hay resultados</li>
+  </ul>
+</div>

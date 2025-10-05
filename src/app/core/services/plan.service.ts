@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { Plan } from '../../models/plan.model';
+import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlanService {
@@ -12,24 +13,24 @@ export class PlanService {
 
   constructor(private http: HttpClient) {}
 
-  crearPlan(plan: Plan): Observable<any> {
-    return this.http.post(this.apiUrl, plan);
+  crearPlan(plan: Plan): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl, plan);
   }
 
-  modificarPlan(plan: Plan): Observable<any> {
-    return this.http.put(this.apiUrl, plan);
+  modificarPlan(plan: Plan): Observable<Respuesta<any>> {
+    return this.http.put<Respuesta<any>>(this.apiUrl, plan);
   }
 
-  listarPlanes(): Observable<Plan[]> {
-    return this.http.get<Plan[]>(this.apiUrl);
+  listarPlanes(): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
   }
 
-  eliminarPlan(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminarPlan(id: string): Observable<Respuesta<any>> {
+    return this.http.delete<Respuesta<any>>(`${this.apiUrl}/${id}`);
   }
 
-  listarPaginadoPlanes(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+  listarPaginadoPlanes(paginacion: PaginacionDto): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl, {
       params: paginacion as any,
     });
   }
