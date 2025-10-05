@@ -2,16 +2,15 @@
   <ng-container *ngFor="let item of items">
     <li class="list-group-item border-0 border-bottom">
       <div class="d-none d-md-flex justify-content-between align-items-center">
-        <ng-container *ngIf="estadoFn && estadoFn(item)">
+        <ng-container *ngIf="estadoFn && estadoFn(item) !== null && estadoFn(item) !== undefined">
           <div class="adminlist-estado-col d-flex align-items-center justify-content-center">
             <span
               class="estado-circulo"
               [ngClass]="{
-                'bg-success': estadoFn(item) === 'Activo',
-                'bg-danger': estadoFn(item) === 'Inactivo',
-                'bg-warning': estadoFn(item) !== 'Activo' && estadoFn(item) !== 'Inactivo',
+                'bg-success': estadoFn(item) === true,
+                'bg-danger': estadoFn(item) === false,
               }"
-              title="{{ estadoFn(item) }}"
+              [title]="estadoFn(item) ? 'Activo' : 'Inactivo'"
             ></span>
           </div>
         </ng-container>
@@ -28,6 +27,16 @@
             </div>
             <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
               Correo: {{ correoFn(item) }}
+            </div>
+            <!-- Roles como pastillas de colores -->
+            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1 mb-2">
+              <ng-container *ngFor="let rol of rolesFn(item)">
+                <span
+                  class="badge me-1 mb-1 text-white adminlist-role-pill"
+                  [ngClass]="rol.nombre | roleColor: rolesDisponiblesInput || []"
+                  >{{ rol.nombre }}</span
+                >
+              </ng-container>
             </div>
             <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
               Teléfono: {{ telefonoFn(item) }}
@@ -72,18 +81,6 @@
                 </ng-container>
               </ng-container>
             </ng-container>
-            <!-- Badges de roles si se provee rolesFn -->
-            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
-              <span
-                *ngFor="let rol of rolesFn(item)"
-                class="badge me-1"
-                [ngClass]="
-                  rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
-                "
-              >
-                {{ rol }}
-              </span>
-            </div>
           </div>
         </div>
         <div class="adminlist-btns-col">
@@ -102,15 +99,14 @@
       <div class="d-block d-md-none w-100">
         <div class="d-flex align-items-center w-100">
           <div class="adminlist-estado-col d-flex align-items-center justify-content-center me-2">
-            <ng-container *ngIf="estadoFn && estadoFn(item)">
+            <ng-container *ngIf="estadoFn && estadoFn(item) !== null">
               <span
                 class="estado-circulo"
                 [ngClass]="{
-                  'bg-success': estadoFn(item) === 'Activo',
-                  'bg-danger': estadoFn(item) === 'Inactivo',
-                  'bg-warning': estadoFn(item) !== 'Activo' && estadoFn(item) !== 'Inactivo',
+                  'bg-success': estadoFn(item) === true,
+                  'bg-danger': estadoFn(item) === false,
                 }"
-                title="{{ estadoFn(item) }}"
+                [title]="estadoFn(item) ? 'Activo' : 'Inactivo'"
               ></span>
             </ng-container>
           </div>
@@ -127,6 +123,16 @@
             <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
               Correo: {{ correoFn(item) }}
             </div>
+            <!-- Roles como pastillas de colores (mobile) -->
+            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1 mb-2">
+              <ng-container *ngFor="let rol of rolesFn(item)">
+                <span
+                  class="badge me-1 mb-1 text-white adminlist-role-pill"
+                  [ngClass]="rol.nombre | roleColor: rolesDisponiblesInput || []"
+                  >{{ rol.nombre }}</span
+                >
+              </ng-container>
+            </div>
             <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
               Teléfono: {{ telefonoFn(item) }}
             </div>
@@ -138,17 +144,6 @@
             </div>
             <div *ngIf="maximoUsuariosFn && maximoUsuariosFn(item)" class="text-muted small">
               Máximo de usuarios: {{ maximoUsuariosFn(item) }}
-            </div>
-            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1">
-              <span
-                *ngFor="let rol of rolesFn(item)"
-                class="badge me-1"
-                [ngClass]="
-                  rolesDisponiblesInput ? (rol | roleColor: rolesDisponiblesInput) : 'bg-primary'
-                "
-              >
-                {{ rol }}
-              </span>
             </div>
           </div>
         </div>
@@ -167,7 +162,7 @@
     </li>
   </ng-container>
   <li
-    *ngIf="!loading && items.length === 0"
+    *ngIf="!loading && (!items || items.length === 0)"
     class="list-group-item text-center text-muted border-0"
   >
     {{ emptyText }}

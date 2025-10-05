@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { Tenant } from '../../models/tenant.model';
+import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
 export class TenantService {
@@ -12,24 +13,24 @@ export class TenantService {
 
   constructor(private http: HttpClient) {}
 
-  crearTenant(tenant: Tenant): Observable<any> {
-    return this.http.post(this.apiUrl, tenant);
+  crearTenant(tenant: Tenant): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl, tenant);
   }
 
-  modificarTenant(tenant: Tenant): Observable<any> {
-    return this.http.put(this.apiUrl, tenant);
+  modificarTenant(tenant: Tenant): Observable<Respuesta<any>> {
+    return this.http.put<Respuesta<any>>(this.apiUrl, tenant);
   }
 
-  listarTenants(): Observable<Tenant[]> {
-    return this.http.get<Tenant[]>(this.apiUrl);
+  listarTenants(): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
   }
 
-  eliminarTenant(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminarTenant(id: string): Observable<Respuesta<any>> {
+    return this.http.delete<Respuesta<any>>(this.apiUrl + `/${id}`);
   }
 
-  listarPaginadoTenants(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+  listarPaginadoTenants(paginacion: PaginacionDto): Observable<Respuesta<RespuestaPaginadaDto>> {
+    return this.http.get<Respuesta<RespuestaPaginadaDto>>(this.apiUrl, {
       params: paginacion as any,
     });
   }

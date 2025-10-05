@@ -1,9 +1,9 @@
 export interface Tenant {
   id?: string;
   nombre: string;
-  correo?: string;
-  telefono?: string;
+  correo: string;
+  rol: string;
+  telefono: string;
   direccion?: string;
-  fechaCreacion: Date;
-  activo: boolean;
+  estadoActivo?: boolean;
 }

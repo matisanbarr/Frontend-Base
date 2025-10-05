@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,20 +7,17 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms';
-import { FormControl } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components';
-import { RouterModule } from '@angular/router';
 import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
 import { Usuario } from '../../../models/usuario.model';
-import { Rol } from '../../../models/rol.model';
 import { Tenant } from '../../../models/tenant.model';
 import { TenantService } from '../../../core/services/tenant.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
-import { RolService } from '../../../core/services/rol.service';
 import { PaginacionDto } from '../../../models/compartidos';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
+
 import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
 
 @Component({
@@ -31,7 +28,6 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     ReactiveFormsModule,
     FormsModule,
     ConfirmModalComponent,
-    RouterModule,
     ToastAlertsComponent,
     AdminListComponent,
     FormButtonsComponent,
@@ -41,40 +37,34 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-users.component.scss'],
 })
 export class AdminUsersComponent {
-  get estadoActivoControl(): import('@angular/forms').FormControl {
-    return this.usuarioForm.get('estadoActivo') as import('@angular/forms').FormControl;
-  }
-  // Funciones para el componente reutilizable de lista
-  usuarioNombreFn = (usuario: Usuario) => usuario.nombre || null;
-  usuarioCorreoFn = (usuario: Usuario) => usuario.email || null;
-  usuarioRolesFn = (usuario: Usuario) => usuario.roles?.map((r) => r.nombre) || null;
-  usuarioEstadoFn = (usuario: Usuario) => (usuario.estadoActivo ? 'Activo' : 'Inactivo');
+  // Funciones para mostrar en la lista
+  usuarioNombreFn = (u: Usuario) => u.nombre ?? null;
+  usuarioCorreoFn = (u: Usuario) => u.email ?? null;
+  usuarioRolFn = (u: Usuario) => u.roles ?? null;
+  usuarioEstadoActivoFn = (u: Usuario) =>
+    typeof u.estadoActivo === 'boolean' ? u.estadoActivo : null;
 
-  modoEdicion: boolean = false;
-  usuarioEditandoId: string | null = null;
   usuarioForm: FormGroup;
+  estadoActivoControl;
   usuarios: Usuario[] = [];
+  tenants: Tenant[] = [];
   loading = false;
   showConfirmModal = false;
+  modoEdicion = false;
+  usuarioEditandoId: string | null = null;
   usuarioAEliminar: string | null = null;
   usuarioANombreEliminar: string | null = null;
-  filtroBusqueda: string = '';
-  paginaActual: number = 1;
-  totalPaginas: number = 1;
-  totalRegistros: number = 0;
-  rolesDisponibles: Rol[] = [];
-  rolesSeleccionadosOriginal: string[] = [];
-  rolesSeleccionadosTemp: string[] = [];
-  rolesCambiados: boolean = false;
-  tenants: Tenant[] = [];
+  filtroBusqueda = '';
+  paginaActual = 1;
+  totalPaginas = 1;
+  totalRegistros = 0;
 
   readonly usuarioService = inject(UsuarioService);
-  readonly rolService = inject(RolService);
   readonly tenantService = inject(TenantService);
   readonly fb = inject(FormBuilder);
   readonly alertService = inject(AlertService);
 
-  generos = [
+  readonly generos = [
     { value: 0, label: 'No especificado' },
     { value: 1, label: 'Masculino' },
     { value: 2, label: 'Femenino' },
@@ -82,115 +72,99 @@ export class AdminUsersComponent {
   ];
 
   constructor() {
+    this.estadoActivoControl = this.fb.control(true);
     this.usuarioForm = this.fb.group({
-      primerNombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-      segundoNombre: ['', [Validators.maxLength(30)]],
+      primerNombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      segundoNombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       primerApellido: [
         '',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(30)],
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50)],
       ],
-      segundoApellido: ['', [Validators.maxLength(30)]],
-      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      segundoApellido: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50)],
+      ],
+      nombre: ['', [Validators.maxLength(200)]],
+      password: ['', [Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.minLength(6)]],
       fechaNacimiento: [''],
-      genero: [0],
+      genero: [null, [Validators.required]],
       isGlobal: [false],
-      tenantId: [null, Validators.required],
-      roles: [[]],
-      estadoActivo: [true],
+      tenantId: [null, [Validators.required]],
+      estadoActivo: this.estadoActivoControl,
     });
     this.usuarioForm.get('isGlobal')?.valueChanges.subscribe((isGlobal: boolean) => {
+      const tenantIdCtrl = this.usuarioForm.get('tenantId');
       if (isGlobal) {
-        this.usuarioForm.get('tenantId')?.setValue(null);
-        this.usuarioForm.get('tenantId')?.disable();
+        tenantIdCtrl?.setValue(null);
+        tenantIdCtrl?.disable();
       } else {
-        this.usuarioForm.get('tenantId')?.enable();
+        tenantIdCtrl?.enable();
       }
     });
     this.cargarUsuarios();
-    this.cargarRoles();
     this.cargarTenants();
-    // Sugerir nombre de usuario automáticamente (solo si el usuario no lo ha modificado manualmente)
-    this.usuarioForm.get('primerNombre')?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm
-      .get('segundoNombre')
-      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm
-      .get('primerApellido')
-      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-    this.usuarioForm
-      .get('segundoApellido')
-      ?.valueChanges.subscribe(() => this.sugerirNombreUsuario());
-  }
 
-  private sugerirNombreUsuario(): void {
-    const nombreControl = this.usuarioForm.get('nombre');
-    // Solo sugerir si el usuario no ha escrito manualmente o si el campo está vacío
-    if (nombreControl?.dirty && nombreControl.value) return;
-    const primerNombre = (this.usuarioForm.get('primerNombre')?.value || '')
-      .toLowerCase()
-      .replace(/[^a-záéíóúüñ]/gi, '');
-    const primerApellido = (this.usuarioForm.get('primerApellido')?.value || '')
-      .toLowerCase()
-      .replace(/[^a-záéíóúüñ]/gi, '');
-    const segundoApellido = (this.usuarioForm.get('segundoApellido')?.value || '')
-      .toLowerCase()
-      .replace(/[^a-záéíóúüñ]/gi, '');
-    let sugerido = '';
-    if (primerNombre && primerApellido) {
-      sugerido = primerNombre.charAt(0) + primerApellido;
-      if (segundoApellido) {
-        sugerido += segundoApellido.charAt(0);
-      }
-    } else if (primerNombre) {
-      sugerido = primerNombre;
-    } else if (primerApellido) {
-      sugerido = primerApellido;
-    }
-    nombreControl?.setValue(sugerido, { emitEvent: false });
-    nombreControl?.markAsPristine();
+    // Sincronizar el control de estadoActivo con el formulario
+    this.estadoActivoControl.valueChanges.subscribe((valor) => {
+      this.usuarioForm.get('estadoActivo')?.setValue(valor, { emitEvent: false });
+    });
   }
 
   cargarTenants(): void {
     this.tenantService.listarTenants().subscribe({
-      next: (tenants: Tenant[]) => {
-        this.tenants = tenants;
+      next: (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.tenants = resp.respuesta || [];
+        } else if (resp?.codigoRespuesta === 1) {
+          this.tenants = [];
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se encontraron empresas.');
+        } else {
+          this.tenants = [];
+          this.alertService.error(resp?.glosaRespuesta || 'Error al cargar empresas.');
+        }
       },
-      error: () => {
-        this.tenants = [];
-      },
+      error: () => this.alertService.error('Error al cargar empresas.'),
     });
   }
 
-  cargarRoles(): void {
-    this.rolService.listarRoles().subscribe({
-      next: (roles: Rol[]) => {
-        this.rolesDisponibles = roles;
-      },
-      error: () => {
-        this.rolesDisponibles = [];
-      },
-    });
-  }
-
-  cargarUsuarios(): void {
+  cargarUsuarios(): Promise<void> {
     this.loading = true;
     const filtro = new PaginacionDto();
     filtro.filtro = this.filtroBusqueda;
     filtro.pagina = this.paginaActual;
     filtro.tamano = 10;
-    this.usuarioService.listarPaginadoUsuarios(filtro).subscribe({
-      next: (respuesta: { datos: Usuario[]; total: number }) => {
-        this.usuarios = respuesta.datos;
-        this.totalRegistros = respuesta.total;
-        this.totalPaginas = Math.ceil(respuesta.total / filtro.tamano);
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.alertService.error('Error al cargar usuarios');
-      },
+    return new Promise((resolve, reject) => {
+      this.usuarioService.listarPaginadoUsuarios(filtro).subscribe({
+        next: (resp) => {
+          if (resp?.codigoRespuesta === 0 && resp.respuesta) {
+            const respuesta = resp.respuesta as { datos?: Usuario[]; total?: number };
+            this.usuarios = Array.isArray(respuesta.datos) ? respuesta.datos : [];
+            this.totalRegistros = typeof respuesta.total === 'number' ? respuesta.total : 0;
+            this.totalPaginas = Math.ceil(this.totalRegistros / filtro.tamano);
+          } else if (resp?.codigoRespuesta === 1) {
+            this.usuarios = [];
+            this.totalRegistros = 0;
+            this.totalPaginas = 1;
+            this.alertService.info?.(resp?.glosaRespuesta || 'No se encontraron usuarios.');
+          } else {
+            this.usuarios = [];
+            this.totalRegistros = 0;
+            this.totalPaginas = 1;
+            this.alertService.error(resp?.glosaRespuesta || 'Error al cargar usuarios');
+          }
+          resolve();
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          this.usuarios = [];
+          this.totalRegistros = 0;
+          this.totalPaginas = 1;
+          this.alertService.error('Error al cargar usuarios');
+          reject();
+        },
+      });
     });
   }
 
@@ -205,32 +179,33 @@ export class AdminUsersComponent {
     this.cargarUsuarios();
   }
 
-  registrarUsuario(): void {
-    // Validar contraseña solo al crear
-    if (
-      this.usuarioForm.invalid ||
-      !this.usuarioForm.value.password ||
-      this.usuarioForm.value.password.length < 6
-    ) {
-      this.usuarioForm.get('password')?.setErrors({ required: true });
+  async registrarUsuario() {
+    this.loading = true;
+    if (this.usuarioForm.invalid) {
+      this.usuarioForm.markAllAsTouched();
+      this.alertService.error('Por favor, complete todos los campos obligatorios correctamente.');
+      this.loading = false;
       return;
     }
     const usuario: Usuario = {
       ...this.usuarioForm.value,
-      roles: [], // No se asignan roles al crear
+      estadoActivo: this.estadoActivoControl.value,
+      isGlobal: !!this.usuarioForm.get('isGlobal')?.value,
     };
-    this.loading = true;
     this.usuarioService.registro(usuario).subscribe({
-      next: () => {
-        this.alertService.success('Usuario registrado correctamente');
-        this.usuarioForm.reset();
-        this.cargarUsuarios();
-        this.loading = false;
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.limpiarFormulario();
+          this.alertService.success(resp?.glosaRespuesta || 'Usuario registrado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo registrar el usuario.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al registrar usuario');
+        }
+        await this.cargarUsuarios();
       },
-      error: () => {
-        this.alertService.error('Error al registrar usuario');
-        this.loading = false;
-      },
+      error: () => this.alertService.error('Error al registrar usuario'),
+      complete: () => (this.loading = false),
     });
   }
 
@@ -242,216 +217,117 @@ export class AdminUsersComponent {
       segundoNombre: usuario.segundoNombre || '',
       primerApellido: usuario.primerApellido || '',
       segundoApellido: usuario.segundoApellido || '',
-      nombre: usuario.nombre,
-      email: usuario.email,
+      nombre: usuario.nombre || '',
+      email: usuario.email || '',
       password: '',
       fechaNacimiento: usuario.fechaNacimiento || '',
       genero: usuario.genero ?? 0,
       isGlobal: usuario.isGlobal ?? false,
       tenantId: usuario.isGlobal ? null : (usuario.tenantId ?? null),
-      roles: usuario.roles.map((r) => r.id),
       estadoActivo: usuario.estadoActivo ?? true,
     });
-    if (usuario.isGlobal) {
-      this.usuarioForm.get('tenantId')?.disable();
-    } else {
-      this.usuarioForm.get('tenantId')?.enable();
-    }
+    // Refuerza la sincronización del switch
+    this.estadoActivoControl.setValue(usuario.estadoActivo ?? true, { emitEvent: false });
+    this.usuarioForm.get('tenantId')?.[usuario.isGlobal ? 'disable' : 'enable']();
     this.usuarioForm.markAsPristine();
-    this.rolesSeleccionadosOriginal = usuario.roles.map((r) => r.id ?? '').filter((id) => !!id);
-    this.rolesSeleccionadosTemp = [...this.rolesSeleccionadosOriginal];
-    this.rolesCambiados = false;
   }
 
-  onRolTempCheck(event: any, rolId: string): void {
-    if (event.target.checked) {
-      if (!this.rolesSeleccionadosTemp.includes(rolId)) {
-        this.rolesSeleccionadosTemp.push(rolId);
-      }
-    } else {
-      this.rolesSeleccionadosTemp = this.rolesSeleccionadosTemp.filter((id) => id !== rolId);
-    }
-    this.rolesCambiados = this.detectarCambiosRoles();
-    if (this.modoEdicion) {
-      this.usuarioForm.markAsDirty(); // Marca el formulario como dirty al cambiar roles
-    }
-  }
-
-  detectarCambiosRoles(): boolean {
-    const original = [...this.rolesSeleccionadosOriginal].sort();
-    const actual = [...this.rolesSeleccionadosTemp].sort();
-    return JSON.stringify(original) !== JSON.stringify(actual);
-  }
-
-  guardarRoles(): void {
-    if (!this.usuarioEditandoId) return;
-    const rolesAAsignar = this.rolesSeleccionadosTemp.filter(
-      (id) => !this.rolesSeleccionadosOriginal.includes(id)
-    );
-    const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(
-      (id) => !this.rolesSeleccionadosTemp.includes(id)
-    );
-    const usuarioId = this.usuarioEditandoId;
-    let peticiones = [];
-    if (rolesAAsignar.length > 0) {
-      peticiones.push(this.usuarioService.asignarRoles({ usuarioId, rolesId: rolesAAsignar }));
-    }
-    if (rolesAQuitar.length > 0) {
-      peticiones.push(this.usuarioService.aquitarRoles({ usuarioId, rolesId: rolesAQuitar }));
-    }
-    if (peticiones.length === 0) return;
-    this.loading = true;
-    Promise.all(peticiones.map((p) => p.toPromise()))
-      .then(() => {
-        this.alertService.success('Roles actualizados correctamente');
-        this.cargarUsuarios();
-        this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
-        this.rolesCambiados = false;
-        this.loading = false;
-      })
-      .catch(() => {
-        this.alertService.error('Error al actualizar roles');
-        this.loading = false;
-      });
-  }
-
-  // Detecta cambios en el formulario o roles para mostrar el botón de modificar
   get hayCambios(): boolean {
-    if (!this.modoEdicion) return false;
-    // Detecta si el formulario fue modificado
-    const formCambiado = this.usuarioForm.dirty;
-    // Detecta si los roles fueron modificados
-    const rolesCambiados = this.detectarCambiosRoles();
-    return formCambiado || rolesCambiados;
+    return this.modoEdicion && this.usuarioForm.dirty;
   }
 
-  actualizarUsuarioYRoles(): void {
-    if (!this.usuarioEditandoId) return;
-    // Validaciones manuales
+  async actualizarUsuario() {
+    this.loading = true;
+    if (!this.usuarioEditandoId) {
+      this.loading = false;
+      return;
+    }
     if (this.usuarioForm.get('nombre')?.invalid) {
       this.alertService.error('El nombre es requerido y debe tener entre 3 y 50 caracteres.');
       this.usuarioForm.get('nombre')?.markAsTouched();
+      this.loading = false;
       return;
     }
     if (this.usuarioForm.get('email')?.invalid) {
       this.alertService.error('El email es requerido y debe ser válido.');
       this.usuarioForm.get('email')?.markAsTouched();
-      return;
-    }
-    // Al menos un rol seleccionado en edición
-    if (this.modoEdicion && this.rolesSeleccionadosTemp.length === 0) {
-      this.alertService.error('Debes asignar al menos un rol al usuario.');
-      return;
-    }
-    // El password solo es requerido al crear, no al modificar
-    if (
-      !this.modoEdicion &&
-      (!this.usuarioForm.get('password')?.value || this.usuarioForm.get('password')?.invalid)
-    ) {
-      this.alertService.error('La contraseña es requerida y debe tener al menos 6 caracteres.');
-      this.usuarioForm.get('password')?.markAsTouched();
+      this.loading = false;
       return;
     }
     const usuario: Usuario = {
       ...this.usuarioForm.value,
       id: this.usuarioEditandoId,
-      roles: this.rolesDisponibles.filter(
-        (r) => r.id && this.rolesSeleccionadosTemp.includes(r.id!)
-      ),
+      estadoActivo: this.estadoActivoControl.value,
     };
-    this.loading = true;
     this.usuarioService.modificar(usuario).subscribe({
-      next: () => {
-        // Actualizar roles si hay cambios
-        const rolesAAsignar = this.rolesSeleccionadosTemp.filter(
-          (id) => !this.rolesSeleccionadosOriginal.includes(id)
-        );
-        const rolesAQuitar = this.rolesSeleccionadosOriginal.filter(
-          (id) => !this.rolesSeleccionadosTemp.includes(id)
-        );
-        let peticiones = [];
-        if (rolesAAsignar.length > 0) {
-          peticiones.push(
-            this.usuarioService.asignarRoles({ usuarioId: usuario.id!, rolesId: rolesAAsignar })
-          );
-        }
-        if (rolesAQuitar.length > 0) {
-          peticiones.push(
-            this.usuarioService.aquitarRoles({ usuarioId: usuario.id!, rolesId: rolesAQuitar })
-          );
-        }
-        if (peticiones.length > 0) {
-          Promise.all(peticiones.map((p) => p.toPromise()))
-            .then(() => {
-              this.alertService.success('Usuario y roles actualizados correctamente');
-              this.cargarUsuarios();
-              this.rolesSeleccionadosOriginal = [...this.rolesSeleccionadosTemp];
-              this.rolesCambiados = false;
-              this.loading = false;
-              this.limpiarFormulario();
-            })
-            .catch(() => {
-              this.alertService.error('Error al actualizar roles');
-              this.loading = false;
-            });
-        } else {
-          this.alertService.success('Usuario actualizado correctamente');
-          this.cargarUsuarios();
-          this.loading = false;
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
           this.limpiarFormulario();
+          this.alertService.success(resp?.glosaRespuesta || 'Usuario actualizado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo actualizar el usuario.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al actualizar usuario');
         }
+        await this.cargarUsuarios();
       },
-      error: () => {
-        this.alertService.error('Error al actualizar usuario');
-        this.loading = false;
-      },
+      error: () => this.alertService.error('Error al actualizar usuario'),
+      complete: () => (this.loading = false),
     });
   }
 
   limpiarFormulario(): void {
     this.usuarioForm.reset({
+      primerNombre: '',
+      segundoNombre: '',
+      primerApellido: '',
+      segundoApellido: '',
       nombre: '',
-      email: '',
       password: '',
+      email: '',
       fechaNacimiento: '',
-      genero: 0,
+      genero: null,
       isGlobal: false,
       tenantId: null,
-      roles: [],
       estadoActivo: true,
     });
+    // Forzar el valor booleano explícitamente después del reset
+    this.usuarioForm.get('isGlobal')?.setValue(false, { emitEvent: false });
     this.usuarioForm.get('tenantId')?.enable();
+    this.usuarioForm.get('genero')?.setValue(null);
+    this.usuarioForm.get('tenantId')?.setValue(null);
+    this.estadoActivoControl.setValue(true, { emitEvent: false });
     this.modoEdicion = false;
     this.usuarioEditandoId = null;
   }
 
   cancelarEdicion(): void {
-    this.modoEdicion = false;
-    this.usuarioEditandoId = null;
-    this.usuarioForm.reset();
+    this.limpiarFormulario();
   }
 
   eliminarUsuario(usuario: Usuario): void {
     this.usuarioAEliminar = usuario.id || null;
-    this.usuarioANombreEliminar = usuario.nombre;
+    this.usuarioANombreEliminar = usuario.nombre ?? null;
     this.showConfirmModal = true;
   }
 
-  confirmarEliminacion(): void {
+  async confirmarEliminacion() {
     if (!this.usuarioAEliminar) return;
     this.loading = true;
     this.usuarioService.eliminarUsuario(this.usuarioAEliminar).subscribe({
-      next: () => {
-        this.alertService.success('Usuario eliminado correctamente');
-        this.cargarUsuarios();
-        this.loading = false;
-        this.cerrarModal();
+      next: async (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.cerrarModal();
+          this.alertService.success(resp?.glosaRespuesta || 'Usuario eliminado correctamente');
+        } else if (resp?.codigoRespuesta === 1) {
+          this.alertService.info?.(resp?.glosaRespuesta || 'No se pudo eliminar el usuario.');
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al eliminar usuario');
+        }
+        await this.cargarUsuarios();
       },
-      error: () => {
-        this.alertService.error('Error al eliminar usuario');
-        this.loading = false;
-        this.cerrarModal();
-      },
+      error: () => this.alertService.error('Error al eliminar usuario'),
+      complete: () => (this.loading = false),
     });
   }
 
@@ -462,13 +338,27 @@ export class AdminUsersComponent {
   }
 
   generarNombreUsuario(): void {
-    this.sugerirNombreUsuario();
     const nombreControl = this.usuarioForm.get('nombre');
-    nombreControl?.markAsDirty(); // Marca como modificado para que el formulario detecte el cambio
+    const { primerNombre, primerApellido, segundoApellido } = this.usuarioForm.value;
+    const quitarAcentos = (str: string) => str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    let sugerido = '';
+    if (primerNombre && primerApellido) {
+      sugerido =
+        quitarAcentos(primerNombre[0]?.toLowerCase() || '') +
+        quitarAcentos((primerApellido as string).toLowerCase());
+      if (segundoApellido)
+        sugerido += quitarAcentos((segundoApellido as string)[0]?.toLowerCase() || '');
+    } else if (primerNombre) {
+      sugerido = quitarAcentos((primerNombre as string).toLowerCase());
+    } else if (primerApellido) {
+      sugerido = quitarAcentos((primerApellido as string).toLowerCase());
+    }
+    nombreControl?.setValue(sugerido);
+    nombreControl?.markAsDirty();
   }
   getTenantName(tenantId: string | null | undefined): string {
     if (!tenantId) return 'Sin empresa';
-    const tenant = this.tenants.find((t: Tenant) => t.id === tenantId);
+    const tenant = this.tenants.find((t) => t.id === tenantId);
     return tenant ? tenant.nombre : 'Empresa desconocida';
   }
 }

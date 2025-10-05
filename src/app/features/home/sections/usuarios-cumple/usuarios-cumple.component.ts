@@ -37,9 +37,12 @@ export class UsuariosCumpleComponent implements OnInit {
     this.loading = true;
     this.error = null;
     this.usuarioService.proximosCumpleaños(dias).subscribe({
-      next: (usuarios: Usuario[]) => {
-        this.usuarios = usuarios;
-        this.loading = false;
+      next: (resp) => {
+        if (resp.codigoRespuesta == 0) {
+          let usuarios = resp.respuesta as Usuario[];
+          this.usuarios = usuarios;
+          this.loading = false;
+        }
       },
       error: (_err: unknown) => {
         this.error = 'No se pudieron cargar los cumpleaños.';

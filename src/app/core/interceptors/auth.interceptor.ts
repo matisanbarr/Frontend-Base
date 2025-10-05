@@ -21,8 +21,6 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Agregar API Key y JWT Token a todas las peticiones
     req = this.addAuthHeaders(req);
-    // Log para verificar los headers
-    console.log('Headers enviados:', req.headers.keys(), req.headers.get('x-api-key'));
 
     return next.handle(req).pipe(
       catchError((error) => {

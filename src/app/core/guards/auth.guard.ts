@@ -17,10 +17,8 @@ export const authGuard: CanActivateFn = (
   const isAuthenticated = !!token;
 
   if (isAuthenticated) {
-    console.log('AuthGuard: Usuario autenticado, permitiendo acceso');
     return true;
   } else {
-    console.log('AuthGuard: Usuario no autenticado, redirigiendo al login');
     router.navigate(['/auth/login'], {
       queryParams: { returnUrl: state.url },
     });

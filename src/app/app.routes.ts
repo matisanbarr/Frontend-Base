@@ -90,13 +90,6 @@ export const routes: Routes = [
                 './features/admin/admin-asignacion-proyectos/admin-asignacion-proyectos.component'
               ).then((m) => m.AdminAsignacionProyectosComponent),
           },
-          {
-            path: 'register',
-            loadComponent: () =>
-              import('./features/auth/register/register.component').then(
-                (m) => m.RegisterComponent
-              ),
-          },
         ],
       },
       // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, LoginResponse } from '../../models';
 import { jwtDecode } from 'jwt-decode';
+import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,6 +21,8 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthState());
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
+  apiUrl = environment.apiUrl;
+
   constructor(
     private http: HttpClient,
     private router: Router
@@ -27,15 +30,17 @@ export class AuthService {
 
   // --- Sesión y autenticación ---
 
-  login(credentials: LoginRequest): Observable<any> {
-    // El backend devuelve RespuestaDto<TokenResponseDto>
-    return this.http.post<any>(`${environment.apiUrl}/auth/login`, credentials).pipe(
-      map((respuestaDto) => {
-        if (!respuestaDto || !respuestaDto.respuesta) {
-          throw new Error('Respuesta de login inválida');
+  login(credentials: LoginRequest): Observable<Respuesta<LoginResponse>> {
+    return this.http.post<Respuesta<LoginResponse>>(this.apiUrl + '/auth/login', credentials).pipe(
+      map((resp) => {
+        if (resp && resp.codigoRespuesta === 0) {
+          if (resp.respuesta) {
+            this.setSession(resp.respuesta);
+          }
+        } else {
+          throw new Error(resp.glosaRespuesta || 'Error en interno, por favor intente nuevamente');
         }
-        this.setSession(respuestaDto.respuesta);
-        return respuestaDto;
+        return resp;
       }),
       catchError((error) => {
         console.error('Error en login:', error);
@@ -50,28 +55,29 @@ export class AuthService {
       this.logout();
       return of();
     }
-    return this.http.post<any>(`${environment.apiUrl}/auth/refresh`, refreshToken).pipe(
-      map((respuestaDto) => {
-        if (!respuestaDto || !respuestaDto.respuesta) {
-          throw new Error('Respuesta de refresh inválida');
-        }
-        this.setSession(respuestaDto.respuesta);
-        return respuestaDto.respuesta;
-      }),
-      catchError((error) => {
-        console.error('Error al refrescar token:', error);
-        this.logout();
-        throw error;
-      })
-    );
+    return this.http
+      .post<Respuesta<LoginResponse>>(this.apiUrl + '/auth/refresh', refreshToken)
+      .pipe(
+        map((resp) => {
+          if (resp && resp.codigoRespuesta === 0 && resp.respuesta) {
+            this.setSession(resp.respuesta);
+            return resp.respuesta;
+          } else {
+            throw new Error('Respuesta de refresco inválida');
+          }
+        }),
+        catchError((error) => {
+          console.error('Error al refrescar token:', error);
+          this.logout();
+          throw error;
+        })
+      );
   }
 
   logout(): void {
     this.clearSession();
     this.router.navigate(['/auth/login']);
   }
-
-  // refreshToken eliminado, ya no se usa
 
   // --- Métodos de obtención de datos ---
 
@@ -86,8 +92,6 @@ export class AuthService {
   getTokenExpiration(): string | null {
     return localStorage.getItem(this.EXPIRATION_KEY);
   }
-
-  // getRefreshToken eliminado, ya no se usa
 
   getCurrentUser(): any | null {
     const userStr = localStorage.getItem(this.USER_KEY);
@@ -111,9 +115,6 @@ export class AuthService {
     return this.hasValidToken();
   }
 
-  /**
-   * Retorna true si el usuario está autenticado (token válido y usuario actual existe)
-   */
   isLoggedIn(): boolean {
     return this.isAuthenticated() && !!this.getCurrentUser();
   }
@@ -148,28 +149,21 @@ export class AuthService {
     localStorage.setItem(this.EXPIRATION_KEY, tokenResponse.expiration);
     try {
       const decoded: any = jwtDecode(tokenResponse.accessToken);
-      // Extraer claims relevantes según backend
-      const usuarioId = decoded['nameidentifier'] || decoded['NameIdentifier'] || decoded['sub'];
+      // Extraer claims tal como vienen
+      const usuarioId = decoded['nameidentifier'] || decoded['NameIdentifier'];
       const nombreUsuario = decoded['NombreUsuario'];
       const primerNombre = decoded['PrimerNombre'];
       const segundoNombre = decoded['SegundoNombre'];
       const primerApellido = decoded['PrimerApellido'];
       const segundoApellido = decoded['SegundoApellido'];
-      const email =
-        decoded['email'] ||
-        decoded['Email'] ||
-        decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
-      const isGlobal = decoded['IsGlobal'] === 'true' || decoded['IsGlobal'] === true;
-      const tenantId = decoded['TenantId'] || decoded['tenantid'] || null;
-      let roles =
-        decoded['role'] ||
-        decoded['Role'] ||
-        decoded['roles'] ||
-        decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      const email = decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
+      const isGlobal = decoded['IsGlobal'] === 'True';
+      const tenantId = decoded['TenantId'];
+      let roles = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      if (roles && typeof roles === 'string') {
+        roles = [roles];
+      }
       if (roles) {
-        if (typeof roles === 'string') {
-          roles = [roles];
-        }
         localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify(roles));
       } else {
         localStorage.removeItem(this.USER_ROLES_KEY);

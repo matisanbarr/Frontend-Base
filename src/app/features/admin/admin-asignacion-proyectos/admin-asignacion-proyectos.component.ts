@@ -91,9 +91,24 @@ export class AdminAsignacionProyectosComponent {
     this.cargarAsignaciones();
   }
 
-  cargarEmpresas() {
-    this.tenantService.listarTenants().subscribe((empresas: Tenant[]) => {
-      this.empresas = empresas;
+  cargarEmpresas(): void {
+    this.empresas = [];
+    this.tenantService.listarTenants().subscribe({
+      next: (resp) => {
+        if (!resp || resp.codigoRespuesta !== 0) {
+          this.alertService.info(resp?.glosaRespuesta || 'No se encontraron empresas.');
+          return;
+        }
+        const empresas = resp.respuesta || [];
+        if (empresas.length === 0) {
+          this.alertService.info('No se encontraron empresas.');
+          return;
+        }
+        this.empresas = empresas;
+      },
+      error: () => {
+        this.alertService.error('Error al cargar empresas.');
+      },
     });
   }
 

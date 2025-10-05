@@ -49,7 +49,7 @@ export class AdminAsignacionPlanesComponent {
   asignacionSubscripcionFn = (a: TenantPlan) => this.getPlanNombre(a.planId) || null;
   asignacionFechaInicioFn = (a: TenantPlan) => this.fechaLarga(a.fechaInicio!) || null;
   asignacionFechaFinFn = (a: TenantPlan) => this.fechaLarga(a.fechaFin!) || null;
-  asignacionEstadoFn = (a: TenantPlan) => (a.activo ? 'Activo' : 'Inactivo');
+  asignacionEstadoFn = (a: TenantPlan) => a.activo;
   asignacionDiasRestantesFn = (a: TenantPlan) => this.getDiasRestantes(a) || null;
 
   modoEdicion: boolean = false;
@@ -212,11 +212,25 @@ export class AdminAsignacionPlanesComponent {
     this.cargarAsignaciones();
   }
 
-  cargarTenants() {
+  cargarTenants(): void {
+    this.tenants = [];
+    this.tenantsFiltrados = [];
     this.tenantService.listarTenants().subscribe({
-      next: (tenants) => {
+      next: (resp) => {
+        if (!resp || resp.codigoRespuesta !== 0) {
+          this.alertService.info(resp?.glosaRespuesta || 'No se encontraron empresas.');
+          return;
+        }
+        const tenants = resp.respuesta || [];
+        if (tenants.length === 0) {
+          this.alertService.info('No se encontraron empresas.');
+          return;
+        }
         this.tenants = tenants;
         this.tenantsFiltrados = tenants;
+      },
+      error: () => {
+        this.alertService.error('Error al cargar empresas.');
       },
     });
   }

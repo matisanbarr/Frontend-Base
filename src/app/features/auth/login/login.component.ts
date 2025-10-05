@@ -51,30 +51,35 @@ export class LoginComponent {
     this.isLoading = true;
 
     this.authService.login(this.loginData).subscribe({
-      next: () => {
-        this.successMessage = 'Inicio de sesión exitoso. Redirigiendo...';
-        this.errorMessage = '';
-        this.loadingService.show();
-        // Si el token está expirado, intentar refresh
-        if (this.authService.isTokenExpired()) {
-          this.authService.refreshToken().subscribe({
-            next: () => {
-              this.router.navigate(['/dashboard']);
-            },
-            error: () => {
-              this.errorMessage = 'La sesión expiró, por favor inicia sesión nuevamente.';
-              this.successMessage = '';
-              this.authService.logout();
-            },
-            complete: () => {
-              this.isLoading = false;
-              this.loadingService.hide();
-            },
-          });
+      next: (resp) => {
+        if (resp.codigoRespuesta === 0) {
+          this.successMessage = 'Inicio de sesión exitoso. Redirigiendo...';
+          this.loadingService.show();
+          // Si el token está expirado, intentar refresh
+          if (this.authService.isTokenExpired()) {
+            this.authService.refreshToken().subscribe({
+              next: () => {
+                this.router.navigate(['/dashboard']);
+              },
+              error: () => {
+                this.errorMessage = 'La sesión expiró, por favor inicia sesión nuevamente.';
+                this.successMessage = '';
+                this.authService.logout();
+              },
+              complete: () => {
+                this.isLoading = false;
+                this.loadingService.hide();
+              },
+            });
+          } else {
+            this.router.navigate(['/dashboard']);
+            this.isLoading = false;
+            this.loadingService.hide();
+          }
         } else {
-          this.router.navigate(['/dashboard']);
           this.isLoading = false;
-          this.loadingService.hide();
+          this.errorMessage =
+            resp.glosaRespuesta || 'Error en interno, por favor intente nuevamente';
         }
       },
       error: (err) => {

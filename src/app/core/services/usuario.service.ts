@@ -6,6 +6,7 @@ import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
 import { RespuestaPaginadaDto } from '../../models/compartidos';
 import { AsignarRolesDto } from '../../models/asignarRoles.model';
 import { Usuario } from '../../models/usuario.model';
+import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
@@ -13,64 +14,59 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) {}
 
-  registro(usuario: Usuario): Observable<boolean> {
-    return this.http.post<boolean>(this.apiUrl, usuario).pipe(
+  registro(usuario: Usuario): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl, usuario).pipe(
       catchError((error) => {
-        console.error('Error en registro:', error);
         throw error;
       })
     );
   }
 
-  modificar(userData: Usuario): Observable<boolean> {
-    return this.http.put<boolean>(`${this.apiUrl}/${userData.id}`, userData).pipe(
+  modificar(usuario: Usuario): Observable<Respuesta<any>> {
+    return this.http.put<Respuesta<any>>(this.apiUrl, usuario).pipe(
       catchError((error) => {
-        console.error('Error en modificar usuario:', error);
         throw error;
       })
     );
   }
 
-  listarUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.apiUrl);
+  listarUsuarios(): Observable<Respuesta<any>[]> {
+    return this.http.get<Respuesta<any>[]>(this.apiUrl + 'listar-todos');
   }
 
-  eliminarUsuario(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminarUsuario(id: string): Observable<Respuesta<any>> {
+    return this.http.delete<Respuesta<any>>(`${this.apiUrl}/${id}`);
   }
 
-  listarPaginadoUsuarios(paginacion: PaginacionDto): Observable<RespuestaPaginadaDto> {
-    return this.http.get<RespuestaPaginadaDto>(this.apiUrl + '/lista-paginada', {
+  listarPaginadoUsuarios(paginacion: PaginacionDto): Observable<Respuesta<any>> {
+    return this.http.get<Respuesta<any>>(this.apiUrl, {
       params: paginacion as any,
     });
   }
 
-  asignarRoles(userData: AsignarRolesDto): Observable<boolean> {
-    return this.http.post<boolean>(this.apiUrl + '/asignar-roles', userData).pipe(
+  asignarRoles(userData: AsignarRolesDto): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl + '/asignar-roles', userData).pipe(
       catchError((error) => {
-        console.error('Error en asignar roles:', error);
         throw error;
       })
     );
   }
 
-  aquitarRoles(userData: AsignarRolesDto): Observable<boolean> {
-    return this.http.post<boolean>(this.apiUrl + '/quitar-roles', userData).pipe(
+  aquitarRoles(userData: AsignarRolesDto): Observable<Respuesta<any>> {
+    return this.http.post<Respuesta<any>>(this.apiUrl + '/quitar-roles', userData).pipe(
       catchError((error) => {
-        console.error('Error en quitar roles:', error);
         throw error;
       })
     );
   }
 
-  proximosCumpleaños(dias: number): Observable<Usuario[]> {
+  proximosCumpleaños(dias: number): Observable<Respuesta<any>> {
     return this.http
-      .get<Usuario[]>(this.apiUrl + '/cumpleanios-proximos', {
+      .get<Respuesta<any>>(this.apiUrl + '/cumpleanios-proximos', {
         params: { dias: dias.toString() },
       })
       .pipe(
         catchError((error) => {
-          console.error('Error en obtener próximos cumpleaños:', error);
           throw error;
         })
       );

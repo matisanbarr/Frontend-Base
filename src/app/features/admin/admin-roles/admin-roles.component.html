@@ -1,141 +1,157 @@
-<!-- Modal de confirmación -->
-<app-confirm-modal
-  *ngIf="showConfirmModal"
-  [message]="'¿Seguro que deseas eliminar el rol \' ' + rolANombreEliminar + '\'?'"
-  [confirmText]="'Eliminar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="confirmarEliminacion()"
-  (cancel)="cerrarModal()"
-></app-confirm-modal>
+<!-- Templates reutilizables -->
+<ng-template #modalConfirmacion>
+  <app-confirm-modal
+    *ngIf="showConfirmModal"
+    [message]="'¿Seguro que deseas eliminar el rol \' ' + rolANombreEliminar + '\'?'"
+    [confirmText]="'Eliminar'"
+    [cancelText]="'Cancelar'"
+    (confirm)="confirmarEliminacion()"
+    (cancel)="cerrarModal()"
+  ></app-confirm-modal>
+</ng-template>
+
+<ng-template #alertas>
+  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+</ng-template>
+
+<ng-template #buscador>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Buscar rol..."
+    [(ngModel)]="filtroBusqueda"
+    (input)="buscarRoles()"
+  />
+</ng-template>
+
+<ng-template #listaRoles>
+  <div class="planes-scroll">
+    <app-admin-list
+      [items]="roles"
+      [nombreFn]="rolNombreFn"
+      [descriptionFn]="rolDescriptionFn"
+      [estadoFn]="rolEstadoActivoFn"
+      [loading]="loading"
+      [emptyText]="'No hay roles registrados.'"
+      (edit)="editarRol($event)"
+      (remove)="eliminarRol($event)"
+    ></app-admin-list>
+  </div>
+  <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+    <button
+      *ngIf="paginaActual > 1"
+      class="btn btn-outline-info btn-sm rounded-pill me-2 px-3"
+      (click)="cambiarPagina(paginaActual - 1)"
+    >
+      Anterior
+    </button>
+    <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    <button
+      *ngIf="paginaActual < totalPaginas"
+      class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3"
+      (click)="cambiarPagina(paginaActual + 1)"
+    >
+      Siguiente
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #formularioRol>
+  <form [formGroup]="rolForm" (ngSubmit)="modoEdicion ? actualizarRol() : registrarRol()">
+    <div class="mb-3">
+      <label for="rolNombre" class="form-label">Nombre del Rol</label>
+      <input
+        type="text"
+        class="form-control"
+        id="rolNombre"
+        formControlName="nombre"
+        placeholder="Ej: Admin Global"
+        [class.is-invalid]="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched"
+      />
+      <div
+        *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched"
+        class="invalid-feedback"
+      >
+        El nombre es requerido (3-50 caracteres).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="rolDescripcion" class="form-label">Descripción del Rol</label>
+      <textarea
+        class="form-control"
+        id="rolDescripcion"
+        formControlName="descripcion"
+        placeholder="Ej: Acceso completo al sistema"
+        maxlength="200"
+        rows="3"
+        [class.is-invalid]="
+          rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched
+        "
+      ></textarea>
+      <div class="text-end text-muted small">
+        {{ rolForm.get('descripcion')?.value?.length || 0 }}/200 caracteres
+      </div>
+      <div
+        *ngIf="rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched"
+        class="invalid-feedback"
+      >
+        La descripción es opcional (máximo 200 caracteres).
+      </div>
+    </div>
+    <app-form-buttons
+      [modoEdicion]="modoEdicion"
+      [formInvalid]="rolForm.invalid"
+      [loading]="loading"
+      [hayCambios]="hayCambios"
+      [crearLabel]="'Crear Rol'"
+      [modificarLabel]="'Modificar Rol'"
+      (limpiar)="limpiarFormulario()"
+      (submit)="modoEdicion ? actualizarRol() : registrarRol()"
+    ></app-form-buttons>
+  </form>
+</ng-template>
 
 <div class="container py-4">
-  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+  <ng-container *ngTemplateOutlet="alertas"></ng-container>
   <div class="row">
     <div class="col-12 col-md-6 col-lg-6 mb-4">
-      <div class="card">
+      <div class="card border-0 shadow-sm rounded-3">
         <div class="card-header card-header-info">
-          <h5 class="mb-0">Roles registrados</h5>
+          <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Roles registrados</h5>
           <div class="mt-2">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Buscar rol..."
-              [(ngModel)]="filtroBusqueda"
-              (input)="buscarRoles()"
-            />
+            <ng-container *ngTemplateOutlet="buscador"></ng-container>
           </div>
         </div>
         <div class="card-body p-0 bg-light">
-          <ng-container *ngIf="loading; else listaRoles">
+          <ng-container *ngIf="loading; else rolesListos">
             <div class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
+              <div class="spinner-border text-info" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
           </ng-container>
-          <ng-template #listaRoles>
-            <div class="planes-scroll">
-              <app-admin-list
-                [items]="roles"
-                [nombreFn]="rolNombreFn"
-                [descriptionFn]="rolDescriptionFn"
-                [loading]="loading"
-                [emptyText]="'No hay roles registrados.'"
-                (edit)="editarRol($event)"
-                (remove)="eliminarRol($event)"
-              ></app-admin-list>
-            </div>
-            <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
-              <button
-                *ngIf="paginaActual > 1"
-                class="btn btn-outline-primary me-2"
-                (click)="paginaAnterior()"
-              >
-                Anterior
-              </button>
-              <span class="flex-grow-1 text-center"
-                >Página {{ paginaActual }} de {{ totalPaginas }}</span
-              >
-              <button
-                *ngIf="paginaActual < totalPaginas"
-                class="btn btn-outline-primary ms-2"
-                (click)="paginaSiguiente()"
-              >
-                Siguiente
-              </button>
-            </div>
+          <ng-template #rolesListos>
+            <ng-container *ngTemplateOutlet="listaRoles"></ng-container>
           </ng-template>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6 col-lg-6">
-      <div class="card">
+      <div class="card border-0 shadow-sm rounded-3">
         <app-admin-form-header
           icon="bi bi-shield-lock"
           [titulo]="'Rol'"
           [modoEdicion]="modoEdicion"
           [labelCrear]="'Crear Nuevo'"
           [labelEditar]="'Modificar'"
-          [mostrarEstado]="false"
+          [mostrarEstado]="true"
+          [estadoControl]="estadoActivoControl"
         ></app-admin-form-header>
-        <div class="card-body">
-          <form [formGroup]="rolForm" (ngSubmit)="crearRol()">
-            <div class="mb-3">
-              <label for="rolNombre" class="form-label">Nombre del Rol</label>
-              <input
-                type="text"
-                class="form-control"
-                id="rolNombre"
-                formControlName="nombre"
-                placeholder="Ej: Admin Global"
-                [class.is-invalid]="
-                  rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched
-                "
-              />
-              <div
-                *ngIf="rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched"
-                class="invalid-feedback"
-              >
-                El nombre es requerido (3-50 caracteres).
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="rolDescripcion" class="form-label">Descripción del Rol</label>
-              <textarea
-                class="form-control"
-                id="rolDescripcion"
-                formControlName="descripcion"
-                placeholder="Ej: Acceso completo al sistema"
-                maxlength="200"
-                rows="3"
-                [class.is-invalid]="
-                  rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched
-                "
-              ></textarea>
-              <div class="text-end text-muted small">
-                {{ rolForm.get('descripcion')?.value?.length || 0 }}/200 caracteres
-              </div>
-              <div
-                *ngIf="rolForm.get('descripcion')?.invalid && rolForm.get('descripcion')?.touched"
-                class="invalid-feedback"
-              >
-                La descripción es opcional (3-200 caracteres).
-              </div>
-            </div>
-
-            <app-form-buttons
-              [modoEdicion]="modoEdicion"
-              [formInvalid]="rolForm.invalid"
-              [loading]="loading"
-              [crearLabel]="'Crear Rol'"
-              [modificarLabel]="'Modificar Rol'"
-              [hayCambios]="true"
-              (limpiar)="limpiarFormulario()"
-              (submit)="crearRol()"
-            ></app-form-buttons>
-          </form>
+        <div class="card-body bg-light">
+          <ng-container *ngTemplateOutlet="formularioRol"></ng-container>
         </div>
       </div>
     </div>
   </div>
+  <ng-container *ngTemplateOutlet="modalConfirmacion"></ng-container>
 </div>

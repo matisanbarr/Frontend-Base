@@ -1,185 +1,213 @@
-<!-- Modal de confirmación -->
-<app-confirm-modal
-  *ngIf="showConfirmModal"
-  [message]="'¿Seguro que deseas eliminar la empresa \' ' + tenantANombreEliminar + '\'?'"
-  [confirmText]="'Eliminar'"
-  [cancelText]="'Cancelar'"
-  (confirm)="confirmarEliminacion()"
-  (cancel)="cerrarModal()"
-></app-confirm-modal>
+<!-- Templates reutilizables -->
+<ng-template #modalConfirmacion>
+  <app-confirm-modal
+    *ngIf="showConfirmModal"
+    [message]="'¿Seguro que deseas eliminar la empresa \' ' + tenantANombreEliminar + '\'?'"
+    [confirmText]="'Eliminar'"
+    [cancelText]="'Cancelar'"
+    (confirm)="confirmarEliminacion()"
+    (cancel)="cerrarModal()"
+  ></app-confirm-modal>
+</ng-template>
+
+<ng-template #alertas>
+  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+</ng-template>
+
+<ng-template #buscador>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Buscar empresa..."
+    [(ngModel)]="filtroBusqueda"
+    (input)="buscarTenants()"
+  />
+</ng-template>
+
+<ng-template #listaTenants>
+  <div class="tenants-scroll">
+    <app-admin-list
+      [items]="tenants"
+      [nombreFn]="tenantNombreFn"
+      [estadoFn]="tenantEstadoActivoFn"
+      [correoFn]="tenantCorreoFn"
+      [telefonoFn]="tenantTelefonoFn"
+      [direccionFn]="tenantDireccionFn"
+      [loading]="loading"
+      [emptyText]="'No hay empresas registradas.'"
+      (edit)="editarTenant($event)"
+      (remove)="eliminarTenant($event)"
+    ></app-admin-list>
+  </div>
+  <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
+    <button
+      *ngIf="paginaActual > 1"
+      class="btn btn-outline-info btn-sm rounded-pill me-2 px-3"
+      (click)="cambiarPagina(paginaActual - 1)"
+    >
+      Anterior
+    </button>
+    <span class="flex-grow-1 text-center">Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    <button
+      *ngIf="paginaActual < totalPaginas"
+      class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3"
+      (click)="cambiarPagina(paginaActual + 1)"
+    >
+      Siguiente
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #formularioTenant>
+  <form [formGroup]="tenantForm" (ngSubmit)="modoEdicion ? actualizarTenant() : registrarTenant()">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input
+        type="text"
+        class="form-control"
+        id="nombre"
+        formControlName="nombre"
+        placeholder="Ej: Empresa S.A."
+        [class.is-invalid]="tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched"
+      />
+      <div
+        *ngIf="tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched"
+        class="invalid-feedback"
+      >
+        El nombre es requerido (3-50 caracteres).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo</label>
+      <input
+        type="email"
+        class="form-control"
+        id="correo"
+        formControlName="correo"
+        placeholder="Ej: empresa@email.com"
+        [class.is-invalid]="tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched"
+      />
+      <div
+        *ngIf="tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched"
+        class="invalid-feedback"
+      >
+        Correo válido requerido.
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12 col-md-4 mb-3 mb-md-0">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input
+          type="text"
+          class="form-control"
+          id="telefono"
+          formControlName="telefono"
+          placeholder="Ej: 555123456"
+          [class.is-invalid]="
+            tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched
+          "
+          maxlength="20"
+        />
+        <div
+          *ngIf="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched"
+          class="invalid-feedback"
+        >
+          Teléfono requerido, máximo 20 caracteres.
+        </div>
+      </div>
+      <div class="col-12 col-md-4 mb-3 mb-md-0">
+        <label for="rol" class="form-label">Rol empresa</label>
+        <input
+          type="text"
+          class="form-control"
+          id="rol"
+          formControlName="rol"
+          placeholder="Ej: Administrador"
+          [class.is-invalid]="tenantForm.get('rol')?.invalid && tenantForm.get('rol')?.touched"
+          maxlength="30"
+        />
+        <div
+          *ngIf="tenantForm.get('rol')?.invalid && tenantForm.get('rol')?.touched"
+          class="invalid-feedback"
+        >
+          Rol requerido, máximo 30 caracteres.
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="direccion" class="form-label">Dirección</label>
+        <input
+          type="text"
+          class="form-control"
+          id="direccion"
+          formControlName="direccion"
+          placeholder="Ej: Calle 123, Ciudad"
+          [class.is-invalid]="
+            tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched
+          "
+          maxlength="200"
+        />
+        <div
+          *ngIf="tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched"
+          class="invalid-feedback"
+        >
+          Máximo 200 caracteres.
+        </div>
+      </div>
+    </div>
+    <app-form-buttons
+      [modoEdicion]="modoEdicion"
+      [formInvalid]="tenantForm.invalid"
+      [loading]="loading"
+      [hayCambios]="hayCambios"
+      [crearLabel]="'Crear Empresa'"
+      [modificarLabel]="'Modificar Empresa'"
+      (limpiar)="limpiarFormulario()"
+      (submit)="modoEdicion ? actualizarTenant() : registrarTenant()"
+    ></app-form-buttons>
+  </form>
+</ng-template>
 
 <div class="container py-4">
-  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
+  <ng-container *ngTemplateOutlet="alertas"></ng-container>
   <div class="row">
     <div class="col-12 col-md-6 col-lg-6 mb-4">
       <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-header" style="background-color: #e3f2fd; color: #1565c0">
+        <div class="card-header card-header-info">
           <h5 class="mb-0"><i class="bi bi-buildings me-2"></i>Empresas registradas</h5>
           <div class="mt-2">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Buscar empresa..."
-              [(ngModel)]="filtroBusqueda"
-              (input)="buscarTenants()"
-            />
+            <ng-container *ngTemplateOutlet="buscador"></ng-container>
           </div>
         </div>
         <div class="card-body p-0 bg-light">
-          <ng-container *ngIf="loading; else listaEmpresas">
+          <ng-container *ngIf="loading; else tenantsListos">
             <div class="text-center py-4">
               <div class="spinner-border text-info" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
           </ng-container>
-          <ng-template #listaEmpresas>
-            <div class="tenants-scroll">
-              <app-admin-list
-                [items]="tenants"
-                [nombreFn]="tenantNombreFn"
-                [estadoFn]="tenantEstadoFn"
-                [correoFn]="tenantCorreoFn"
-                [telefonoFn]="tenantTelefonoFn"
-                [direccionFn]="tenantDireccionFn"
-                [loading]="loading"
-                [emptyText]="'No hay empresas registradas.'"
-                (edit)="editarTenant($event)"
-                (remove)="eliminarTenant($event)"
-              ></app-admin-list>
-            </div>
-            <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
-              <button
-                *ngIf="paginaActual > 1"
-                class="btn btn-outline-info btn-sm rounded-pill me-2 px-3"
-                (click)="cambiarPagina(paginaActual - 1)"
-              >
-                Anterior
-              </button>
-              <span class="flex-grow-1 text-center"
-                >Página {{ paginaActual }} de {{ totalPaginas }}</span
-              >
-              <button
-                *ngIf="paginaActual < totalPaginas"
-                class="btn btn-outline-info btn-sm rounded-pill ms-2 px-3"
-                (click)="cambiarPagina(paginaActual + 1)"
-              >
-                Siguiente
-              </button>
-            </div>
+          <ng-template #tenantsListos>
+            <ng-container *ngTemplateOutlet="listaTenants"></ng-container>
           </ng-template>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
-        <form [formGroup]="tenantForm" (ngSubmit)="guardarTenant()">
-          <app-admin-form-header
-            icon="bi bi-building"
-            [titulo]="'Empresa'"
-            [modoEdicion]="modoEdicion"
-            [labelCrear]="'Registrar Nueva'"
-            [labelEditar]="'Modificar'"
-            [estadoControl]="activoControl"
-            [mostrarEstado]="true"
-          ></app-admin-form-header>
-          <div class="card-body bg-light">
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input
-                type="text"
-                class="form-control"
-                id="nombre"
-                formControlName="nombre"
-                placeholder="Ej: Empresa S.A."
-                [class.is-invalid]="
-                  tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched
-                "
-              />
-              <div
-                *ngIf="tenantForm.get('nombre')?.invalid && tenantForm.get('nombre')?.touched"
-                class="invalid-feedback"
-              >
-                El nombre es requerido (3-50 caracteres).
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="correo" class="form-label">Correo</label>
-              <input
-                type="email"
-                class="form-control"
-                id="correo"
-                formControlName="correo"
-                placeholder="Ej: empresa@email.com"
-                [class.is-invalid]="
-                  tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched
-                "
-              />
-              <div
-                *ngIf="tenantForm.get('correo')?.invalid && tenantForm.get('correo')?.touched"
-                class="invalid-feedback"
-              >
-                Correo válido requerido.
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-12 col-md-6 mb-3 mb-md-0">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="telefono"
-                  formControlName="telefono"
-                  placeholder="Ej: 555123456"
-                  [class.is-invalid]="
-                    tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched
-                  "
-                  minlength="7"
-                  maxlength="20"
-                />
-                <div
-                  *ngIf="tenantForm.get('telefono')?.invalid && tenantForm.get('telefono')?.touched"
-                  class="invalid-feedback"
-                >
-                  Teléfono entre 7 y 20 caracteres.
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="direccion"
-                  formControlName="direccion"
-                  placeholder="Ej: Calle 123, Ciudad"
-                  [class.is-invalid]="
-                    tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched
-                  "
-                  maxlength="200"
-                />
-                <div
-                  *ngIf="
-                    tenantForm.get('direccion')?.invalid && tenantForm.get('direccion')?.touched
-                  "
-                  class="invalid-feedback"
-                >
-                  Máximo 200 caracteres.
-                </div>
-              </div>
-            </div>
-            <app-form-buttons
-              [modoEdicion]="modoEdicion"
-              [formInvalid]="tenantForm.invalid"
-              [loading]="loading"
-              [crearLabel]="'Crear Empresa'"
-              [modificarLabel]="'Modificar Empresa'"
-              [hayCambios]="true"
-              (limpiar)="cancelarEdicion()"
-              (submit)="guardarTenant()"
-            ></app-form-buttons>
-          </div>
-        </form>
+        <app-admin-form-header
+          icon="bi bi-building"
+          [titulo]="'Empresa'"
+          [modoEdicion]="modoEdicion"
+          [labelCrear]="'Registrar Nueva'"
+          [labelEditar]="'Modificar'"
+          [mostrarEstado]="true"
+          [estadoControl]="activoControl"
+        ></app-admin-form-header>
+        <div class="card-body bg-light">
+          <ng-container *ngTemplateOutlet="formularioTenant"></ng-container>
+        </div>
       </div>
     </div>
   </div>
+  <ng-container *ngTemplateOutlet="modalConfirmacion"></ng-container>
 </div>
