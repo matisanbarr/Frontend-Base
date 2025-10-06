@@ -4,17 +4,17 @@ import { TenantProyectoPlan } from '../../../../../models/tenantProyectoPlan.mod
 import { TenantProyectoPlanService } from '../../../../../core/services/tenant-proyecto-plan.service';
 import { PaginacionDto } from '../../../../../models';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
-import { TenantProyectoPlanFormComponent } from '../../components/tenant-proyecto-plan-form/tenant-proyecto-plan-form.component';
 import { AlertService } from '../../../../../core/services';
+import { PagoTenantProyectoPlanFormComponent } from '../../components/pagos-tenants-proyectos-planes-form/pagos-tenants-proyectos-planes-form.component';
 
 @Component({
   selector: 'app-tenant-proyecto-plan-list',
   standalone: true,
-  templateUrl: './tenant-proyecto-plan-list.component.html',
-  styleUrls: ['./tenant-proyecto-plan-list.component.scss'],
-  imports: [CommonModule, DatePipe, ConfirmModalComponent, TenantProyectoPlanFormComponent],
+  templateUrl: './pago-tenant-proyecto-plan-list.component.html',
+  styleUrls: ['./pago-tenant-proyecto-plan-list.component.scss'],
+  imports: [CommonModule, DatePipe, ConfirmModalComponent, PagoTenantProyectoPlanFormComponent],
 })
-export class TenantProyectoPlanListComponent implements OnInit {
+export class PagoTenantProyectoPlanListComponent implements OnInit {
   @Output() edit = new EventEmitter<TenantProyectoPlan>();
   asignaciones: TenantProyectoPlan[] = [];
   total = 0;

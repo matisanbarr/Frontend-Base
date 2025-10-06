@@ -13,25 +13,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TenantProyectoPlan } from '../../../../../models/tenantProyectoPlan.model';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { TenantSelectorComponent } from '../tenant-selector/tenant-selector.component';
-import { ProyectoSelectorComponent } from '../proyecto-selector/proyecto-selector.component';
-import { PlanSelectorComponent } from '../plan-selector/plan-selector.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tenant-proyecto-plan-form',
   standalone: true,
-  templateUrl: './tenant-proyecto-plan-form.component.html',
-  styleUrls: ['./tenant-proyecto-plan-form.component.scss'],
-  imports: [
-    ReactiveFormsModule,
-    TenantSelectorComponent,
-    ProyectoSelectorComponent,
-    PlanSelectorComponent,
-    CommonModule,
-  ],
+  templateUrl: './pagos-tenants-proyectos-planes-form.component.html',
+  styleUrls: ['./pagos-tenants-proyectos-planes-form.component.scss'],
+  imports: [ReactiveFormsModule, CommonModule],
 })
-export class TenantProyectoPlanFormComponent implements OnInit, OnChanges {
+export class PagoTenantProyectoPlanFormComponent implements OnInit, OnChanges {
   @Input() initialData: TenantProyectoPlan | null = null;
   @Output() save = new EventEmitter<TenantProyectoPlan>();
   form: FormGroup;

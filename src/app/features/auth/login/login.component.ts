@@ -55,27 +55,18 @@ export class LoginComponent {
         if (resp.codigoRespuesta === 0) {
           this.successMessage = 'Inicio de sesión exitoso. Redirigiendo...';
           this.loadingService.show();
-          // Si el token está expirado, intentar refresh
+          // Validar que el token no esté expirado por desfase UTC
           if (this.authService.isTokenExpired()) {
-            this.authService.refreshToken().subscribe({
-              next: () => {
-                this.router.navigate(['/dashboard']);
-              },
-              error: () => {
-                this.errorMessage = 'La sesión expiró, por favor inicia sesión nuevamente.';
-                this.successMessage = '';
-                this.authService.logout();
-              },
-              complete: () => {
-                this.isLoading = false;
-                this.loadingService.hide();
-              },
-            });
-          } else {
-            this.router.navigate(['/dashboard']);
             this.isLoading = false;
             this.loadingService.hide();
+            this.errorMessage =
+              'El token recibido ya está expirado (UTC). Por favor, revisa la hora del servidor o contacta a soporte.';
+            this.authService.logout();
+            return;
           }
+          this.router.navigate(['/dashboard']);
+          this.isLoading = false;
+          this.loadingService.hide();
         } else {
           this.isLoading = false;
           this.errorMessage =

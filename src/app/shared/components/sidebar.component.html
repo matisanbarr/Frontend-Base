@@ -25,7 +25,7 @@
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleMantenedoresMenu()">
             <i class="bi bi-list-ul"></i>
-            <span>Mantenedores principales</span>
+            <span>Mantenedores</span>
             <i
               class="bi"
               [ngClass]="mantenedoresMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
@@ -33,29 +33,37 @@
           </div>
           <ul class="sidebar-submenu" *ngIf="mantenedoresMenuOpen">
             <li>
-              <a routerLink="/dashboard/admin/roles"><i class="bi bi-shield-lock"></i> Roles</a>
+              <a routerLink="/dashboard/admin/roles" routerLinkActive="active"
+                ><i class="bi bi-shield-lock"></i> Roles</a
+              >
             </li>
             <li>
-              <a routerLink="/dashboard/admin/users"><i class="bi bi-people"></i> Clientes</a>
+              <a routerLink="/dashboard/admin/users" routerLinkActive="active"
+                ><i class="bi bi-people"></i> Clientes</a
+              >
             </li>
             <li>
-              <a routerLink="/dashboard/admin/tenants"><i class="bi bi-building"></i> Empresas</a>
+              <a routerLink="/dashboard/admin/tenants" routerLinkActive="active"
+                ><i class="bi bi-building"></i> Empresas</a
+              >
             </li>
             <li>
-              <a routerLink="/dashboard/admin/planes"
+              <a routerLink="/dashboard/admin/planes" routerLinkActive="active"
                 ><i class="bi bi-box-seam"></i> Subscripciones</a
               >
             </li>
             <li>
-              <a routerLink="/dashboard/admin/proyectos"><i class="bi bi-kanban"></i> Proyectos</a>
+              <a routerLink="/dashboard/admin/proyectos" routerLinkActive="active"
+                ><i class="bi bi-kanban"></i> Proyectos</a
+              >
             </li>
           </ul>
         </li>
         <!-- Nivel 2: Asignaciones -->
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleAsignacionesMenu()">
-            <i class="bi bi-diagram-3"></i>
-            <span>Asignaciones</span>
+            <i class="bi bi-briefcase"></i>
+            <span>Géstiones</span>
             <i
               class="bi"
               [ngClass]="asignacionesMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
@@ -63,8 +71,11 @@
           </div>
           <ul class="sidebar-submenu" *ngIf="asignacionesMenuOpen">
             <li>
-              <a routerLink="/dashboard/asignaciones/tenant-proyecto-plan">
-                <i class="bi bi-diagram-3"></i> Empresa-Proyecto-Plan
+              <a
+                routerLink="/dashboard/asignaciones/tenant-proyecto-plan"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-diagram-3"></i> Asignar conexiones
               </a>
             </li>
           </ul>
@@ -84,7 +95,9 @@
       </div>
       <ul class="sidebar-submenu" *ngIf="isProyectoMenuOpen(proyecto) && !sidebarCollapsed">
         <li *ngFor="let comp of getComponentesProyecto(proyecto)">
-          <a [routerLink]="comp.route"><i class="bi" [ngClass]="comp.icon"></i> {{ comp.label }}</a>
+          <a [routerLink]="comp.route" routerLinkActive="active"
+            ><i class="bi" [ngClass]="comp.icon"></i> {{ comp.label }}</a
+          >
         </li>
       </ul>
     </li>

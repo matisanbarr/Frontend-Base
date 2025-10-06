@@ -14,7 +14,14 @@ import { CommonModule } from '@angular/common';
 export class TenantProyectoPlanCrudComponent {
   @ViewChild(TenantProyectoPlanListComponent) listComponent?: TenantProyectoPlanListComponent;
 
+  editData: any = null;
+
+  onEdit(data: any) {
+    this.editData = { ...data };
+  }
+
   onSave() {
+    this.editData = null;
     this.listComponent?.getAsignaciones();
   }
 }
