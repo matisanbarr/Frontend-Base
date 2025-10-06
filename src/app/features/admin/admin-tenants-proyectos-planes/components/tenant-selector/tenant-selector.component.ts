@@ -41,9 +41,9 @@ export class TenantSelectorComponent implements OnInit, ControlValueAccessor {
 
   buscarTenants(filtro: string) {
     this.loading = true;
-    this.tenantService.listarPaginadoTenants({ pagina: 1, tamano: 10, filtro } as any).subscribe({
+    this.tenantService.listarTenants().subscribe({
       next: (resp: any) => {
-        this.tenants = resp.respuesta?.datos || [];
+        this.tenants = resp.respuesta || [];
         this.loading = false;
       },
       error: () => {

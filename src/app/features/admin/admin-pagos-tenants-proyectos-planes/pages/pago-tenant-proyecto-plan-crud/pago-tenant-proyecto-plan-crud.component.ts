@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PagoTenantProyectoPlanListComponent } from '../pago-tenant-proyecto-plan-list/pago-tenant-proyecto-plan-list.component';
 
 @Component({
-  selector: 'app-tenant-proyecto-plan-crud',
+  selector: 'app-pago-tenant-proyecto-plan-crud',
   standalone: true,
   templateUrl: './pago-tenant-proyecto-plan-crud.component.html',
   styleUrls: ['./pago-tenant-proyecto-plan-crud.component.scss'],

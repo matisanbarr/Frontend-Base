@@ -12,6 +12,8 @@ export const environment = {
   enableDebugMode: true,
   tokenExpirationBuffer: 300000, // 5 minutos en ms
   autoRefreshToken: true,
+  bancoCentralUser: 'matias.sandoval94@outlook.com',
+  bancoCentralPass: '@Matias1994',
 };
 
 /*

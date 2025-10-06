@@ -5,9 +5,11 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Tenant } from '../../../../../models';
 import { TenantService } from '../../../../../core/services';
+import { TenantProyectoPlanService } from '../../../../../core/services/tenant-proyecto-plan.service';
+import { TenantProyectoPlan } from '../../../../../models/tenantProyectoPlan.model';
 
 @Component({
-  selector: 'app-tenant-selector',
+  selector: 'app-tenant-proyecto-plan-selector',
   standalone: true,
   templateUrl: './tenants-proyectos-planes-selector.component.html',
   styleUrls: ['./tenants-proyectos-planes-selector.component.scss'],
@@ -21,14 +23,14 @@ import { TenantService } from '../../../../../core/services';
   ],
 })
 export class TenantProyectoPlanSelectorComponent implements OnInit, ControlValueAccessor {
-  tenants: Tenant[] = [];
+  tenantsProyectosPlanes: TenantProyectoPlan[] = [];
   search = new FormControl('');
   loading = false;
-  value: string | null = null;
+  value: TenantProyectoPlan | null = null;
   onChange = (value: any) => {};
   onTouched = () => {};
 
-  private readonly tenantService = inject(TenantService);
+  private readonly tenantProyectoPlanService = inject(TenantProyectoPlanService);
 
   constructor() {}
 
@@ -41,9 +43,9 @@ export class TenantProyectoPlanSelectorComponent implements OnInit, ControlValue
 
   buscarTenants(filtro: string) {
     this.loading = true;
-    this.tenantService.listarPaginadoTenants({ pagina: 1, tamano: 10, filtro } as any).subscribe({
+    this.tenantProyectoPlanService.listarTenantsProyectosPlanes().subscribe({
       next: (resp: any) => {
-        this.tenants = resp.respuesta?.datos || [];
+        this.tenantsProyectosPlanes = resp.respuesta || [];
         this.loading = false;
       },
       error: () => {
@@ -52,14 +54,28 @@ export class TenantProyectoPlanSelectorComponent implements OnInit, ControlValue
     });
   }
 
-  seleccionarTenant(id: string) {
-    this.value = id;
-    this.onChange(id);
+  seleccionarTenant(item: TenantProyectoPlan) {
+    this.value = item;
+    this.onChange(item);
     this.onTouched();
   }
 
   writeValue(value: any): void {
-    this.value = value;
+    if (!value) {
+      this.value = null;
+      return;
+    }
+    // Si value tiene id, buscar en la lista y seleccionar por id
+    if (
+      value.id &&
+      Array.isArray(this.tenantsProyectosPlanes) &&
+      this.tenantsProyectosPlanes.length
+    ) {
+      const found = this.tenantsProyectosPlanes.find((t) => t.id === value.id);
+      this.value = found || value;
+    } else {
+      this.value = value;
+    }
   }
   registerOnChange(fn: any): void {
     this.onChange = fn;

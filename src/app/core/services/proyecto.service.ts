@@ -24,7 +24,7 @@ export class ProyectoService {
   }
 
   listarProyectos(): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todos');
+    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
   }
 
   eliminarProyecto(id: string): Observable<Respuesta<any>> {

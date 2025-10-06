@@ -39,9 +39,9 @@ export class PlanSelectorComponent implements ControlValueAccessor {
 
   buscarPlanes(filtro: string) {
     this.loading = true;
-    this.planService.listarPaginadoPlanes({ pagina: 1, tamano: 10, filtro } as any).subscribe({
+    this.planService.listarPlanes().subscribe({
       next: (resp: any) => {
-        this.planes = resp.respuesta?.datos || [];
+        this.planes = resp.respuesta || [];
         this.loading = false;
       },
       error: () => {

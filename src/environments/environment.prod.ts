@@ -4,4 +4,6 @@ export const environment = {
   apiKey: 'your-production-api-key', // Tu API Key de producción
   appName: 'Grimat Labs',
   version: '1.0.0',
+  bancoCentralUser: 'matias.sandoval94@outlook.com',
+  bancoCentralPass: '@Matias1994',
 };

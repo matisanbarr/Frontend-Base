@@ -39,17 +39,15 @@ export class ProyectoSelectorComponent implements ControlValueAccessor {
 
   buscarProyectos(filtro: string) {
     this.loading = true;
-    this.proyectoService
-      .listarPaginadoProyectos({ pagina: 1, tamano: 10, filtro } as any)
-      .subscribe({
-        next: (resp: any) => {
-          this.proyectos = resp.respuesta?.datos || [];
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-        },
-      });
+    this.proyectoService.listarProyectos().subscribe({
+      next: (resp: any) => {
+        this.proyectos = resp.respuesta || [];
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
   }
 
   seleccionarProyecto(id: string) {

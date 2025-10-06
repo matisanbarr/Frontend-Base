@@ -91,6 +91,13 @@ export const routes: Routes = [
                 './features/admin/admin-tenants-proyectos-planes/admin-tenants-proyectos-planes.module'
               ).then((m) => m.AdminTenantsProyectosPlanesModule),
           },
+          {
+            path: 'pagos-subscripciones',
+            loadChildren: () =>
+              import(
+                './features/admin/admin-pagos-tenants-proyectos-planes/admin-pago-tenants-proyectos-planes.module'
+              ).then((m) => m.AdminTenantsProyectosPlanesModule),
+          },
         ],
       },
       // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.

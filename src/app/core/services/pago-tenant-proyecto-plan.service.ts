@@ -11,7 +11,7 @@ import { PagoTenantProyectoPlan } from '../../models/pagoTenantProyectoPlan.mode
 
 @Injectable({ providedIn: 'root' })
 export class PagoTenantProyectoPlanService {
-  private apiUrl = environment.apiUrl + '/pagoTenantsProyectosPlanes';
+  private apiUrl = environment.apiUrl + '/pagosTenantsProyectosPlanes';
 
   constructor(private http: HttpClient) {}
 

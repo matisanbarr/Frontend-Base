@@ -3,15 +3,17 @@
   <div *ngIf="loading" class="text-secondary small mb-2">Buscando...</div>
   <ul class="list-group shadow-sm" *ngIf="!loading">
     <li
-      *ngFor="let t of tenants"
-      (click)="seleccionarTenant(t.id!)"
+      *ngFor="let t of tenantsProyectosPlanes"
+      (click)="seleccionarTenant(t)"
       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-      [class.active]="value === t.id"
+      [class.active]="value?.id === t.id"
       style="cursor: pointer"
     >
-      <span>{{ t.nombre }}</span>
+      <span>{{ t.tenant?.nombre + ' - ' + t.proyecto?.nombre + ' - ' + t.plan?.nombre }}</span>
       <span *ngIf="!t.estadoActivo" class="badge bg-warning text-dark ms-2">Inactiva</span>
     </li>
-    <li *ngIf="!tenants.length" class="list-group-item text-muted">No hay resultados</li>
+    <li *ngIf="!tenantsProyectosPlanes.length" class="list-group-item text-muted">
+      No hay resultados
+    </li>
   </ul>
 </div>
