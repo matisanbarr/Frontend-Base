@@ -6,22 +6,33 @@
       <th>Empresa</th>
       <th>Proyecto</th>
       <th>Plan</th>
-      <th>Fecha Inicio</th>
-      <th>Fecha Vencimiento</th>
-      <th>R. Automática</th>
-      <th>Activo</th>
+      <th>Fecha Pago</th>
+      <th>Monto</th>
       <th style="width: 120px">Acciones</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let a of asignaciones">
-      <td>{{ a.tenant?.nombre || a.tenantId }}</td>
-      <td>{{ a.proyecto?.nombre || a.proyectoId }}</td>
-      <td>{{ a.plan?.nombre || a.planId }}</td>
-      <td>{{ a.fechaInicio | date: 'longDate' : '' : 'es-CL' }}</td>
-      <td>{{ a.fechaVencimiento | date: 'longDate' : '' : 'es-CL' }}</td>
-      <td>{{ a.renovacionAutomatica ? 'Sí' : 'No' }}</td>
-      <td>{{ a.estadoActivo ? 'Sí' : 'No' }}</td>
+      <td>
+        <ng-container *ngIf="a.tenantProyectoPlan; else noRegistro">
+          {{ a.tenantProyectoPlan.tenant?.nombre }}
+        </ng-container>
+        <ng-template #noRegistro>No se encontró registro</ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="a.tenantProyectoPlan; else noRegistro">
+          {{ a.tenantProyectoPlan.proyecto?.nombre }}
+        </ng-container>
+        <ng-template #noRegistro>No se encontró registro</ng-template>
+      </td>
+      <td>
+        <ng-container *ngIf="a.tenantProyectoPlan; else noRegistro">
+          {{ a.tenantProyectoPlan.plan?.nombre }}
+        </ng-container>
+        <ng-template #noRegistro>No se encontró registro</ng-template>
+      </td>
+      <td>{{ a.fechaPago | date: 'longDate' : '' : 'es-CL' }}</td>
+      <td>{{ a.monto | currency: 'CLP' : 'symbol' : '1.0-0' : 'es-CL' }}</td>
       <td>
         <button
           class="btn btn-sm btn-warning me-1"

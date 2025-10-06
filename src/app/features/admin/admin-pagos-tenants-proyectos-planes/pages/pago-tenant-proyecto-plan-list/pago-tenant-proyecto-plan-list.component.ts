@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { TenantProyectoPlan } from '../../../../../models/tenantProyectoPlan.model';
 import { PaginacionDto } from '../../../../../models';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { AlertService } from '../../../../../core/services';
 import { PagoTenantProyectoPlanService } from '../../../../../core/services/pago-tenant-proyecto-plan.service';
+import { PagoTenantProyectoPlan } from '../../../../../models/pagoTenantProyectoPlan.model';
 
 @Component({
   selector: 'app-pago-tenant-proyecto-plan-list',
@@ -14,8 +14,8 @@ import { PagoTenantProyectoPlanService } from '../../../../../core/services/pago
   imports: [CommonModule, DatePipe, ConfirmModalComponent],
 })
 export class PagoTenantProyectoPlanListComponent implements OnInit {
-  @Output() edit = new EventEmitter<TenantProyectoPlan>();
-  asignaciones: TenantProyectoPlan[] = [];
+  @Output() edit = new EventEmitter<PagoTenantProyectoPlan>();
+  asignaciones: PagoTenantProyectoPlan[] = [];
   total = 0;
   pagina = 1;
   tamano = 10;
@@ -24,10 +24,10 @@ export class PagoTenantProyectoPlanListComponent implements OnInit {
 
   // Para eliminar
   showDeleteModal = false;
-  deleteTarget: TenantProyectoPlan | null = null;
+  deleteTarget: PagoTenantProyectoPlan | null = null;
 
   // Para editar/crear
-  editData: TenantProyectoPlan | null = null;
+  editData: PagoTenantProyectoPlan | null = null;
   formKey = 0; // Para forzar reinicio del form
 
   private readonly pagoTenantProyectoPlanService = inject(PagoTenantProyectoPlanService);
@@ -81,19 +81,19 @@ export class PagoTenantProyectoPlanListComponent implements OnInit {
     this.getAsignaciones();
   }
 
-  onEdit(asignacion: TenantProyectoPlan) {
+  onEdit(asignacion: PagoTenantProyectoPlan) {
     this.edit.emit({
       ...asignacion,
     } as any);
   }
 
-  onSave(_data: TenantProyectoPlan) {
+  onSave(_data: PagoTenantProyectoPlan) {
     this.editData = null;
     this.formKey++;
     this.getAsignaciones();
   }
 
-  onConfirmDelete(asignacion: TenantProyectoPlan) {
+  onConfirmDelete(asignacion: PagoTenantProyectoPlan) {
     this.deleteTarget = asignacion;
     this.showDeleteModal = true;
   }

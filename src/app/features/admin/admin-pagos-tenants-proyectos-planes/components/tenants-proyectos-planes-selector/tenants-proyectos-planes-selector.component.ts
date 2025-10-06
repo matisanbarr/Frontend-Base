@@ -38,7 +38,6 @@ export class TenantProyectoPlanSelectorComponent implements OnInit, ControlValue
     this.search.valueChanges.pipe(debounceTime(300)).subscribe((value: string | null) => {
       this.buscarTenants(value ?? '');
     });
-    this.buscarTenants('');
   }
 
   buscarTenants(filtro: string) {
