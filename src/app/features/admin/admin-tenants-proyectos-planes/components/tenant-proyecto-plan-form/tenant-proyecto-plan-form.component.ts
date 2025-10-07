@@ -131,7 +131,8 @@ export class TenantProyectoPlanFormComponent implements OnInit, OnChanges {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth();
-    const lastDay = new Date(year, month + 1, 0);
+    // Último día del mes anterior
+    const lastDayPrevMonth = new Date(year, month, 0);
     const format = (d: Date) => d.toISOString().slice(0, 10);
     this.isEdit = false;
     this.form.reset({
@@ -140,7 +141,7 @@ export class TenantProyectoPlanFormComponent implements OnInit, OnChanges {
       proyectoId: null,
       planId: null,
       fechaInicio: format(today),
-      fechaVencimiento: format(lastDay),
+      fechaVencimiento: format(lastDayPrevMonth),
       renovacionAutomatica: false,
       estadoActivo: true,
     });
