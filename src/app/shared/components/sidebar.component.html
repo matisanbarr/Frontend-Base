@@ -59,17 +59,17 @@
             </li>
           </ul>
         </li>
-        <!-- Nivel 2: Asignaciones -->
+        <!-- Nivel 2: Géstiones -->
         <li class="sidebar-group">
-          <div class="sidebar-link" (click)="toggleAsignacionesMenu()">
+          <div class="sidebar-link" (click)="toggleGestionesMenu()">
             <i class="bi bi-briefcase"></i>
             <span>Géstiones</span>
             <i
               class="bi"
-              [ngClass]="asignacionesMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+              [ngClass]="gestionesMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
             ></i>
           </div>
-          <ul class="sidebar-submenu" *ngIf="asignacionesMenuOpen">
+          <ul class="sidebar-submenu" *ngIf="gestionesMenuOpen">
             <li>
               <a
                 routerLink="/dashboard/asignaciones/tenant-proyecto-plan"
@@ -88,24 +88,26 @@
             </li>
           </ul>
         </li>
-      </ul>
-    </li>
-    <!-- Menús de proyectos -->
-    <li *ngFor="let proyecto of proyectos" class="sidebar-group">
-      <div class="sidebar-link" (click)="toggleProyectoMenu(proyecto)">
-        <i class="bi bi-folder"></i>
-        <span *ngIf="!sidebarCollapsed">{{ proyecto.nombre }}</span>
-        <i
-          class="bi"
-          [ngClass]="isProyectoMenuOpen(proyecto) ? 'bi-chevron-down' : 'bi-chevron-right'"
-          *ngIf="!sidebarCollapsed"
-        ></i>
-      </div>
-      <ul class="sidebar-submenu" *ngIf="isProyectoMenuOpen(proyecto) && !sidebarCollapsed">
-        <li *ngFor="let comp of getComponentesProyecto(proyecto)">
-          <a [routerLink]="comp.route" routerLinkActive="active"
-            ><i class="bi" [ngClass]="comp.icon"></i> {{ comp.label }}</a
-          >
+        <!-- Nivel 2: Informes -->
+        <li class="sidebar-group">
+          <div class="sidebar-link" (click)="toggleInformesMenu()">
+            <i class="bi bi-file-earmark-bar-graph"></i>
+            <span>Informes</span>
+            <i class="bi" [ngClass]="informesMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+          </div>
+          <ul class="sidebar-submenu" *ngIf="informesMenuOpen"></ul>
+        </li>
+        <!-- Nivel 2: Auditorias -->
+        <li class="sidebar-group">
+          <div class="sidebar-link" (click)="toggleAuditoriasMenu()">
+            <i class="bi bi-search"></i>
+            <span>Auditorias</span>
+            <i
+              class="bi"
+              [ngClass]="auditoriasMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+            ></i>
+          </div>
+          <ul class="sidebar-submenu" *ngIf="auditoriasMenuOpen"></ul>
         </li>
       </ul>
     </li>

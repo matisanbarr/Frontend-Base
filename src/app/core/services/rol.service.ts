@@ -22,7 +22,7 @@ export class RolService {
   }
 
   listarRoles(): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<Rol[]>>(this.apiUrl + 'listar-todos');
+    return this.http.get<Respuesta<Rol[]>>(this.apiUrl + '/listar-todo');
   }
 
   eliminarRol(id: string): Observable<Respuesta<any>> {

@@ -44,22 +44,6 @@ export class UsuarioService {
     });
   }
 
-  asignarRoles(userData: AsignarRolesDto): Observable<Respuesta<any>> {
-    return this.http.post<Respuesta<any>>(this.apiUrl + '/asignar-roles', userData).pipe(
-      catchError((error) => {
-        throw error;
-      })
-    );
-  }
-
-  aquitarRoles(userData: AsignarRolesDto): Observable<Respuesta<any>> {
-    return this.http.post<Respuesta<any>>(this.apiUrl + '/quitar-roles', userData).pipe(
-      catchError((error) => {
-        throw error;
-      })
-    );
-  }
-
   proximosCumpleaños(dias: number): Observable<Respuesta<any>> {
     return this.http
       .get<Respuesta<any>>(this.apiUrl + '/cumpleanios-proximos', {

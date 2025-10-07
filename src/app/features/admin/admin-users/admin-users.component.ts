@@ -14,6 +14,8 @@ import { Usuario } from '../../../models/usuario.model';
 import { Tenant } from '../../../models/tenant.model';
 import { TenantService } from '../../../core/services/tenant.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
+import { RolService } from '../../../core/services/rol.service';
+import { UsuarioRolService } from '../../../core/services/usuario-rol.service';
 import { PaginacionDto } from '../../../models/compartidos';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
@@ -44,6 +46,13 @@ export class AdminUsersComponent {
   usuarioEstadoActivoFn = (u: Usuario) =>
     typeof u.estadoActivo === 'boolean' ? u.estadoActivo : null;
 
+  usuarioSeleccionado: Usuario | null = null;
+  rolesDisponibles: Array<{
+    id: string;
+    nombre: string;
+    descripcion: string;
+    seleccionado: boolean;
+  }> = [];
   usuarioForm: FormGroup;
   estadoActivoControl;
   usuarios: Usuario[] = [];
@@ -59,6 +68,8 @@ export class AdminUsersComponent {
   totalPaginas = 1;
   totalRegistros = 0;
 
+  readonly rolService = inject(RolService);
+  readonly usuarioRolService = inject(UsuarioRolService);
   readonly usuarioService = inject(UsuarioService);
   readonly tenantService = inject(TenantService);
   readonly fb = inject(FormBuilder);
@@ -356,9 +367,68 @@ export class AdminUsersComponent {
     nombreControl?.setValue(sugerido);
     nombreControl?.markAsDirty();
   }
+
   getTenantName(tenantId: string | null | undefined): string {
     if (!tenantId) return 'Sin empresa';
     const tenant = this.tenants.find((t) => t.id === tenantId);
     return tenant ? tenant.nombre : 'Empresa desconocida';
+  }
+
+  abrirModalRoles(usuario: Usuario) {
+    this.usuarioSeleccionado = usuario;
+    // Cargar roles disponibles
+    this.rolService.listarRoles().subscribe({
+      next: (resp) => {
+        if (resp?.codigoRespuesta === 0 && Array.isArray(resp.respuesta)) {
+          const rolesUsuario = (usuario.roles || []).map((r: any) => r.id);
+          this.rolesDisponibles = resp.respuesta.map((rol: any) => ({
+            id: rol.id,
+            nombre: rol.nombre,
+            descripcion: rol.descripcion || '',
+            seleccionado: rolesUsuario.includes(rol.id),
+          }));
+        } else {
+          this.rolesDisponibles = [];
+        }
+        const modal = document.getElementById('modalRoles');
+        if (modal) {
+          // @ts-ignore
+          const bsModal = new window.bootstrap.Modal(modal);
+          bsModal.show();
+        }
+      },
+      error: () => {
+        this.rolesDisponibles = [];
+        this.alertService.error('Error al cargar roles');
+      },
+    });
+  }
+
+  guardarRolesUsuario() {
+    if (!this.usuarioSeleccionado || !this.usuarioSeleccionado.id) {
+      this.alertService.error('No se encontró el usuario.');
+      return;
+    }
+    const rolesSeleccionados = this.rolesDisponibles.filter((r) => r.seleccionado).map((r) => r.id);
+    const dto = { usuarioId: this.usuarioSeleccionado.id, roles: rolesSeleccionados };
+    this.usuarioRolService.actualizarRolesUsuario(dto).subscribe({
+      next: (resp) => {
+        if (resp?.codigoRespuesta === 0) {
+          this.alertService.success('Roles actualizados correctamente');
+          this.cargarUsuarios();
+        } else {
+          this.alertService.error(resp?.glosaRespuesta || 'Error al actualizar roles');
+        }
+        const modal = document.getElementById('modalRoles');
+        if (modal) {
+          // @ts-ignore
+          const bsModal = window.bootstrap.Modal.getInstance(modal);
+          bsModal?.hide();
+        }
+      },
+      error: () => {
+        this.alertService.error('Error al actualizar roles');
+      },
+    });
   }
 }

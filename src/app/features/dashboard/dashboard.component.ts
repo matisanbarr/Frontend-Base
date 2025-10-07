@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isAdminGlobal: boolean | null = null;
   proyectos: Proyecto[] = [];
   sidebarCollapsed = false;
-  adminMenuOpen = true;
+  adminMenuOpen = false;
   proyectosMenuOpen: { [id: string]: boolean } = {};
 
   constructor(

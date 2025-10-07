@@ -8,4 +8,4 @@ const routes: Routes = [{ path: '', component: PagoTenantProyectoPlanCrudCompone
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdminTenantsProyectosPlanesRoutingModule {}
+export class AdminPagoTenantsProyectosPlanesRoutingModule {}

@@ -13,28 +13,21 @@ import { RouterModule } from '@angular/router';
 export class SidebarComponent {
   @Input() sidebarCollapsed = false;
   @Input() isAdminGlobal: boolean | null = null;
-  @Input() adminMenuOpen = true;
+  @Input() adminMenuOpen = false;
   @Input() proyectos: Proyecto[] = [];
   @Input() proyectosMenuOpen: { [id: string]: boolean } = {};
   @Output() toggleSidebarEvent = new EventEmitter<void>();
   @Output() toggleAdminMenuEvent = new EventEmitter<void>();
   @Output() toggleProyectoMenuEvent = new EventEmitter<Proyecto>();
-
-  mantenedoresMenuOpen = true;
-  asignacionesMenuOpen = true;
-
-  toggleMantenedoresMenu() {
-    this.mantenedoresMenuOpen = !this.mantenedoresMenuOpen;
-  }
-
-  toggleAsignacionesMenu() {
-    this.asignacionesMenuOpen = !this.asignacionesMenuOpen;
-  }
-
+  @Input() isProyectoMenuOpen: (proyecto: Proyecto) => boolean = () => false;
   @Input() getComponentesProyecto: (
     proyecto: Proyecto
   ) => { label: string; route: string; icon: string }[] = () => [];
-  @Input() isProyectoMenuOpen: (proyecto: Proyecto) => boolean = () => false;
+
+  mantenedoresMenuOpen = false;
+  gestionesMenuOpen = false;
+  informesMenuOpen = false;
+  auditoriasMenuOpen = false;
 
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
@@ -44,5 +37,21 @@ export class SidebarComponent {
   }
   toggleProyectoMenu(proyecto: Proyecto) {
     this.toggleProyectoMenuEvent.emit(proyecto);
+  }
+
+  toggleMantenedoresMenu() {
+    this.mantenedoresMenuOpen = !this.mantenedoresMenuOpen;
+  }
+
+  toggleGestionesMenu() {
+    this.gestionesMenuOpen = !this.gestionesMenuOpen;
+  }
+
+  toggleInformesMenu() {
+    this.informesMenuOpen = !this.informesMenuOpen;
+  }
+
+  toggleAuditoriasMenu() {
+    this.auditoriasMenuOpen = !this.auditoriasMenuOpen;
   }
 }

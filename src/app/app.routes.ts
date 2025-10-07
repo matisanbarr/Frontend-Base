@@ -96,7 +96,7 @@ export const routes: Routes = [
             loadChildren: () =>
               import(
                 './features/admin/admin-pagos-tenants-proyectos-planes/admin-pago-tenants-proyectos-planes.module'
-              ).then((m) => m.AdminTenantsProyectosPlanesModule),
+              ).then((m) => m.AdminPagoTenantsProyectosPlanesModule),
           },
         ],
       },

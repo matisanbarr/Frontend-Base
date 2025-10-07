@@ -15,8 +15,7 @@ export class AdminListComponent<T = any> {
   @Input() emptyText = 'No hay registros.';
   @Input() loading = false;
   @Input() itemKey: string = 'id';
-  @Output() edit = new EventEmitter<T>();
-  @Output() remove = new EventEmitter<T>();
+  @Input() mostrarRoles: boolean = false;
 
   // Nuevos inputs opcionales para visualización rica
   @Input() nombreFn?: (item: T) => string | null;
@@ -33,6 +32,9 @@ export class AdminListComponent<T = any> {
   @Input() fechaFinFn?: (item: T) => string | null;
   @Input() diasRestantesFn?: (item: T) => number | null;
 
+  @Output() edit = new EventEmitter<T>();
+  @Output() remove = new EventEmitter<T>();
+  @Output() roles = new EventEmitter<T>();
   // Para el pipe de color de roles
   @Input() rolesDisponiblesInput?: any[];
 
