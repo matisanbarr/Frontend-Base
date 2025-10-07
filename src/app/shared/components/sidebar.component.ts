@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Proyecto } from '../../models/proyecto.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -10,7 +10,33 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  private readonly STORAGE_KEY = 'sidebar-menu-state';
+
+  ngOnInit(): void {
+    const saved = localStorage.getItem(this.STORAGE_KEY);
+    if (saved) {
+      try {
+        const state = JSON.parse(saved);
+        this.mantenedoresMenuOpen = !!state.mantenedoresMenuOpen;
+        this.gestionesMenuOpen = !!state.gestionesMenuOpen;
+        this.informesMenuOpen = !!state.informesMenuOpen;
+        this.auditoriasMenuOpen = !!state.auditoriasMenuOpen;
+        this.adminMenuOpen = !!state.adminMenuOpen;
+      } catch {}
+    }
+  }
+
+  private saveState() {
+    const state = {
+      mantenedoresMenuOpen: this.mantenedoresMenuOpen,
+      gestionesMenuOpen: this.gestionesMenuOpen,
+      informesMenuOpen: this.informesMenuOpen,
+      auditoriasMenuOpen: this.auditoriasMenuOpen,
+      adminMenuOpen: this.adminMenuOpen,
+    };
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+  }
   @Input() sidebarCollapsed = false;
   @Input() isAdminGlobal: boolean | null = null;
   @Input() adminMenuOpen = false;
@@ -33,7 +59,9 @@ export class SidebarComponent {
     this.toggleSidebarEvent.emit();
   }
   toggleAdminMenu() {
+    this.adminMenuOpen = !this.adminMenuOpen;
     this.toggleAdminMenuEvent.emit();
+    this.saveState();
   }
   toggleProyectoMenu(proyecto: Proyecto) {
     this.toggleProyectoMenuEvent.emit(proyecto);
@@ -41,17 +69,21 @@ export class SidebarComponent {
 
   toggleMantenedoresMenu() {
     this.mantenedoresMenuOpen = !this.mantenedoresMenuOpen;
+    this.saveState();
   }
 
   toggleGestionesMenu() {
     this.gestionesMenuOpen = !this.gestionesMenuOpen;
+    this.saveState();
   }
 
   toggleInformesMenu() {
     this.informesMenuOpen = !this.informesMenuOpen;
+    this.saveState();
   }
 
   toggleAuditoriasMenu() {
     this.auditoriasMenuOpen = !this.auditoriasMenuOpen;
+    this.saveState();
   }
 }
