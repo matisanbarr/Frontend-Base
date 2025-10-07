@@ -9,7 +9,6 @@
     <span *ngIf="!sidebarCollapsed" class="sidebar-title">Menú</span>
   </div>
   <ul class="sidebar-menu">
-    <!-- Menú Administración con 3 niveles: Mantenedores principales y Asignaciones -->
     <li *ngIf="isAdminGlobal" class="sidebar-group">
       <div class="sidebar-link" (click)="toggleAdminMenu()">
         <i class="bi bi-gear"></i>
@@ -21,7 +20,6 @@
         ></i>
       </div>
       <ul class="sidebar-submenu" *ngIf="adminMenuOpen && !sidebarCollapsed">
-        <!-- Nivel 2: Mantenedores principales -->
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleMantenedoresMenu()">
             <i class="bi bi-list-ul"></i>
@@ -59,7 +57,6 @@
             </li>
           </ul>
         </li>
-        <!-- Nivel 2: Géstiones -->
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleGestionesMenu()">
             <i class="bi bi-briefcase"></i>
@@ -71,24 +68,17 @@
           </div>
           <ul class="sidebar-submenu" *ngIf="gestionesMenuOpen">
             <li>
-              <a
-                routerLink="/dashboard/asignaciones/tenant-proyecto-plan"
-                routerLinkActive="active"
+              <a routerLink="/dashboard/asignaciones/tenant-proyecto-plan" routerLinkActive="active"
+                ><i class="bi bi-kanban"></i> Asignar conexiones</a
               >
-                <i class="bi bi-kanban"></i> Asignar conexiones
-              </a>
             </li>
             <li>
-              <a
-                routerLink="/dashboard/asignaciones/pagos-subscripciones"
-                routerLinkActive="active"
+              <a routerLink="/dashboard/asignaciones/pagos-subscripciones" routerLinkActive="active"
+                ><i class="bi bi-credit-card"></i> Pagos de subscripciones</a
               >
-                <i class="bi bi-credit-card"></i> Pagos de subscripciones
-              </a>
             </li>
           </ul>
         </li>
-        <!-- Nivel 2: Informes -->
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleInformesMenu()">
             <i class="bi bi-file-earmark-bar-graph"></i>
@@ -97,7 +87,6 @@
           </div>
           <ul class="sidebar-submenu" *ngIf="informesMenuOpen"></ul>
         </li>
-        <!-- Nivel 2: Auditorias -->
         <li class="sidebar-group">
           <div class="sidebar-link" (click)="toggleAuditoriasMenu()">
             <i class="bi bi-search"></i>
@@ -111,5 +100,143 @@
         </li>
       </ul>
     </li>
+    <!-- Proyectos como menú principal -->
+    <ng-container *ngFor="let proyecto of proyectos">
+      <li class="sidebar-group">
+        <ng-container *ngIf="proyecto.tagId === 0; else defaultProyecto">
+          <div class="sidebar-link" (click)="toggleVeterinariaMenu()">
+            <i class="bi bi-heart-pulse"></i>
+            <span *ngIf="!sidebarCollapsed">{{ proyecto.nombre }}</span>
+            <i
+              class="bi"
+              [ngClass]="veterinariaMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+              *ngIf="!sidebarCollapsed"
+            ></i>
+          </div>
+          <ul class="sidebar-submenu" *ngIf="veterinariaMenuOpen && !sidebarCollapsed">
+            <!-- Administrador -->
+            <li class="sidebar-group" *ngIf="showVetAdminMenu">
+              <div class="sidebar-link" (click)="toggleVetAdminMenu()">
+                <i class="bi bi-person-gear"></i>
+                <span>Administrador</span>
+                <i
+                  class="bi"
+                  [ngClass]="vetAdminMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+                ></i>
+              </div>
+              <ul class="sidebar-submenu" *ngIf="vetAdminMenuOpen">
+                <li>
+                  <a routerLink="/veterinaria/admin/pacientes" routerLinkActive="active"
+                    ><i class="bi bi-people"></i> Pacientes</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/admin/consultas" routerLinkActive="active"
+                    ><i class="bi bi-journal-medical"></i> Consultas</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/admin/inventario" routerLinkActive="active"
+                    ><i class="bi bi-box"></i> Inventario</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/admin/facturacion" routerLinkActive="active"
+                    ><i class="bi bi-receipt"></i> Facturación</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/admin/reportes" routerLinkActive="active"
+                    ><i class="bi bi-bar-chart"></i> Reportes</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <!-- Veterinario -->
+            <li class="sidebar-group" *ngIf="showVetVeterinarioMenu">
+              <div class="sidebar-link" (click)="toggleVetVeterinarioMenu()">
+                <i class="bi bi-person-badge"></i>
+                <span>Veterinario</span>
+                <i
+                  class="bi"
+                  [ngClass]="vetVeterinarioMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+                ></i>
+              </div>
+              <ul class="sidebar-submenu" *ngIf="vetVeterinarioMenuOpen">
+                <li>
+                  <a routerLink="/veterinaria/veterinario/pacientes" routerLinkActive="active"
+                    ><i class="bi bi-people"></i> Pacientes</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/veterinario/consultas" routerLinkActive="active"
+                    ><i class="bi bi-journal-medical"></i> Consultas</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/veterinario/citas" routerLinkActive="active"
+                    ><i class="bi bi-calendar-check"></i> Citas</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <!-- Asistente / Recepcionista -->
+            <li class="sidebar-group" *ngIf="showVetAsistenteMenu">
+              <div class="sidebar-link" (click)="toggleVetAsistenteMenu()">
+                <i class="bi bi-person"></i>
+                <span>Asistente / Recepcionista</span>
+                <i
+                  class="bi"
+                  [ngClass]="vetAsistenteMenuOpen ? 'bi-chevron-down' : 'bi-chevron-right'"
+                ></i>
+              </div>
+              <ul class="sidebar-submenu" *ngIf="vetAsistenteMenuOpen">
+                <li>
+                  <a routerLink="/veterinaria/asistente/pacientes" routerLinkActive="active"
+                    ><i class="bi bi-people"></i> Pacientes</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/asistente/citas" routerLinkActive="active"
+                    ><i class="bi bi-calendar-check"></i> Citas</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/asistente/facturacion" routerLinkActive="active"
+                    ><i class="bi bi-receipt"></i> Facturación</a
+                  >
+                </li>
+                <li>
+                  <a routerLink="/veterinaria/asistente/inventario" routerLinkActive="active"
+                    ><i class="bi bi-box"></i> Inventario</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #defaultProyecto>
+          <a
+            class="sidebar-link"
+            [routerLink]="['/dashboard/proyecto', proyecto.id]"
+            routerLinkActive="active"
+          >
+            <i
+              class="bi"
+              [ngClass]="
+                proyecto.tagId === 0
+                  ? 'bi-heart-pulse'
+                  : proyecto.tagId === 1
+                    ? 'bi-building'
+                    : proyecto.tagId === 2
+                      ? 'bi-rocket'
+                      : 'bi-kanban'
+              "
+            ></i>
+            <span *ngIf="!sidebarCollapsed">{{ proyecto.nombre }}</span>
+          </a>
+        </ng-template>
+      </li>
+    </ng-container>
   </ul>
 </div>

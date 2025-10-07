@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { Proyecto } from '../../models/proyecto.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ProyectoService } from '../../core/services/proyecto.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,10 +12,13 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  // Flags para visibilidad de menús de veterinaria
+  showVetAdminMenu = false;
+  showVetVeterinarioMenu = false;
+  showVetAsistenteMenu = false;
   @Input() sidebarCollapsed = false;
   @Input() isAdminGlobal: boolean | null = null;
   @Input() adminMenuOpen = false;
-  @Input() proyectos: Proyecto[] = [];
   @Input() proyectosMenuOpen: { [id: string]: boolean } = {};
   @Output() toggleSidebarEvent = new EventEmitter<void>();
   @Output() toggleAdminMenuEvent = new EventEmitter<void>();
@@ -24,12 +28,20 @@ export class SidebarComponent implements OnInit {
     proyecto: Proyecto
   ) => { label: string; route: string; icon: string }[] = () => [];
 
+  proyectos: Proyecto[] = [];
   mantenedoresMenuOpen = false;
   gestionesMenuOpen = false;
   informesMenuOpen = false;
   auditoriasMenuOpen = false;
+  veterinariaMenuOpen = false;
+  vetAdminMenuOpen = false;
+  vetVeterinarioMenuOpen = false;
+  vetAsistenteMenuOpen = false;
 
   private readonly STORAGE_KEY = 'sidebar-menu-state';
+  private proyectoService = inject(ProyectoService);
+  private isAdminGlobalUser: boolean = false;
+  private proyectoIdsUsuario: string[] = [];
 
   ngOnInit(): void {
     const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -41,8 +53,73 @@ export class SidebarComponent implements OnInit {
         this.informesMenuOpen = !!state.informesMenuOpen;
         this.auditoriasMenuOpen = !!state.auditoriasMenuOpen;
         this.adminMenuOpen = !!state.adminMenuOpen;
+        this.veterinariaMenuOpen = !!state.veterinariaMenuOpen;
+        this.vetAdminMenuOpen = !!state.vetAdminMenuOpen;
+        this.vetVeterinarioMenuOpen = !!state.vetVeterinarioMenuOpen;
+        this.vetAsistenteMenuOpen = !!state.vetAsistenteMenuOpen;
       } catch {}
     }
+    // Obtener usuario actual y roles
+    const userStr = localStorage.getItem('current_user');
+    if (userStr) {
+      try {
+        const currentUser = JSON.parse(userStr);
+        const roles = currentUser?.roles || [];
+        this.isAdminGlobalUser = Array.isArray(roles) && roles.includes('Admin Global');
+        if (Array.isArray(currentUser?.proyectos)) {
+          this.proyectoIdsUsuario = currentUser.proyectos.map((p: any) => String(p.ProyectoId));
+        }
+        // Lógica de visibilidad de menús de veterinaria
+        // Si es Admin Global, ve todo
+        if (this.isAdminGlobalUser) {
+          this.showVetAdminMenu = true;
+          this.showVetVeterinarioMenu = true;
+          this.showVetAsistenteMenu = true;
+        } else {
+          // Se asume que el rol principal está en roles[0] o se puede ajustar según tu modelo
+          const rolPrincipal = Array.isArray(roles) && roles.length > 0 ? roles[0] : '';
+          if (rolPrincipal === 'Veterinario Jefe') {
+            this.showVetAdminMenu = true;
+            this.showVetVeterinarioMenu = true;
+            this.showVetAsistenteMenu = true;
+          } else if (rolPrincipal === 'Veterinario') {
+            this.showVetAdminMenu = false;
+            this.showVetVeterinarioMenu = true;
+            this.showVetAsistenteMenu = true;
+          } else if (
+            rolPrincipal === 'Asistente' ||
+            rolPrincipal === 'Recepcionista' ||
+            rolPrincipal === 'Asistente/Recepcionista'
+          ) {
+            this.showVetAdminMenu = false;
+            this.showVetVeterinarioMenu = false;
+            this.showVetAsistenteMenu = true;
+          } else {
+            // Por defecto, no muestra nada
+            this.showVetAdminMenu = false;
+            this.showVetVeterinarioMenu = false;
+            this.showVetAsistenteMenu = false;
+          }
+        }
+      } catch {}
+    }
+    // Cargar proyectos como menú principal
+    this.proyectoService.listarProyectos().subscribe({
+      next: (resp) => {
+        if (resp && resp.respuesta) {
+          if (this.isAdminGlobalUser) {
+            this.proyectos = resp.respuesta;
+          } else {
+            this.proyectos = resp.respuesta.filter(
+              (p: Proyecto) => p.id && this.proyectoIdsUsuario.includes(String(p.id))
+            );
+          }
+        }
+      },
+      error: () => {
+        this.proyectos = [];
+      },
+    });
   }
 
   private saveState() {
@@ -52,6 +129,10 @@ export class SidebarComponent implements OnInit {
       informesMenuOpen: this.informesMenuOpen,
       auditoriasMenuOpen: this.auditoriasMenuOpen,
       adminMenuOpen: this.adminMenuOpen,
+      veterinariaMenuOpen: this.veterinariaMenuOpen,
+      vetAdminMenuOpen: this.vetAdminMenuOpen,
+      vetVeterinarioMenuOpen: this.vetVeterinarioMenuOpen,
+      vetAsistenteMenuOpen: this.vetAsistenteMenuOpen,
     };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
   }
@@ -85,6 +166,24 @@ export class SidebarComponent implements OnInit {
 
   toggleAuditoriasMenu() {
     this.auditoriasMenuOpen = !this.auditoriasMenuOpen;
+    this.saveState();
+  }
+
+  // Métodos para Veterinaria
+  toggleVeterinariaMenu() {
+    this.veterinariaMenuOpen = !this.veterinariaMenuOpen;
+    this.saveState();
+  }
+  toggleVetAdminMenu() {
+    this.vetAdminMenuOpen = !this.vetAdminMenuOpen;
+    this.saveState();
+  }
+  toggleVetVeterinarioMenu() {
+    this.vetVeterinarioMenuOpen = !this.vetVeterinarioMenuOpen;
+    this.saveState();
+  }
+  toggleVetAsistenteMenu() {
+    this.vetAsistenteMenuOpen = !this.vetAsistenteMenuOpen;
     this.saveState();
   }
 }
