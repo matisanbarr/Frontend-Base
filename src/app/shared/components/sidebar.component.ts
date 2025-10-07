@@ -11,6 +11,24 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  @Input() sidebarCollapsed = false;
+  @Input() isAdminGlobal: boolean | null = null;
+  @Input() adminMenuOpen = false;
+  @Input() proyectos: Proyecto[] = [];
+  @Input() proyectosMenuOpen: { [id: string]: boolean } = {};
+  @Output() toggleSidebarEvent = new EventEmitter<void>();
+  @Output() toggleAdminMenuEvent = new EventEmitter<void>();
+  @Output() toggleProyectoMenuEvent = new EventEmitter<Proyecto>();
+  @Input() isProyectoMenuOpen: (proyecto: Proyecto) => boolean = () => false;
+  @Input() getComponentesProyecto: (
+    proyecto: Proyecto
+  ) => { label: string; route: string; icon: string }[] = () => [];
+
+  mantenedoresMenuOpen = false;
+  gestionesMenuOpen = false;
+  informesMenuOpen = false;
+  auditoriasMenuOpen = false;
+
   private readonly STORAGE_KEY = 'sidebar-menu-state';
 
   ngOnInit(): void {
@@ -37,23 +55,6 @@ export class SidebarComponent implements OnInit {
     };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
   }
-  @Input() sidebarCollapsed = false;
-  @Input() isAdminGlobal: boolean | null = null;
-  @Input() adminMenuOpen = false;
-  @Input() proyectos: Proyecto[] = [];
-  @Input() proyectosMenuOpen: { [id: string]: boolean } = {};
-  @Output() toggleSidebarEvent = new EventEmitter<void>();
-  @Output() toggleAdminMenuEvent = new EventEmitter<void>();
-  @Output() toggleProyectoMenuEvent = new EventEmitter<Proyecto>();
-  @Input() isProyectoMenuOpen: (proyecto: Proyecto) => boolean = () => false;
-  @Input() getComponentesProyecto: (
-    proyecto: Proyecto
-  ) => { label: string; route: string; icon: string }[] = () => [];
-
-  mantenedoresMenuOpen = false;
-  gestionesMenuOpen = false;
-  informesMenuOpen = false;
-  auditoriasMenuOpen = false;
 
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
