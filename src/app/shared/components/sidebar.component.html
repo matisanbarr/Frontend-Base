@@ -9,6 +9,12 @@
     <span *ngIf="!sidebarCollapsed" class="sidebar-title">Menú</span>
   </div>
   <ul class="sidebar-menu">
+    <li *ngIf="isLoading" class="sidebar-group" style="text-align: center; padding: 2rem 0">
+      <div>
+        <i class="bi bi-arrow-repeat spin" style="font-size: 2rem"></i>
+        <div>Cargando menú...</div>
+      </div>
+    </li>
     <li *ngIf="isAdminGlobal" class="sidebar-group">
       <div class="sidebar-link" (click)="toggleAdminMenu()">
         <i class="bi bi-gear"></i>

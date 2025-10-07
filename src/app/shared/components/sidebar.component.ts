@@ -12,6 +12,7 @@ import { ProyectoService } from '../../core/services/proyecto.service';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  isLoading = true;
   // Flags para visibilidad de menús de veterinaria
   showVetAdminMenu = false;
   showVetVeterinarioMenu = false;
@@ -115,9 +116,11 @@ export class SidebarComponent implements OnInit {
             );
           }
         }
+        this.isLoading = false;
       },
       error: () => {
         this.proyectos = [];
+        this.isLoading = false;
       },
     });
   }
