@@ -105,8 +105,9 @@ export class AuthService {
   }
 
   getCurrentUserRoles(): string[] {
-    const rolesStr = localStorage.getItem(this.USER_ROLES_KEY);
-    return rolesStr ? JSON.parse(rolesStr) : [];
+    // Obtener roles directamente desde currentUser
+    const user = this.getCurrentUser();
+    return user && Array.isArray(user.roles) ? user.roles : [];
   }
 
   // --- Métodos de verificación ---
@@ -120,7 +121,8 @@ export class AuthService {
   }
 
   hasRole(role: string): boolean {
-    return this.getCurrentUserRoles().includes(role);
+    // Verifica si el usuario tiene el rol, aunque tenga más de uno
+    return this.getCurrentUserRoles().some((r) => r === role);
   }
 
   hasAnyRole(roles: string[]): boolean {
@@ -159,16 +161,21 @@ export class AuthService {
       const email = decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
       const isGlobal = decoded['IsGlobal'] === 'True';
       const tenantId = decoded['TenantId'];
-      let roles = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      if (roles && typeof roles === 'string') {
-        roles = [roles];
+
+      // Capturar roles únicamente desde el claim estándar
+      let roles: string[] = [];
+      const claim = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      if (Array.isArray(claim)) {
+        roles = claim.filter((r) => typeof r === 'string');
+      } else if (typeof claim === 'string') {
+        roles = [claim];
       }
-      if (roles) {
-        localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify(roles));
-      } else {
-        localStorage.removeItem(this.USER_ROLES_KEY);
+      // Si el usuario tiene 'Admin Global', dejar solo ese rol
+      if (roles.length > 0 && roles.indexOf('Admin Global') !== -1) {
+        roles = ['Admin Global'];
       }
-      const user: any = {
+
+      let user: any = {
         usuarioId,
         nombreUsuario,
         primerNombre,
@@ -180,15 +187,23 @@ export class AuthService {
         tenantId,
         roles,
       };
+      if (decoded['Proyectos']) {
+        try {
+          user.proyectos = JSON.parse(decoded['Proyectos']);
+        } catch (e) {
+          // Si falla el parseo, no agregar la propiedad
+        }
+      }
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
       this.currentUserSubject.next(user);
+      this.isAuthenticatedSubject.next(true);
     } catch (e) {
       console.error('Error al extraer datos del JWT:', e);
       localStorage.setItem(this.USER_KEY, JSON.stringify({}));
       localStorage.removeItem(this.USER_ROLES_KEY);
       this.currentUserSubject.next(null);
+      this.isAuthenticatedSubject.next(true);
     }
-    this.isAuthenticatedSubject.next(true);
   }
 
   private clearSession(): void {
@@ -196,7 +211,6 @@ export class AuthService {
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     localStorage.removeItem(this.EXPIRATION_KEY);
     localStorage.removeItem(this.USER_KEY);
-    localStorage.removeItem(this.USER_ROLES_KEY);
     this.currentUserSubject.next(null);
     this.isAuthenticatedSubject.next(false);
   }

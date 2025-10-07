@@ -39,6 +39,11 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
   styleUrls: ['./admin-users.component.scss'],
 })
 export class AdminUsersComponent {
+  seleccionarRolUnico(indice: number) {
+    this.rolesDisponibles.forEach((rol, i) => {
+      rol.seleccionado = i === indice;
+    });
+  }
   // Funciones para mostrar en la lista
   usuarioNombreFn = (u: Usuario) => u.nombre ?? null;
   usuarioCorreoFn = (u: Usuario) => u.email ?? null;
