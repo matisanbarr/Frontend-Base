@@ -1,0 +1,27 @@
+.veterinaria-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.veterinaria-layout app-sidebar {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+  height: 100vh;
+  background: #232946;
+  color: #fff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  z-index: 10;
+}
+
+.veterinaria-content {
+  flex: 1 1 0%;
+  width: 100%;
+  padding: 1rem;
+  background: #f4f6fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}

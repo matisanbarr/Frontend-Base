@@ -71,37 +71,10 @@ export class SidebarComponent implements OnInit {
           this.proyectoIdsUsuario = currentUser.proyectos.map((p: any) => String(p.ProyectoId));
         }
         // Lógica de visibilidad de menús de veterinaria
-        // Si es Admin Global, ve todo
-        if (this.isAdminGlobalUser) {
-          this.showVetAdminMenu = true;
-          this.showVetVeterinarioMenu = true;
-          this.showVetAsistenteMenu = true;
-        } else {
-          // Se asume que el rol principal está en roles[0] o se puede ajustar según tu modelo
-          const rolPrincipal = Array.isArray(roles) && roles.length > 0 ? roles[0] : '';
-          if (rolPrincipal === 'Veterinario Jefe') {
-            this.showVetAdminMenu = true;
-            this.showVetVeterinarioMenu = true;
-            this.showVetAsistenteMenu = true;
-          } else if (rolPrincipal === 'Veterinario') {
-            this.showVetAdminMenu = false;
-            this.showVetVeterinarioMenu = true;
-            this.showVetAsistenteMenu = true;
-          } else if (
-            rolPrincipal === 'Asistente' ||
-            rolPrincipal === 'Recepcionista' ||
-            rolPrincipal === 'Asistente/Recepcionista'
-          ) {
-            this.showVetAdminMenu = false;
-            this.showVetVeterinarioMenu = false;
-            this.showVetAsistenteMenu = true;
-          } else {
-            // Por defecto, no muestra nada
-            this.showVetAdminMenu = false;
-            this.showVetVeterinarioMenu = false;
-            this.showVetAsistenteMenu = false;
-          }
-        }
+        // Mostrar todos los menús de veterinaria para depuración
+        this.showVetAdminMenu = true;
+        this.showVetVeterinarioMenu = true;
+        this.showVetAsistenteMenu = true;
       } catch {}
     }
     // Cargar proyectos como menú principal
@@ -143,50 +116,108 @@ export class SidebarComponent implements OnInit {
   toggleSidebar() {
     this.toggleSidebarEvent.emit();
   }
+  // Solo un menú principal abierto a la vez
   toggleAdminMenu() {
     this.adminMenuOpen = !this.adminMenuOpen;
+    if (this.adminMenuOpen) {
+      this.mantenedoresMenuOpen = false;
+      this.gestionesMenuOpen = false;
+      this.informesMenuOpen = false;
+      this.auditoriasMenuOpen = false;
+      this.veterinariaMenuOpen = false;
+    }
     this.toggleAdminMenuEvent.emit();
     this.saveState();
-  }
-  toggleProyectoMenu(proyecto: Proyecto) {
-    this.toggleProyectoMenuEvent.emit(proyecto);
   }
 
   toggleMantenedoresMenu() {
     this.mantenedoresMenuOpen = !this.mantenedoresMenuOpen;
+    if (this.mantenedoresMenuOpen) {
+      // Solo cerrar otros submenús hermanos dentro de Administración
+      this.gestionesMenuOpen = false;
+      this.informesMenuOpen = false;
+      this.auditoriasMenuOpen = false;
+    }
     this.saveState();
   }
 
   toggleGestionesMenu() {
     this.gestionesMenuOpen = !this.gestionesMenuOpen;
+    if (this.gestionesMenuOpen) {
+      this.mantenedoresMenuOpen = false;
+      this.informesMenuOpen = false;
+      this.auditoriasMenuOpen = false;
+    }
     this.saveState();
   }
 
   toggleInformesMenu() {
     this.informesMenuOpen = !this.informesMenuOpen;
+    if (this.informesMenuOpen) {
+      this.mantenedoresMenuOpen = false;
+      this.gestionesMenuOpen = false;
+      this.auditoriasMenuOpen = false;
+    }
     this.saveState();
   }
 
   toggleAuditoriasMenu() {
     this.auditoriasMenuOpen = !this.auditoriasMenuOpen;
+    if (this.auditoriasMenuOpen) {
+      this.mantenedoresMenuOpen = false;
+      this.gestionesMenuOpen = false;
+      this.informesMenuOpen = false;
+    }
     this.saveState();
   }
 
-  // Métodos para Veterinaria
   toggleVeterinariaMenu() {
     this.veterinariaMenuOpen = !this.veterinariaMenuOpen;
+    if (this.veterinariaMenuOpen) {
+      this.adminMenuOpen = false;
+      this.mantenedoresMenuOpen = false;
+      this.gestionesMenuOpen = false;
+      this.informesMenuOpen = false;
+      this.auditoriasMenuOpen = false;
+    }
     this.saveState();
   }
+
+  // Solo un submenú de veterinaria abierto a la vez
   toggleVetAdminMenu() {
     this.vetAdminMenuOpen = !this.vetAdminMenuOpen;
+    if (this.vetAdminMenuOpen) {
+      this.vetVeterinarioMenuOpen = false;
+      this.vetAsistenteMenuOpen = false;
+    }
     this.saveState();
   }
   toggleVetVeterinarioMenu() {
     this.vetVeterinarioMenuOpen = !this.vetVeterinarioMenuOpen;
+    if (this.vetVeterinarioMenuOpen) {
+      this.vetAdminMenuOpen = false;
+      this.vetAsistenteMenuOpen = false;
+    }
     this.saveState();
   }
   toggleVetAsistenteMenu() {
     this.vetAsistenteMenuOpen = !this.vetAsistenteMenuOpen;
+    if (this.vetAsistenteMenuOpen) {
+      this.vetAdminMenuOpen = false;
+      this.vetVeterinarioMenuOpen = false;
+    }
+    this.saveState();
+  }
+
+  // Para futuros proyectos, solo uno abierto
+  toggleProyectoMenu(proyecto: Proyecto) {
+    Object.keys(this.proyectosMenuOpen).forEach((id) => {
+      this.proyectosMenuOpen[id] = false;
+    });
+    if (proyecto.id !== undefined) {
+      this.proyectosMenuOpen[String(proyecto.id)] = true;
+    }
+    this.toggleProyectoMenuEvent.emit(proyecto);
     this.saveState();
   }
 }

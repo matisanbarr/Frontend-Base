@@ -33,6 +33,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard.page').then((m) => m.DashboardPage),
     canActivate: [TokenGuard, authGuard],
     children: [
+      // Rutas de veterinaria (modular, lazy loading)
+      {
+        path: 'veterinaria',
+        loadChildren: () =>
+          import('./features/veterinaria/veterinaria.routes').then((m) => m.veterinariaRoutes),
+      },
       // Rutas de administración (requieren rol admin)
       {
         path: 'admin',
@@ -70,31 +76,22 @@ export const routes: Routes = [
                 (m) => m.AdminProyectosPage
               ),
           },
-        ],
-      },
-      // Menú Asignaciones
-      {
-        path: 'asignaciones',
-        canActivate: [RoleGuard],
-        data: { roles: ['Admin Global', 'Usuario'] },
-        children: [
           {
-            path: 'tenant-proyecto-plan',
-            loadChildren: () =>
+            path: 'admin-tenants-proyectos-planes',
+            loadComponent: () =>
               import(
-                './features/admin/admin-tenants-proyectos-planes/admin-tenants-proyectos-planes.module'
-              ).then((m) => m.AdminTenantsProyectosPlanesModule),
+                './features/admin/admin-tenants-proyectos-planes/admin-tenants-proyectos-planes.page'
+              ).then((m) => m.AdminTenantsProyectosPlanesPage),
           },
           {
-            path: 'pagos-subscripciones',
-            loadChildren: () =>
+            path: 'admin-pagos-tenants-proyectos-planes',
+            loadComponent: () =>
               import(
-                './features/admin/admin-pagos-tenants-proyectos-planes/admin-pago-tenants-proyectos-planes.module'
-              ).then((m) => m.AdminPagoTenantsProyectosPlanesModule),
+                './features/admin/admin-pagos-tenants-proyectos-planes/admin-pago-tenants-proyectos-planes.page'
+              ).then((m) => m.AdminPagoTenantsProyectosPlanesPage),
           },
         ],
       },
-      // Aquí puedes agregar más rutas hijas para proyectos, módulos, etc.
     ],
   },
 

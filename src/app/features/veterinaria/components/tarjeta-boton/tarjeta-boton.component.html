@@ -1,0 +1,11 @@
+<div
+  class="tarjeta-boton"
+  [ngStyle]="{ '--color-fondo': colorFondo, '--color-boton': colorBoton }"
+  (click)="onClick()"
+>
+  <div class="icono-decorativa">
+    <span class="icono">{{ icono }}</span>
+  </div>
+  <div class="titulo">{{ titulo }}</div>
+  <div class="descripcion">{{ descripcion }}</div>
+</div>

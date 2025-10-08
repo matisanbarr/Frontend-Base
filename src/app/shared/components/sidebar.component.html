@@ -74,12 +74,16 @@
           </div>
           <ul class="sidebar-submenu" *ngIf="gestionesMenuOpen">
             <li>
-              <a routerLink="/dashboard/asignaciones/tenant-proyecto-plan" routerLinkActive="active"
+              <a
+                routerLink="/dashboard/admin/admin-tenants-proyectos-planes"
+                routerLinkActive="active"
                 ><i class="bi bi-kanban"></i> Asignar conexiones</a
               >
             </li>
             <li>
-              <a routerLink="/dashboard/asignaciones/pagos-subscripciones" routerLinkActive="active"
+              <a
+                routerLink="/dashboard/admin/admin-pagos-tenants-proyectos-planes"
+                routerLinkActive="active"
                 ><i class="bi bi-credit-card"></i> Pagos de subscripciones</a
               >
             </li>
@@ -198,22 +202,30 @@
               </div>
               <ul class="sidebar-submenu" *ngIf="vetAsistenteMenuOpen">
                 <li>
-                  <a routerLink="/veterinaria/asistente/pacientes" routerLinkActive="active"
+                  <a
+                    routerLink="/dashboard/veterinaria/asistente-recepcionista/paciente"
+                    routerLinkActive="active"
                     ><i class="bi bi-people"></i> Pacientes</a
                   >
                 </li>
                 <li>
-                  <a routerLink="/veterinaria/asistente/citas" routerLinkActive="active"
+                  <a
+                    routerLink="/dashboard/veterinaria/asistente-recepcionista/cita"
+                    routerLinkActive="active"
                     ><i class="bi bi-calendar-check"></i> Citas</a
                   >
                 </li>
                 <li>
-                  <a routerLink="/veterinaria/asistente/facturacion" routerLinkActive="active"
+                  <a
+                    routerLink="/dashboard/veterinaria/asistente-recepcionista/facturacion"
+                    routerLinkActive="active"
                     ><i class="bi bi-receipt"></i> Facturación</a
                   >
                 </li>
                 <li>
-                  <a routerLink="/veterinaria/asistente/inventario" routerLinkActive="active"
+                  <a
+                    routerLink="/dashboard/veterinaria/asistente-recepcionista/inventario"
+                    routerLinkActive="active"
                     ><i class="bi bi-box"></i> Inventario</a
                   >
                 </li>

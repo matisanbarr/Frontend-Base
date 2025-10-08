@@ -1,0 +1,118 @@
+// Hermosura y profesionalismo extra
+.tarjeta-boton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+
+  /* Centrado interno */
+  > * {
+    flex-shrink: 0;
+  }
+  background: linear-gradient(135deg, #f9fafc 80%, #e3f6fc 100%);
+  border-radius: 28px;
+  box-shadow:
+    0 6px 32px rgba(93, 183, 183, 0.1),
+    0 1.5px 8px rgba(0, 0, 0, 0.08);
+  padding: 2.8rem 2.2rem;
+  transition:
+    transform 0.18s cubic-bezier(0.4, 1.4, 0.6, 1),
+    box-shadow 0.18s cubic-bezier(0.4, 1.4, 0.6, 1),
+    border-color 0.18s;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid #b2d8d8;
+  border-bottom: 6px double #5db7b7;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  margin: auto;
+  aspect-ratio: 1 / 1;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    aspect-ratio: unset;
+    height: auto;
+    border-radius: 18px;
+    padding: 1.5rem 0.7rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-radius: 28px;
+    box-shadow: 0 0 32px 0 rgba(93, 183, 183, 0.08) inset;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    transform: scale(1.025);
+    box-shadow:
+      0 12px 40px rgba(93, 183, 183, 0.18),
+      0 2px 12px rgba(0, 0, 0, 0.12);
+    border-color: #5db7b7;
+    background: linear-gradient(135deg, #e3f6fc 70%, #f9fafc 100%);
+    filter: brightness(1.04);
+  }
+
+  .icono-decorativa {
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(178, 216, 216, 0.15);
+    padding: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 240px;
+    position: relative;
+    border: 2px dashed #b2d8d8;
+    /* Huellitas decorativas */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center
+        center;
+      background-size: contain;
+      opacity: 0.3;
+    }
+  }
+
+  .icono {
+    font-size: 4.2rem;
+    font-size: 10rem;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .titulo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    text-align: center;
+    color: #3a4d39;
+    letter-spacing: 0.5px;
+  }
+
+  .descripcion {
+    font-size: 1.05rem;
+    color: #5a6e6e;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    line-height: 1.5;
+  }
+}
