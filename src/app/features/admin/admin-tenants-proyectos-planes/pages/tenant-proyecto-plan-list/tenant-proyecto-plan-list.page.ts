@@ -10,11 +10,11 @@ import { AlertService } from '../../../../../core/services';
 @Component({
   selector: 'app-tenant-proyecto-plan-list',
   standalone: true,
-  templateUrl: './tenant-proyecto-plan-list.component.html',
-  styleUrls: ['./tenant-proyecto-plan-list.component.scss'],
-  imports: [CommonModule, DatePipe, ConfirmModalComponent, TenantProyectoPlanFormComponent],
+  templateUrl: './tenant-proyecto-plan-list.page.html',
+  styleUrls: ['./tenant-proyecto-plan-list.page.scss'],
+  imports: [CommonModule, DatePipe, ConfirmModalComponent],
 })
-export class TenantProyectoPlanListComponent implements OnInit {
+export class TenantProyectoPlanListPage implements OnInit {
   @Output() edit = new EventEmitter<TenantProyectoPlan>();
   asignaciones: TenantProyectoPlan[] = [];
   total = 0;

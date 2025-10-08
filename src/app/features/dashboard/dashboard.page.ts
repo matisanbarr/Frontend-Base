@@ -7,16 +7,16 @@ import { AuthService } from '../../core/services/auth.service';
 import { ProyectoService } from '../../core/services/proyecto.service';
 import { Proyecto } from '../../models/proyecto.model';
 import { SidebarComponent } from '../../shared/components/sidebar.component';
-import { HomeComponent } from '../home/home.component';
+import { HomePage } from '../home/home.page';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent, HomeComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  imports: [CommonModule, RouterModule, SidebarComponent, HomePage],
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardPage implements OnInit, OnDestroy {
   showHamburger = true;
   // Métodos para controlar visibilidad del botón hamburguesa
   onOffcanvasShown() {

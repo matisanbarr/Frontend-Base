@@ -32,10 +32,10 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     FormButtonsComponent,
     AdminFormHeaderComponent,
   ],
-  templateUrl: './admin-planes.component.html',
-  styleUrls: ['./admin-planes.component.scss'],
+  templateUrl: './admin-planes.page.html',
+  styleUrls: ['./admin-planes.page.scss'],
 })
-export class AdminPlanesComponent {
+export class AdminPlanesPage {
   planNombreFn = (p: Plan) => p.nombre ?? null;
   descripcionFn = (p: Plan) => p.descripcion ?? null;
   precioFn = (p: Plan) => p.precioUfPorProyecto ?? null;

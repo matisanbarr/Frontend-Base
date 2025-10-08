@@ -21,8 +21,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadComponent: () =>
-          import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+        loadComponent: () => import('./features/auth/login/login.page').then((m) => m.LoginPage),
         canActivate: [LoginGuard], // No permitir acceso si ya está autenticado
       },
     ],
@@ -31,8 +30,7 @@ export const routes: Routes = [
   // Rutas protegidas (dashboard y sus hijos)
   {
     path: 'dashboard',
-    loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    loadComponent: () => import('./features/dashboard/dashboard.page').then((m) => m.DashboardPage),
     canActivate: [TokenGuard, authGuard],
     children: [
       // Rutas de administración (requieren rol admin)
@@ -44,36 +42,32 @@ export const routes: Routes = [
           {
             path: 'users',
             loadComponent: () =>
-              import('./features/admin/admin-users/admin-users.component').then(
-                (m) => m.AdminUsersComponent
-              ),
+              import('./features/admin/admin-users/admin-users.page').then((m) => m.AdminUsersPage),
           },
           {
             path: 'roles',
             loadComponent: () =>
-              import('./features/admin/admin-roles/admin-roles.component').then(
-                (m) => m.AdminRolesComponent
-              ),
+              import('./features/admin/admin-roles/admin-roles.page').then((m) => m.AdminRolesPage),
           },
           {
             path: 'planes',
             loadComponent: () =>
-              import('./features/admin/admin-planes/admin-planes.component').then(
-                (m) => m.AdminPlanesComponent
+              import('./features/admin/admin-planes/admin-planes.page').then(
+                (m) => m.AdminPlanesPage
               ),
           },
           {
             path: 'tenants',
             loadComponent: () =>
-              import('./features/admin/admin-tenants/admin-tenants.component').then(
-                (m) => m.AdminTenantsComponent
+              import('./features/admin/admin-tenants/admin-tenants.page').then(
+                (m) => m.AdminTenantsPage
               ),
           },
           {
             path: 'proyectos',
             loadComponent: () =>
-              import('./features/admin/admin-proyectos/admin-proyectos.component').then(
-                (m) => m.AdminProyectosComponent
+              import('./features/admin/admin-proyectos/admin-proyectos.page').then(
+                (m) => m.AdminProyectosPage
               ),
           },
         ],

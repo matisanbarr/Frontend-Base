@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TenantProyectoPlanCrudComponent } from './pages/tenant-proyecto-plan-crud/tenant-proyecto-plan-crud.component';
+import { TenantProyectoPlanCrudPage } from './pages/tenant-proyecto-plan-crud/tenant-proyecto-plan-crud.page';
 
-const routes: Routes = [{ path: '', component: TenantProyectoPlanCrudComponent }];
+const routes: Routes = [{ path: '', component: TenantProyectoPlanCrudPage }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

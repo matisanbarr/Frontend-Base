@@ -30,10 +30,10 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     FormButtonsComponent,
     AdminFormHeaderComponent,
   ],
-  templateUrl: './admin-tenants.component.html',
-  styleUrls: ['./admin-tenants.component.scss'],
+  templateUrl: './admin-tenants.page.html',
+  styleUrls: ['./admin-tenants.page.scss'],
 })
-export class AdminTenantsComponent {
+export class AdminTenantsPage {
   // Funciones para mostrar en la lista
   tenantNombreFn = (t: Tenant) => t.nombre ?? null;
   tenantCorreoFn = (t: Tenant) => t.correo ?? null;

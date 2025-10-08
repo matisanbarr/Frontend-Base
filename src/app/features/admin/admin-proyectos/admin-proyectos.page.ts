@@ -32,10 +32,10 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     FormButtonsComponent,
     AdminFormHeaderComponent,
   ],
-  templateUrl: './admin-proyectos.component.html',
-  styleUrls: ['./admin-proyectos.component.scss'],
+  templateUrl: './admin-proyectos.page.html',
+  styleUrls: ['./admin-proyectos.page.scss'],
 })
-export class AdminProyectosComponent {
+export class AdminProyectosPage {
   // Funciones para AdminListComponent
   proyectoNombreFn = (p: Proyecto) => p.nombre ?? null;
   proyectoDescripcionFn = (p: Proyecto) => p.descripcion ?? 'Sin descripción';

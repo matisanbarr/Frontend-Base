@@ -10,10 +10,10 @@ import { LoadingService } from '../../../core/services/loading.service';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
 })
-export class LoginComponent {
+export class LoginPage {
   loginData: LoginRequest = {
     nombreUsuario: '',
     password: '',

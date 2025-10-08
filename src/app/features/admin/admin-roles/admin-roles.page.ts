@@ -30,10 +30,10 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     FormButtonsComponent,
     AdminFormHeaderComponent,
   ],
-  templateUrl: './admin-roles.component.html',
-  styleUrls: ['./admin-roles.component.scss'],
+  templateUrl: './admin-roles.page.html',
+  styleUrls: ['./admin-roles.page.scss'],
 })
-export class AdminRolesComponent {
+export class AdminRolesPage {
   // Funciones para mostrar en la lista
   rolNombreFn = (r: Rol) => r.nombre ?? null;
   rolDescriptionFn = (r: Rol) => r.descripcion ?? null;

@@ -7,7 +7,7 @@ import { PagoTenantProyectoPlanCrudComponent } from './pages/pago-tenant-proyect
   selector: 'app-admin-pago-tenants-proyectos-planes',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, PagoTenantProyectoPlanCrudComponent],
-  templateUrl: './admin-pago-tenants-proyectos-planes.component.html',
-  styleUrls: ['./admin-pago-tenants-proyectos-planes.component.scss'],
+  templateUrl: './admin-pago-tenants-proyectos-planes.page.html',
+  styleUrls: ['./admin-pago-tenants-proyectos-planes.page.scss'],
 })
-export class AdminPagoTenantsProyectosPlanesComponent {}
+export class AdminPagoTenantsProyectosPlanesPage {}

@@ -35,10 +35,10 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     FormButtonsComponent,
     AdminFormHeaderComponent,
   ],
-  templateUrl: './admin-users.component.html',
-  styleUrls: ['./admin-users.component.scss'],
+  templateUrl: './admin-users.page.html',
+  styleUrls: ['./admin-users.page.scss'],
 })
-export class AdminUsersComponent {
+export class AdminUsersPage {
   seleccionarRolUnico(indice: number) {
     this.rolesDisponibles.forEach((rol, i) => {
       rol.seleccionado = i === indice;
