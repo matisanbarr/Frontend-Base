@@ -1,4 +1,4 @@
-export interface RespuestaPaginadaDto {
+export interface RespuestaPaginada {
   datos: any[];
   total: number;
 }

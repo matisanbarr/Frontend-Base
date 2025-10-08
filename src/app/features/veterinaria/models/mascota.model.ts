@@ -1,8 +1,18 @@
+import { HistorialMedico } from './historial-medico.model';
+import { Cita } from './cita.model';
+
 export interface Mascota {
-  id: string;
+  id?: string;
   nombre: string;
   especie: string;
-  raza?: string;
-  edad?: number;
-  propietarioId: string;
+  raza: string;
+  sexo: string;
+  fechaNacimiento?: string | Date;
+  color: string;
+  observaciones: string;
+  duenoId: string;
+  tenantId: string;
+  estadoActivo: boolean;
+  historialesMedicos: HistorialMedico[];
+  citas: Cita[];
 }

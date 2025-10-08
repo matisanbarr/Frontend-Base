@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
-import { RespuestaPaginadaDto } from '../../models/compartidos';
+import { RespuestaPaginada } from '../../models/compartidos';
 import { Respuesta } from '../../models/compartidos/respuesta.model';
 import { TenantProyectoPlan } from '../../models/tenantProyectoPlan.model';
 import { HistorialTenantProyectoPlan } from '../../models/historialTenantProyectoPlan.model';
@@ -15,26 +15,26 @@ export class PagoTenantProyectoPlanService {
 
   constructor(private http: HttpClient) {}
 
-  crearPagoTenantProyectoPlan(pago: PagoTenantProyectoPlan): Observable<Respuesta<any>> {
-    return this.http.post<Respuesta<any>>(this.apiUrl, pago);
+  crearPagoTenantProyectoPlan(pago: PagoTenantProyectoPlan): Observable<Respuesta<boolean>> {
+    return this.http.post<Respuesta<boolean>>(this.apiUrl, pago);
   }
 
-  modificarPagoTenantProyectoPlan(pago: PagoTenantProyectoPlan): Observable<Respuesta<any>> {
-    return this.http.put<Respuesta<any>>(this.apiUrl, pago);
+  modificarPagoTenantProyectoPlan(pago: PagoTenantProyectoPlan): Observable<Respuesta<boolean>> {
+    return this.http.put<Respuesta<boolean>>(this.apiUrl, pago);
   }
 
-  listarPagoTenantsProyectosPlanes(): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
+  listarPagoTenantsProyectosPlanes(): Observable<Respuesta<PagoTenantProyectoPlan>> {
+    return this.http.get<Respuesta<PagoTenantProyectoPlan>>(this.apiUrl + '/listar-todo');
   }
 
-  eliminarPagoTenantProyectoPlan(id: string): Observable<Respuesta<any>> {
-    return this.http.delete<Respuesta<any>>(this.apiUrl + `/${id}`);
+  eliminarPagoTenantProyectoPlan(id: string): Observable<Respuesta<boolean>> {
+    return this.http.delete<Respuesta<boolean>>(this.apiUrl + `/${id}`);
   }
 
   listarPaginadoPagoTenantsProyectosPlanes(
     paginacion: PaginacionDto
-  ): Observable<Respuesta<RespuestaPaginadaDto>> {
-    return this.http.get<Respuesta<RespuestaPaginadaDto>>(this.apiUrl, {
+  ): Observable<Respuesta<RespuestaPaginada>> {
+    return this.http.get<Respuesta<RespuestaPaginada>>(this.apiUrl, {
       params: paginacion as any,
     });
   }

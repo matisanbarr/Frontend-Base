@@ -3,10 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
-import { RespuestaPaginadaDto } from '../../models/compartidos';
-import { TenantPlan } from '../../models/asignacion-plan.model';
+import { RespuestaPaginada } from '../../models/compartidos';
 import { Proyecto } from '../../models/proyecto.model';
-import { AsignarProyectosTenant } from '../../models/asignar-proyectos-tenant.model';
 import { Respuesta } from '../../models/compartidos/respuesta.model';
 
 @Injectable({ providedIn: 'root' })
@@ -15,24 +13,24 @@ export class ProyectoService {
 
   constructor(private http: HttpClient) {}
 
-  crearProyecto(proyecto: Proyecto): Observable<Respuesta<any>> {
-    return this.http.post<Respuesta<any>>(this.apiUrl, proyecto);
+  crearProyecto(proyecto: Proyecto): Observable<Respuesta<boolean>> {
+    return this.http.post<Respuesta<boolean>>(this.apiUrl, proyecto);
   }
 
-  modificarProyecto(proyecto: Proyecto): Observable<Respuesta<any>> {
-    return this.http.put<Respuesta<any>>(this.apiUrl, proyecto);
+  modificarProyecto(proyecto: Proyecto): Observable<Respuesta<boolean>> {
+    return this.http.put<Respuesta<boolean>>(this.apiUrl, proyecto);
   }
 
-  listarProyectos(): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
+  listarProyectos(): Observable<Respuesta<Proyecto[]>> {
+    return this.http.get<Respuesta<Proyecto[]>>(this.apiUrl + '/listar-todo');
   }
 
-  eliminarProyecto(id: string): Observable<Respuesta<any>> {
-    return this.http.delete<Respuesta<any>>(`${this.apiUrl}/${id}`);
+  eliminarProyecto(id: string): Observable<Respuesta<boolean>> {
+    return this.http.delete<Respuesta<boolean>>(`${this.apiUrl}/${id}`);
   }
 
-  listarPaginadoProyectos(paginacion: PaginacionDto): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<any>>(this.apiUrl, {
+  listarPaginadoProyectos(paginacion: PaginacionDto): Observable<Respuesta<RespuestaPaginada>> {
+    return this.http.get<Respuesta<RespuestaPaginada>>(this.apiUrl, {
       params: paginacion as any,
     });
   }

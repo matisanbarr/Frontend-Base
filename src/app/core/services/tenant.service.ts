@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginacionDto } from '../../models/compartidos/paginadoDto.model';
-import { RespuestaPaginadaDto } from '../../models/compartidos';
+import { RespuestaPaginada } from '../../models/compartidos';
 import { Tenant } from '../../models/tenant.model';
 import { Respuesta } from '../../models/compartidos/respuesta.model';
 
@@ -13,24 +13,24 @@ export class TenantService {
 
   constructor(private http: HttpClient) {}
 
-  crearTenant(tenant: Tenant): Observable<Respuesta<any>> {
-    return this.http.post<Respuesta<any>>(this.apiUrl, tenant);
+  crearTenant(tenant: Tenant): Observable<Respuesta<boolean>> {
+    return this.http.post<Respuesta<boolean>>(this.apiUrl, tenant);
   }
 
-  modificarTenant(tenant: Tenant): Observable<Respuesta<any>> {
-    return this.http.put<Respuesta<any>>(this.apiUrl, tenant);
+  modificarTenant(tenant: Tenant): Observable<Respuesta<boolean>> {
+    return this.http.put<Respuesta<boolean>>(this.apiUrl, tenant);
   }
 
-  listarTenants(): Observable<Respuesta<any>> {
-    return this.http.get<Respuesta<any>>(this.apiUrl + '/listar-todo');
+  listarTenants(): Observable<Respuesta<Tenant[]>> {
+    return this.http.get<Respuesta<Tenant[]>>(this.apiUrl + '/listar-todo');
   }
 
-  eliminarTenant(id: string): Observable<Respuesta<any>> {
-    return this.http.delete<Respuesta<any>>(this.apiUrl + `/${id}`);
+  eliminarTenant(id: string): Observable<Respuesta<boolean>> {
+    return this.http.delete<Respuesta<boolean>>(this.apiUrl + `/${id}`);
   }
 
-  listarPaginadoTenants(paginacion: PaginacionDto): Observable<Respuesta<RespuestaPaginadaDto>> {
-    return this.http.get<Respuesta<RespuestaPaginadaDto>>(this.apiUrl, {
+  listarPaginadoTenants(paginacion: PaginacionDto): Observable<Respuesta<RespuestaPaginada>> {
+    return this.http.get<Respuesta<RespuestaPaginada>>(this.apiUrl, {
       params: paginacion as any,
     });
   }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ActualizarUsuarioRoles } from '../../models/usuario-rol.model';
 import { Respuesta } from '../../models/compartidos/respuesta.model';
+import { UsuarioRoleResponse } from '../../models';
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioRolService {
@@ -11,7 +12,7 @@ export class UsuarioRolService {
 
   constructor(private http: HttpClient) {}
 
-  actualizarRolesUsuario(dto: ActualizarUsuarioRoles): Observable<Respuesta<any>> {
-    return this.http.put<Respuesta<any>>(this.apiUrl + `/${dto.usuarioId}`, dto);
+  actualizarRolesUsuario(dto: ActualizarUsuarioRoles): Observable<Respuesta<UsuarioRoleResponse>> {
+    return this.http.put<Respuesta<UsuarioRoleResponse>>(this.apiUrl + `/${dto.usuarioId}`, dto);
   }
 }

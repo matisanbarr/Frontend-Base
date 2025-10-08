@@ -6,7 +6,6 @@ import { AlertService } from './services/alert.service';
 import { HttpConfigService } from './services/http-config.service';
 import { LoadingService } from './services/loading.service';
 import { PlanService } from './services/plan.service';
-import { RegisterService } from './services/register.service';
 import { RolService } from './services/rol.service';
 import { TenantService } from './services/tenant.service';
 import { UsuarioService } from './services/usuario.service';
@@ -27,7 +26,6 @@ export const CORE_PROVIDERS = [
   HttpConfigService,
   LoadingService,
   PlanService,
-  RegisterService,
   RolService,
   TenantService,
   UsuarioService,
