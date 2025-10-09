@@ -1,4 +1,20 @@
 <div class="container">
+  @switch (vistaActual) { @case (0) {
+  <!-- Menu principal -->
+  <ng-container *ngTemplateOutlet="menuPrincipal"></ng-container>
+  } @case (1) {
+  <!-- Gestión de Dueños -->
+  <app-gestor-dueno></app-gestor-dueno>
+  } @case (2) {
+  <!-- Gestión de Mascotas -->
+  <app-gestor-mascota></app-gestor-mascota>
+  } @case (3) {
+  <!-- Historial Médico -->
+  <app-historial-mascota></app-historial-mascota>
+  } }
+</div>
+
+<ng-template #menuPrincipal>
   <!-- Menu principal -->
   <div class="row g-0 align-items-stretch justify-content-center my-5">
     <div
@@ -11,6 +27,7 @@
         [descripcion]="'Gestiona la información de los dueños.'"
         [colorFondo]="'#E0F7FA'"
         [colorBoton]="'#00796B'"
+        (clickTarjeta)="cambiarVista(1)"
       ></app-tarjeta-boton>
       <app-tarjeta-boton
         [titulo]="'Mascotas'"
@@ -18,6 +35,7 @@
         [descripcion]="'Gestiona la información de los pacientes.'"
         [colorFondo]="'#E0F7FA'"
         [colorBoton]="'#00796B'"
+        (clickTarjeta)="cambiarVista(2)"
       ></app-tarjeta-boton>
       <app-tarjeta-boton
         [titulo]="'Historial Médico'"
@@ -25,11 +43,8 @@
         [descripcion]="'Consulta la información de los pacientes.'"
         [colorFondo]="'#E0F7FA'"
         [colorBoton]="'#00796B'"
+        (clickTarjeta)="cambiarVista(3)"
       ></app-tarjeta-boton>
     </div>
   </div>
-
-  <!-- Dueños-->
-
-  <!-- Mascotas-->
-</div>
+</ng-template>

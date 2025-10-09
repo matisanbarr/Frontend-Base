@@ -1,255 +1,213 @@
-// Personalización del header de FullCalendar para diseño vertical
-::ng-deep .fc-header-toolbar {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  background: #e0f7fa !important;
-  padding: 0 !important;
-  margin-bottom: 1rem !important;
-}
-
-// Botones de navegación sin fondo, sin borde, sin sombra, ni contenedor, y con iconos grandes
-::ng-deep .fc-button {
-  font-size: 2rem !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  line-height: 1 !important;
-}
-
-// Altura fija y scroll para la vista diaria
-::ng-deep .fc-timegrid {
-  max-height: 350px !important;
-  overflow-y: auto !important;
-}
-// Estilos para la vista diaria (timeGridDay)
-::ng-deep .fc-timegrid {
-  background: #f5f8fa !important;
+// Diseño elegante para la tabla de bloques horarios en la vista diaria
+::ng-deep .fc-timegrid-table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: #fafafa !important;
   border-radius: 16px !important;
-  border: 1px solid #e0e0e0 !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1) !important;
-  padding: 12px !important;
+  box-shadow: 0 2px 12px rgba(33, 150, 243, 0.07) !important;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif !important;
 }
 
 ::ng-deep .fc-timegrid-slot {
   background: #fff !important;
   border-bottom: 1px solid #e0e0e0 !important;
+  transition: background 0.2s;
+}
+::ng-deep .fc-timegrid-slot:hover {
+  background: #e3f2fd !important;
 }
 
 ::ng-deep .fc-timegrid-slot-label {
-  color: #1976d2 !important;
-  font-weight: 500 !important;
+  color: #1565c0 !important;
+  font-weight: 600 !important;
   font-size: 1rem !important;
+  background: #f5f5f5 !important;
+  border-right: 1px solid #e0e0e0 !important;
+  padding: 6px 12px !important;
+  text-align: right !important;
 }
 
 ::ng-deep .fc-timegrid-col {
-  background: #f5f8fa !important;
+  background: #fafafa !important;
 }
-
-::ng-deep .fc-timegrid-event {
-  border-radius: 8px !important;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
-  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
-  color: #fff !important;
-  font-size: 15px !important;
-  padding: 4px 8px !important;
-}
-
-::ng-deep .fc-timegrid-now-indicator {
-  background: #1976d2 !important;
-}
-
-// Mensaje si no hay eventos
-::ng-deep .fc-timegrid .fc-timegrid-bg-container:empty::after {
-  content: 'Sin citas para hoy';
-  display: block;
-  text-align: center;
-  color: #90caf9;
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-top: 40px;
-}
-// Mejoras visuales adicionales
-::ng-deep .fc-daygrid-day {
-  background: #f5f8fa !important;
-  border-radius: 10px !important;
-  border: 1px solid #e0e0e0 !important;
-  transition:
-    box-shadow 0.2s,
-    background 0.2s;
-  min-height: 90px !important;
-}
-
-::ng-deep .fc-daygrid-day:hover {
-  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.12) !important;
-  background: #e3f2fd !important;
-}
-
-::ng-deep .fc-daygrid-day-number {
-  color: #1976d2 !important;
-  font-weight: 700 !important;
+// Diseño personalizado para el nombre del día de la semana
+::ng-deep .fc-col-header-cell-cushion {
+  color: #1565c0 !important;
   font-size: 1.15rem !important;
-  margin-bottom: 4px !important;
+  font-weight: 700 !important;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif !important;
+  letter-spacing: 1px;
+  padding: 8px 0 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+// Botones prev, hoy y next como grupo
+::ng-deep .fc-header-toolbar .fc-toolbar-chunk {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+// Botón prev (izquierda)
+::ng-deep .fc-header-toolbar .fc-prev-button {
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-right: 0 !important;
+}
+// Botón next (derecha)
+::ng-deep .fc-header-toolbar .fc-next-button {
+  border-top-right-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  margin-left: 0 !important;
+}
+// Botón hoy (centro)
+::ng-deep .fc-header-toolbar .fc-today-button {
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+// Mejorar controles y fecha en FullCalendar (universal, funciona en todas las vistas)
+::ng-deep .fc-header-toolbar {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 10px;
+  margin-bottom: 12px !important;
 }
 
-::ng-deep .fc-event {
-  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 8px !important;
-  font-size: 15px !important;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12) !important;
-  padding: 4px 8px !important;
-}
-
-::ng-deep .fc-timegrid-slot-label {
-  color: #1976d2 !important;
-  font-weight: 500 !important;
-}
-
-::ng-deep .fc-timegrid-col {
-  background: #f5f8fa !important;
-}
-
-::ng-deep .fc-timegrid-event {
-  border-radius: 8px !important;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
-}
-
-// Traducción de "All-day" a "Todo el día"
-::ng-deep .fc-timegrid-axis-frame .fc-timegrid-all-day-events .fc-timegrid-axis {
-  &::after {
-    content: 'Todo el día' !important;
-    color: #1976d2 !important;
-    font-weight: 600 !important;
-    font-size: 15px !important;
-    display: block;
-    margin-top: 4px;
-  }
-}
-.calendar-controls {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  margin-bottom: 32px;
-}
-
-.calendar-controls button,
-.calendar-controls select {
-  padding: 10px 22px;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
-  transition:
-    background 0.2s,
-    box-shadow 0.2s;
-  cursor: pointer;
-  margin: 0 4px;
-}
-
-.calendar-controls button:hover,
-.calendar-controls select:hover {
-  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
-  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.18);
-}
-
-::ng-deep .fc-daygrid-day {
-  background: #f5f8fa !important;
-  border-radius: 8px !important;
-  border: 1px solid #e0e0e0 !important;
-  transition: box-shadow 0.2s;
-}
-
-::ng-deep .fc-daygrid-day:hover {
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
-  background: #e3f2fd !important;
-}
-
-::ng-deep .fc-daygrid-day-number {
-  color: #1976d2 !important;
-  font-weight: 600 !important;
-  font-size: 1.1rem !important;
-}
-::ng-deep .fc {
-  max-width: 950px !important;
-  margin: 0px auto !important;
-  background: #fff !important;
-  border-radius: 16px !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12) !important;
-  padding: 24px !important;
-  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif !important;
-  border: 1px solid #e0e0e0 !important;
-}
-
-::ng-deep .fc-toolbar-title {
-  font-size: 2rem !important;
-  font-weight: 600 !important;
-  color: #1976d2 !important;
-}
-
-::ng-deep .fc-daygrid-day-number {
-  color: #1976d2 !important;
-  font-weight: 500 !important;
-}
-
-::ng-deep .fc-event {
-  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 6px !important;
-  font-size: 14px !important;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08) !important;
+::ng-deep .fc-toolbar-chunk {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px;
 }
 
 ::ng-deep .fc-button {
-  background: #e0f7fa !important;
-  color: #00796b !important;
-  border: 1px solid #b2ebf2 !important;
-  border-radius: 10px !important;
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+  border: 2px solid #1976d2 !important;
+  border-radius: 20px !important;
   font-weight: 600 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  margin: 0 8px !important;
-  padding: 0.35rem 1.1rem !important;
+  font-size: 1.1rem !important;
+  padding: 0.4rem 1.2rem !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08) !important;
   transition:
     background 0.2s,
     color 0.2s;
 }
 ::ng-deep .fc-button:hover,
 ::ng-deep .fc-button:focus {
-  background: #b2ebf2 !important;
-  color: #004d40 !important;
+  background: #1976d2 !important;
+  color: #fff !important;
 }
 
-.calendar-controls {
+// Fecha destacada
+::ng-deep .fc-toolbar-title {
+  background: #e0f7fa !important;
+  color: #00796b !important;
+  border-radius: 16px !important;
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 1.5rem !important;
+  margin-top: 8px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  text-align: center !important;
+  letter-spacing: 1px;
+}
+// Mejorar diseño en la página de cita usando ::ng-deep para estilos globales
+::ng-deep .row.g-0.align-items-stretch {
+  min-height: 600px;
+}
+
+::ng-deep .col-lg-6 {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 24px;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  min-height: 100%;
 }
 
-.calendar-controls button,
-.calendar-controls select {
-  padding: 8px 18px;
-  border-radius: 6px;
-  border: none;
-  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
-  transition:
-    background 0.2s,
-    box-shadow 0.2s;
-  cursor: pointer;
+::ng-deep app-calendar {
+  flex: 1 1 0%;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  margin: 18px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-.calendar-controls button:hover,
-.calendar-controls select:hover {
-  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
-  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.16);
+@media (max-width: 991px) {
+  ::ng-deep .row.g-0.align-items-stretch {
+    min-height: 0;
+  }
+  ::ng-deep .col-lg-6 {
+    min-height: 0;
+    margin-bottom: 18px;
+  }
+  ::ng-deep app-calendar,
+  ::ng-deep app-tarjeta-boton {
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 12px;
+  }
+}
+// Mejorar diseño en la página de cita usando ::ng-deep para estilos globales
+::ng-deep .row.g-0.align-items-stretch {
+  min-height: 600px;
+}
+
+::ng-deep .col-lg-6 {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  min-height: 100%;
+}
+
+::ng-deep app-calendar {
+  flex: 1 1 0%;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  margin: 18px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 991px) {
+  ::ng-deep .row.g-0.align-items-stretch {
+    min-height: 0;
+  }
+  ::ng-deep .col-lg-6 {
+    min-height: 0;
+    margin-bottom: 18px;
+  }
+  ::ng-deep app-calendar,
+  ::ng-deep app-tarjeta-boton {
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 12px;
+  }
+}
+// Centrar y destacar el botón 'Hoy' en el toolbar de FullCalendar
+::ng-deep .fc-header-toolbar {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+// Mostrar la fecha actual debajo del toolbar, centrada
+::ng-deep .fc-toolbar-title {
+  display: block !important;
+  text-align: center !important;
 }

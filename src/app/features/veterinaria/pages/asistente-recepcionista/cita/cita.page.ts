@@ -9,17 +9,19 @@ import { FormCitaComponent } from '../../../components/form-cita/form-cita.compo
   standalone: true,
   imports: [CommonModule, TarjetaBotonComponent, CalendarComponent, FormCitaComponent],
   templateUrl: './cita.page.html',
-  styleUrls: ['./cita.page.css'],
+  styleUrls: ['./cita.page.scss'],
 })
 export class CitaPage implements OnInit {
   calendarOptions = {
     initialView: 'timeGridDay',
     headerToolbar: {
-      left: 'prev,next today', // ← botones para cambiar de día
-      center: 'title',
-      right: '',
+      left: 'prev,today,next', // ← botones para cambiar de día
+      center: 'title', // título del calendario
+      right: '', // opciones de vista
     },
     selectable: true, // Permite seleccionar horarios
+    height: '500px', // Altura fija del calendario
+    weekNumbers: false,
   };
 
   mostrarFormulario = false;

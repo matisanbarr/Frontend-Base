@@ -47,43 +47,64 @@ export class CalendarComponent {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     locale: 'es',
+    timeZone: 'local',
     headerToolbar: {
       left: 'today',
       center: 'prev,title,next',
-      right: '',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
     },
+    footerToolbar: false,
     buttonText: {
       today: 'Hoy',
       month: 'Mes',
       week: 'Semana',
       day: 'Día',
       list: 'Lista',
-      prev: '◀️', // Flecha izquierda emoji
-      next: '▶️', // Flecha derecha emoji
+      prev: '◀️',
+      next: '▶️',
     },
     events: [],
     editable: true,
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
+    eventColor: '#1976d2',
+    eventBackgroundColor: '#42a5f5',
+    eventBorderColor: '#1976d2',
+    eventTextColor: '#fff',
     height: 'auto',
-    allDayText: 'Todo el día',
+    aspectRatio: 1.5,
+    allDayText: 'Día',
     slotDuration: '00:15:00',
     slotLabelInterval: '00:15:00',
     slotMinTime: '08:00:00',
     slotMaxTime: '20:00:00',
+    weekends: true,
+    weekNumbers: true,
+    nowIndicator: true,
+    showNonCurrentDates: true,
+    navLinks: true,
     titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+    dayHeaderFormat: { weekday: 'long' },
+    eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+    slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
     select: (info) => {
-      console.log('select', info);
       this.eventCreateRequest.emit({ date: info.start, allDay: info.allDay, end: info.end });
     },
     dateClick: (info) => {
-      console.log('dateClick', info);
-      // Para dateClick, no hay end, solo inicio
       this.eventCreateRequest.emit({ date: info.date, allDay: info.allDay });
     },
     eventClick: (info) => {},
     eventDrop: (info) => {},
+    eventResize: (info) => {},
+    eventMouseEnter: (info) => {},
+    eventMouseLeave: (info) => {},
+    datesSet: (info) => {},
+    viewDidMount: (info) => {},
+    dayCellDidMount: (info) => {},
+    eventDidMount: (info) => {},
+    loading: (isLoading) => {},
+    windowResize: (info) => {},
   };
 
   public mergedOptions: CalendarOptions = { ...this._defaultOptions };

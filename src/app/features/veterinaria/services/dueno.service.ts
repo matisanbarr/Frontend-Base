@@ -34,7 +34,7 @@ export class DuenoService {
   }
 
   listarTodoPaginado(paginacion: PaginacionDto) {
-    return this.http.post<Respuesta<RespuestaPaginada>>(this.apiUrl, paginacion);
+    return this.http.post<Respuesta<RespuestaPaginada>>(this.apiUrl + '/paginado', paginacion);
   }
 
   agregarOModificarMascotas(duenoId: string, mascotas: Mascota[]) {
