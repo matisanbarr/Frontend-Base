@@ -1,0 +1,47 @@
+// Estilos para el modal y el formulario
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(90deg, #f8fafc 60%, #e3e7ed 100%);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.modal-title {
+  font-weight: 600;
+  color: #3a3a3a;
+}
+
+.btn-close {
+  filter: brightness(0.7);
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-select,
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  box-shadow: none;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus,
+.form-control:focus {
+  border-color: #86b7fe;
+  outline: none;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  background: #f8fafc;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}

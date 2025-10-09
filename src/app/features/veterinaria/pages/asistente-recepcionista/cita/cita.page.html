@@ -1,3 +1,42 @@
-<p>
-  cita works!
-</p>
+<div class="container">
+  <!-- Menu principal -->
+  <div class="row g-0 align-items-stretch justify-content-center">
+    <div
+      class="col-12 col-lg-6 d-flex align-items-start justify-content-center"
+      style="min-height: 350px"
+    >
+      <app-calendar
+        class="p-5"
+        [calendarOptions]="calendarOptions"
+        (eventCreateRequest)="abrirFormulario($event)"
+      ></app-calendar>
+    </div>
+    <div
+      class="col-12 col-md-6 col-lg-6 d-flex flex-column align-items-center justify-content-center"
+      style="min-height: 350px"
+    >
+      <div class="w-100 d-flex align-items-center justify-content-center">
+        <app-tarjeta-boton
+          [titulo]="'Gestión de Citas'"
+          [icono]="'🗓️'"
+          [descripcion]="'Consulta, ingreso, modificación y cancelación de citas.'"
+          [colorFondo]="'#E0F7FA'"
+          [colorBoton]="'#00796B'"
+        ></app-tarjeta-boton>
+      </div>
+    </div>
+  </div>
+
+  <app-form-cita
+    *ngIf="mostrarFormulario"
+    [fecha]="datosSeleccionados?.fecha || null"
+    [horaInicio]="datosSeleccionados?.horaInicio || null"
+    [horaFin]="datosSeleccionados?.horaFin || null"
+    (citaCreada)="guardarCita($event)"
+    (close)="cerrarModal()"
+  ></app-form-cita>
+
+  <!-- Dueños-->
+
+  <!-- Mascotas-->
+</div>

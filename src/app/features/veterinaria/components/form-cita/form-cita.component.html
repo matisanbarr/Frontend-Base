@@ -1,0 +1,116 @@
+<!-- Modal -->
+<div class="modal show d-block" tabindex="-1" role="dialog" aria-modal="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar cita</h5>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="close.emit()"></button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="modal-body">
+          <div class="row mb-3">
+            <!-- Backdrop -->
+            <div class="modal-backdrop fade show"></div>
+
+            <!-- Modal -->
+            <div class="modal show d-block" tabindex="-1" role="dialog" aria-modal="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Agregar cita</h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Cerrar"
+                      (click)="close.emit()"
+                    ></button>
+                  </div>
+                  <form [formGroup]="form" (ngSubmit)="submit()">
+                    <div class="modal-body">
+                      <div class="row mb-3">
+                        <div class="col">
+                          <label class="form-label">Fecha</label>
+                          <div>
+                            {{
+                              form.get('fecha')?.value
+                                ? (form.get('fecha')?.value | date: 'dd-MM-yyyy')
+                                : ''
+                            }}
+                          </div>
+                        </div>
+                        <div class="col">
+                          <label class="form-label">Hora inicio</label>
+                          <div>{{ form.get('horaInicio')?.value }}</div>
+                        </div>
+                        <div class="col">
+                          <label class="form-label">Hora fin</label>
+                          <div>{{ form.get('horaFin')?.value }}</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select id="tipo" formControlName="tipo" required class="form-select">
+                          <option value="" disabled selected>Seleccione tipo de cita</option>
+                          <option value="Consulta">Consulta</option>
+                          <option value="Control">Control</option>
+                          <option value="Cirugia">Cirugía</option>
+                          <option value="Tratamiento">Tratamiento</option>
+                          <option value="Exámen">Exámen</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input
+                          id="estado"
+                          type="text"
+                          formControlName="estado"
+                          required
+                          class="form-control"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="notas">Notas</label>
+                        <textarea
+                          id="notas"
+                          formControlName="notas"
+                          class="form-control"
+                        ></textarea>
+                      </div>
+                      <div class="form-row d-flex gap-3">
+                        <div class="form-group">
+                          <label for="mascotaId">ID Mascota</label>
+                          <input
+                            id="mascotaId"
+                            type="text"
+                            formControlName="mascotaId"
+                            required
+                            class="form-control"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="veterinarioId">ID Veterinario</label>
+                          <input
+                            id="veterinarioId"
+                            type="text"
+                            formControlName="veterinarioId"
+                            required
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+                        Guardar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

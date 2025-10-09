@@ -1,6 +1,10 @@
+import { Time } from '@angular/common';
+
 export interface Cita {
   id?: string;
-  fechaHora: string | Date;
+  fecha: string | Date;
+  horaInicio: string | Time;
+  horaFin: string | Time;
   tipo: string;
   estado: string;
   notas: string;

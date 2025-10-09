@@ -1,17 +1,13 @@
-// Hermosura y profesionalismo extra
+// Tarjeta cuadrada con tamaño fijo y diseño responsivo
 .tarjeta-boton {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  width: 320px;
+  height: 320px;
   min-width: 0;
-
-  /* Centrado interno */
-  > * {
-    flex-shrink: 0;
-  }
+  min-height: 0;
   background: linear-gradient(135deg, #f9fafc 80%, #e3f6fc 100%);
   border-radius: 28px;
   box-shadow:
@@ -28,15 +24,28 @@
   border-bottom: 6px double #5db7b7;
   position: relative;
   overflow: hidden;
-  width: 100%;
-  min-width: 0;
   margin: auto;
   aspect-ratio: 1 / 1;
-  height: 100%;
+
+  /* Centrado interno */
+  > * {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 400px) {
+    width: 98vw;
+    height: 98vw;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 18px;
+    padding: 1.2rem 0.5rem;
+  }
 
   @media (max-width: 768px) {
-    aspect-ratio: unset;
-    height: auto;
+    width: 90vw;
+    height: 90vw;
+    min-width: 0;
+    min-height: 0;
     border-radius: 18px;
     padding: 1.5rem 0.7rem;
   }
@@ -73,8 +82,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 240px;
-    height: 240px;
+    width: 180px;
+    height: 180px;
     position: relative;
     border: 2px dashed #b2d8d8;
     /* Huellitas decorativas */
@@ -90,13 +99,19 @@
       background-size: contain;
       opacity: 0.3;
     }
+    @media (max-width: 768px) {
+      width: 120px;
+      height: 120px;
+    }
   }
 
   .icono {
     font-size: 4.2rem;
-    font-size: 10rem;
     text-align: center;
     line-height: 1;
+    @media (max-width: 768px) {
+      font-size: 3rem;
+    }
   }
 
   .titulo {
@@ -106,6 +121,9 @@
     text-align: center;
     color: #3a4d39;
     letter-spacing: 0.5px;
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+    }
   }
 
   .descripcion {
@@ -114,5 +132,8 @@
     margin-bottom: 0.5rem;
     text-align: center;
     line-height: 1.5;
+    @media (max-width: 768px) {
+      font-size: 0.95rem;
+    }
   }
 }

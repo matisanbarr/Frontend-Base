@@ -1,0 +1,229 @@
+// Altura fija y scroll para la vista diaria
+::ng-deep .fc-timegrid {
+  max-height: 400px !important;
+  overflow-y: auto !important;
+}
+// Estilos para la vista diaria (timeGridDay)
+::ng-deep .fc-timegrid {
+  background: #f5f8fa !important;
+  border-radius: 16px !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1) !important;
+  padding: 12px !important;
+}
+
+::ng-deep .fc-timegrid-slot {
+  background: #fff !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+::ng-deep .fc-timegrid-slot-label {
+  color: #1976d2 !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+}
+
+::ng-deep .fc-timegrid-col {
+  background: #f5f8fa !important;
+}
+
+::ng-deep .fc-timegrid-event {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
+  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  padding: 4px 8px !important;
+}
+
+::ng-deep .fc-timegrid-now-indicator {
+  background: #1976d2 !important;
+}
+
+// Mensaje si no hay eventos
+::ng-deep .fc-timegrid .fc-timegrid-bg-container:empty::after {
+  content: 'Sin citas para hoy';
+  display: block;
+  text-align: center;
+  color: #90caf9;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 40px;
+}
+// Mejoras visuales adicionales
+::ng-deep .fc-daygrid-day {
+  background: #f5f8fa !important;
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s;
+  min-height: 90px !important;
+}
+
+::ng-deep .fc-daygrid-day:hover {
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.12) !important;
+  background: #e3f2fd !important;
+}
+
+::ng-deep .fc-daygrid-day-number {
+  color: #1976d2 !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem !important;
+  margin-bottom: 4px !important;
+}
+
+::ng-deep .fc-event {
+  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12) !important;
+  padding: 4px 8px !important;
+}
+
+::ng-deep .fc-timegrid-slot-label {
+  color: #1976d2 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .fc-timegrid-col {
+  background: #f5f8fa !important;
+}
+
+::ng-deep .fc-timegrid-event {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
+}
+
+// Traducción de "All-day" a "Todo el día"
+::ng-deep .fc-timegrid-axis-frame .fc-timegrid-all-day-events .fc-timegrid-axis {
+  &::after {
+    content: 'Todo el día' !important;
+    color: #1976d2 !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    display: block;
+    margin-top: 4px;
+  }
+}
+.calendar-controls {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.calendar-controls button,
+.calendar-controls select {
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+  cursor: pointer;
+  margin: 0 4px;
+}
+
+.calendar-controls button:hover,
+.calendar-controls select:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.18);
+}
+
+::ng-deep .fc-daygrid-day {
+  background: #f5f8fa !important;
+  border-radius: 8px !important;
+  border: 1px solid #e0e0e0 !important;
+  transition: box-shadow 0.2s;
+}
+
+::ng-deep .fc-daygrid-day:hover {
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1) !important;
+  background: #e3f2fd !important;
+}
+
+::ng-deep .fc-daygrid-day-number {
+  color: #1976d2 !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+}
+::ng-deep .fc {
+  max-width: 950px !important;
+  margin: 0px auto !important;
+  background: #fff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12) !important;
+  padding: 24px !important;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+::ng-deep .fc-toolbar-title {
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+  color: #1976d2 !important;
+}
+
+::ng-deep .fc-daygrid-day-number {
+  color: #1976d2 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .fc-event {
+  background: linear-gradient(90deg, #42a5f5 0%, #1976d2 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08) !important;
+}
+
+::ng-deep .fc-button {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08) !important;
+}
+
+::ng-deep .fc-button:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%) !important;
+}
+
+.calendar-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.calendar-controls button,
+.calendar-controls select {
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.calendar-controls button:hover,
+.calendar-controls select:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.16);
+}
