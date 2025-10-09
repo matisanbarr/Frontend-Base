@@ -1,0 +1,22 @@
+<div class="veterinario-selector d-flex flex-column align-items-center">
+  <div class="mascota-selector-header d-flex align-items-center">
+    <span class="fs-5">🩺</span>
+    <span class="fw-bold">Asignar médico</span>
+  </div>
+  <div class="w-100 px-3 py-2">
+    <label>Buscar veterinario</label>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Buscar veterinario..."
+      (input)="onSearch($event)"
+    />
+  </div>
+  <div class="w-100 px-3 py-2">
+    <label>Seleccionar veterinario</label>
+    <select class="form-select" (change)="onSelect($event)">
+      <option value="" disabled selected>Seleccione un veterinario</option>
+      <option *ngFor="let v of filteredVeterinarios" [value]="v.id">{{ v.nombre }}</option>
+    </select>
+  </div>
+</div>

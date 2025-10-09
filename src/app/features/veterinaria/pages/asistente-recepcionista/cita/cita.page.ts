@@ -15,7 +15,7 @@ export class CitaPage implements OnInit {
   calendarOptions = {
     initialView: 'timeGridDay',
     headerToolbar: {
-      left: '',
+      left: 'prev,next today', // ← botones para cambiar de día
       center: 'title',
       right: '',
     },

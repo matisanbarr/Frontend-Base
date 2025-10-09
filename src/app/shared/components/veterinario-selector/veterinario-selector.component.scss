@@ -1,0 +1,92 @@
+// Estilos para el contenedor principal
+.veterinario-selector {
+  background: #e0f7fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(100, 221, 223, 0.12);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ffd6e0;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  color: #4f8cff;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1px solid #ffd6e0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(255, 182, 193, 0.08);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #4f8cff;
+  .form-select {
+    border-radius: 8px;
+  }
+  .form-control {
+    border-radius: 8px;
+  }
+  // Tarjeta pastel y disposición didáctica
+  .veterinario-selector {
+    background: linear-gradient(120deg, #f8fafc 70%, #e0f7fa 100%);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(100, 221, 223, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  label {
+    font-weight: 600;
+
+    .veterinario-selector {
+      background: linear-gradient(120deg, #f8fafc 70%, #e0f7fa 100%);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(100, 221, 223, 0.12);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #b6d4fe;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: #4f8cff;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 10px;
+      border: 1px solid #b6d4fe;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(100, 221, 223, 0.08);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #4f8cff;
+      box-shadow: 0 0 0 2px #e0f7fa;
+    }
+    box-shadow: 0 1px 4px rgba(100, 221, 223, 0.08);
+  }
+
+  .veterinario-selector .form-control:focus,
+  .veterinario-selector .form-select:focus {
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 2px #b2ebf2;
+    outline: none;
+  }
+  box-shadow: 0 0 0 2px #b6d4fe;
+  outline: none;
+}
+.form-select {
+  border-radius: 8px;
+}
+.form-control {
+  border-radius: 8px;
+}

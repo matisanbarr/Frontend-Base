@@ -14,6 +14,32 @@ import { CalendarOptions } from '@fullcalendar/core';
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
+  private calendarApi: any;
+  private currentDate: Date = new Date();
+
+  navigate(delta: number) {
+    if (this.calendarApi) {
+      this.calendarApi.incrementDate({ days: delta });
+      this.currentDate = this.calendarApi.getDate();
+    }
+  }
+
+  goToday() {
+    if (this.calendarApi) {
+      this.calendarApi.today();
+      this.currentDate = this.calendarApi.getDate();
+    }
+  }
+
+  getCurrentDay(): string {
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    return this.currentDate.toLocaleDateString('es-CL', options);
+  }
+
+  onCalendarInit(calendar: any) {
+    this.calendarApi = calendar.getApi();
+    this.currentDate = this.calendarApi.getDate();
+  }
   @Output() daySelected = new EventEmitter<{ start: Date; end: Date }>();
   @Output() eventCreateRequest = new EventEmitter<{ date: Date; allDay: boolean; end?: Date }>();
 
@@ -22,9 +48,9 @@ export class CalendarComponent {
     initialView: 'dayGridMonth',
     locale: 'es',
     headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      left: 'today',
+      center: 'prev,title,next',
+      right: '',
     },
     buttonText: {
       today: 'Hoy',
@@ -32,8 +58,8 @@ export class CalendarComponent {
       week: 'Semana',
       day: 'Día',
       list: 'Lista',
-      prev: 'Anterior',
-      next: 'Siguiente',
+      prev: '◀️', // Flecha izquierda emoji
+      next: '▶️', // Flecha derecha emoji
     },
     events: [],
     editable: true,
@@ -46,7 +72,7 @@ export class CalendarComponent {
     slotLabelInterval: '00:15:00',
     slotMinTime: '08:00:00',
     slotMaxTime: '20:00:00',
-    titleFormat: { year: 'numeric', month: 'long' },
+    titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
     select: (info) => {
       console.log('select', info);
       this.eventCreateRequest.emit({ date: info.start, allDay: info.allDay, end: info.end });

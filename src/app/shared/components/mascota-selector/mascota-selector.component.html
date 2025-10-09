@@ -1,0 +1,33 @@
+<div class="mascota-selector d-flex flex-column align-items-center">
+  <div class="mascota-selector-header d-flex align-items-center">
+    <span class="fs-5" style="line-height: 1">🐶</span>
+    <span class="fw-bold">Asignar mascota</span>
+  </div>
+  <div class="w-100 px-3 py-2">
+    <div class="row align-items-end">
+      <div class="col">
+        <label>Buscar dueño</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar dueño..."
+          (input)="onSearchDueno($event)"
+        />
+      </div>
+      <div class="col" *ngIf="filteredDuenos?.length">
+        <label>Seleccionar dueño</label>
+        <select class="form-select" (change)="onSelectDueno($event)">
+          <option value="" disabled selected>Seleccione un dueño</option>
+          <option *ngFor="let d of filteredDuenos" [value]="d.id">{{ d.nombre }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="w-100 px-3 py-2">
+    <label>Seleccionar mascota</label>
+    <select class="form-select" (change)="onSelectMascota($event)">
+      <option value="" disabled selected>Seleccione una mascota</option>
+      <option *ngFor="let m of filteredMascotas" [value]="m.id">{{ m.nombre }}</option>
+    </select>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+// Estilos para el contenedor principal
+.mascota-selector {
+  background: #e0f7fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(255, 182, 193, 0.12);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ffd6e0;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  color: #4f8cff;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ffd6e0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(255, 182, 193, 0.08);
+}
+
+.form-control:focus {
+  border-color: #ebf7f7;
+  box-shadow: 0 0 0 2px #ffe5ec;
+}
+
+.mascota-selector-header {
+  display: flex;
+  align-items: center;
+}
+
+.mascota-selector-header i {
+  font-size: 1.5rem;
+  color: #a3bffa;
+}
+
+.mascota-selector label {
+  font-weight: 600;
+  color: #6c63ff;
+}
+
+.mascota-selector .form-control,
+.mascota-selector .form-select {
+  border-radius: 10px;
+  border: 1px solid #d1d9ff;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(163, 191, 250, 0.08);
+}
+
+.mascota-selector .form-control:focus,
+.mascota-selector .form-select:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 2px #d1d9ff;
+  outline: none;
+}

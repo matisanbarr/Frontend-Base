@@ -1,6 +1,26 @@
+// Personalización del header de FullCalendar para diseño vertical
+::ng-deep .fc-header-toolbar {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  background: #e0f7fa !important;
+  padding: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+// Botones de navegación sin fondo, sin borde, sin sombra, ni contenedor, y con iconos grandes
+::ng-deep .fc-button {
+  font-size: 2rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  line-height: 1 !important;
+}
+
 // Altura fija y scroll para la vista diaria
 ::ng-deep .fc-timegrid {
-  max-height: 400px !important;
+  max-height: 350px !important;
   overflow-y: auto !important;
 }
 // Estilos para la vista diaria (timeGridDay)
@@ -187,16 +207,22 @@
 }
 
 ::ng-deep .fc-button {
-  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 6px !important;
-  font-weight: 500 !important;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08) !important;
+  background: #e0f7fa !important;
+  color: #00796b !important;
+  border: 1px solid #b2ebf2 !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  margin: 0 8px !important;
+  padding: 0.35rem 1.1rem !important;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
-
-::ng-deep .fc-button:hover {
-  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%) !important;
+::ng-deep .fc-button:hover,
+::ng-deep .fc-button:focus {
+  background: #b2ebf2 !important;
+  color: #004d40 !important;
 }
 
 .calendar-controls {

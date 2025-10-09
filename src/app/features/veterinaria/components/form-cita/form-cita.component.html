@@ -1,115 +1,87 @@
-<!-- Modal -->
+<div class="modal-backdrop-custom"></div>
+<!-- Modal de cita veterinaria -->
 <div class="modal show d-block" tabindex="-1" role="dialog" aria-modal="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content p-3">
       <div class="modal-header">
-        <h5 class="modal-title">Agregar cita</h5>
+        <h5 class="modal-title">Nueva cita</h5>
         <button type="button" class="btn-close" aria-label="Cerrar" (click)="close.emit()"></button>
       </div>
       <form [formGroup]="form" (ngSubmit)="submit()">
-        <div class="modal-body">
-          <div class="row mb-3">
-            <!-- Backdrop -->
-            <div class="modal-backdrop fade show"></div>
-
-            <!-- Modal -->
-            <div class="modal show d-block" tabindex="-1" role="dialog" aria-modal="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Agregar cita</h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      aria-label="Cerrar"
-                      (click)="close.emit()"
-                    ></button>
-                  </div>
-                  <form [formGroup]="form" (ngSubmit)="submit()">
-                    <div class="modal-body">
-                      <div class="row mb-3">
-                        <div class="col">
-                          <label class="form-label">Fecha</label>
-                          <div>
-                            {{
-                              form.get('fecha')?.value
-                                ? (form.get('fecha')?.value | date: 'dd-MM-yyyy')
-                                : ''
-                            }}
-                          </div>
-                        </div>
-                        <div class="col">
-                          <label class="form-label">Hora inicio</label>
-                          <div>{{ form.get('horaInicio')?.value }}</div>
-                        </div>
-                        <div class="col">
-                          <label class="form-label">Hora fin</label>
-                          <div>{{ form.get('horaFin')?.value }}</div>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="tipo">Tipo</label>
-                        <select id="tipo" formControlName="tipo" required class="form-select">
-                          <option value="" disabled selected>Seleccione tipo de cita</option>
-                          <option value="1">Consulta</option>
-                          <option value="2">Control</option>
-                          <option value="3">Cirugía</option>
-                          <option value="4">Tratamiento</option>
-                          <option value="5">Exámen</option>
-                        </select>
-                      </div>
-                      <div class="form-group mb-3">
-                        <label for="estado">Estado</label>
-                        <select id="estado" formControlName="estado" required class="form-select">
-                          <option value="" disabled selected>Seleccione un estado</option>
-                          <option value="1">Pendiente</option>
-                          <option value="2">Confirmada</option>
-                          <option value="3">Cancelada</option>
-                          <option value="4">Completada</option>
-                          <option value="5">Reprogramada</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="notas">Notas</label>
-                        <textarea
-                          id="notas"
-                          formControlName="notas"
-                          class="form-control"
-                        ></textarea>
-                      </div>
-                      <div class="form-row d-flex gap-3">
-                        <div class="form-group">
-                          <label for="mascotaId">ID Mascota</label>
-                          <input
-                            id="mascotaId"
-                            type="text"
-                            formControlName="mascotaId"
-                            required
-                            class="form-control"
-                          />
-                        </div>
-                        <div class="form-group">
-                          <label for="veterinarioId">ID Veterinario</label>
-                          <input
-                            id="veterinarioId"
-                            type="text"
-                            formControlName="veterinarioId"
-                            required
-                            class="form-control"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-                        Guardar
-                      </button>
-                    </div>
-                  </form>
+        <div class="modal-body pastel-bg">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <div
+                  class="col pastel-card d-flex flex-column align-items-center py-2 mx-1 shadow-sm"
+                >
+                  <span class="fs-4" title="Fecha">📅</span>
+                  <span class="fw-semibold text-secondary">Fecha</span>
+                  <span class="mt-1 text-dark text-center">{{
+                    form.get('fecha')?.value | date: 'longDate'
+                  }}</span>
                 </div>
+                <div
+                  class="col pastel-card d-flex flex-column align-items-center py-2 mx-1 shadow-sm"
+                >
+                  <span class="fs-4" title="Hora inicio">⏰</span>
+                  <span class="fw-semibold text-secondary">Inicio</span>
+                  <span class="mt-1 text-dark">{{ form.get('horaInicio')?.value }}</span>
+                </div>
+                <div
+                  class="col pastel-card d-flex flex-column align-items-center py-2 mx-1 shadow-sm"
+                >
+                  <span class="fs-4" title="Hora fin">🕓</span>
+                  <span class="fw-semibold text-secondary">Fin</span>
+                  <span class="mt-1 text-dark">{{ form.get('horaFin')?.value }}</span>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col form-group">
+                  <label for="tipo">Tipo</label>
+                  <select id="tipo" formControlName="tipo" required class="form-select">
+                    <option value="" disabled selected>Seleccione tipo de cita</option>
+                    <option *ngFor="let tipo of tipoCitaOptions" [value]="tipo.value">
+                      {{ tipo.label }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col form-group">
+                  <label for="estado">Estado</label>
+                  <select id="estado" formControlName="estado" required class="form-select">
+                    <option value="" disabled selected>Seleccione un estado</option>
+                    <option *ngFor="let estado of estadoCitaOptions" [value]="estado.value">
+                      {{ estado.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group mb-3">
+                <label for="notas">Notas</label>
+                <textarea id="notas" formControlName="notas" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6 d-flex flex-column gap-4 justify-content-between h-100">
+              <div class="form-group">
+                <app-mascota-selector
+                  [duenos]="duenos"
+                  [mascotas]="mascotas"
+                  (mascotaSeleccionada)="form.get('mascotaId')?.setValue($event.id)"
+                  class="mascota-selector pastel-card"
+                ></app-mascota-selector>
+              </div>
+              <div class="form-group">
+                <app-veterinario-selector
+                  [veterinarios]="veterinarios"
+                  (veterinarioSeleccionado)="form.get('veterinarioId')?.setValue($event.id)"
+                  class="veterinario-selector pastel-card"
+                ></app-veterinario-selector>
               </div>
             </div>
           </div>
+        </div>
+        <div class="modal-footer p-1 m-0">
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Guardar</button>
         </div>
       </form>
     </div>
