@@ -51,22 +51,23 @@
                         <label for="tipo">Tipo</label>
                         <select id="tipo" formControlName="tipo" required class="form-select">
                           <option value="" disabled selected>Seleccione tipo de cita</option>
-                          <option value="Consulta">Consulta</option>
-                          <option value="Control">Control</option>
-                          <option value="Cirugia">Cirugía</option>
-                          <option value="Tratamiento">Tratamiento</option>
-                          <option value="Exámen">Exámen</option>
+                          <option value="1">Consulta</option>
+                          <option value="2">Control</option>
+                          <option value="3">Cirugía</option>
+                          <option value="4">Tratamiento</option>
+                          <option value="5">Exámen</option>
                         </select>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group mb-3">
                         <label for="estado">Estado</label>
-                        <input
-                          id="estado"
-                          type="text"
-                          formControlName="estado"
-                          required
-                          class="form-control"
-                        />
+                        <select id="estado" formControlName="estado" required class="form-select">
+                          <option value="" disabled selected>Seleccione un estado</option>
+                          <option value="1">Pendiente</option>
+                          <option value="2">Confirmada</option>
+                          <option value="3">Cancelada</option>
+                          <option value="4">Completada</option>
+                          <option value="5">Reprogramada</option>
+                        </select>
                       </div>
                       <div class="form-group">
                         <label for="notas">Notas</label>
