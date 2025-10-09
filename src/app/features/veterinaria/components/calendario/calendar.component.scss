@@ -211,3 +211,61 @@
   display: block !important;
   text-align: center !important;
 }
+
+// Fondo general del calendario
+.fc {
+  background: #f6fff6;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #d0f5d0;
+}
+
+// Cabecera y botones
+.fc-toolbar {
+  background: #e8f5e9;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.fc-button {
+  background: #81c784 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px #d0f5d0;
+}
+.fc-button:hover,
+.fc-button:focus {
+  background: #388e3c !important;
+  color: #fff !important;
+}
+
+// Días y celdas
+.fc-daygrid-day {
+  background: #e8f5e9;
+  border-radius: 8px;
+}
+.fc-daygrid-day.fc-day-today {
+  background: #b2e2b2 !important;
+  border: 2px solid #388e3c !important;
+}
+
+// Eventos
+.fc-event {
+  background: #a3bcf7 !important;
+  color: #388e3c !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px #e0e7ef;
+}
+.fc-event:hover {
+  background: #81c784 !important;
+  color: #fff !important;
+}
+
+// Texto de días y cabecera
+.fc-col-header-cell {
+  color: #388e3c;
+  font-weight: bold;
+}
+.fc-daygrid-day-number {
+  color: #388e3c;
+}

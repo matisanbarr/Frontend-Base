@@ -1,0 +1,257 @@
+// Scroll horizontal para la tabla en mobile/tablet
+.vet-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.vet-table {
+  min-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .vet-table {
+    min-width: 400px;
+    font-size: 0.95rem;
+  }
+}
+// Flex y responsive para el grupo de búsqueda
+.vet-search-flex {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.vet-search-flex .form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  border-radius: 12px;
+  border: 1px solid #b2e2b2;
+  background: #e8f5e9;
+  color: #388e3c;
+  font-size: 1rem;
+}
+.vet-search-flex .vet-search-btn {
+  border-radius: 12px;
+  font-size: 1rem;
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  .vet-search-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .vet-search-flex .vet-search-btn {
+    width: 100%;
+    min-width: unset;
+  }
+}
+// Estilos para el input de búsqueda y botón
+.vet-search-group {
+  .form-control {
+    border-radius: 12px 0 0 12px;
+    border: 1px solid #b2e2b2;
+    background: #e8f5e9;
+    color: #388e3c;
+    font-size: 1rem;
+    min-width: 0;
+  }
+  .vet-search-btn {
+    border-radius: 0 12px 12px 0;
+    font-size: 1rem;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .vet-search-group {
+    flex-direction: column;
+    gap: 0.5rem;
+    .form-control {
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+    .vet-search-btn {
+      border-radius: 12px;
+      width: 100%;
+      min-width: unset;
+    }
+  }
+}
+// Responsive para gestor de dueños
+.container {
+  max-width: 900px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  h2 {
+    font-size: 1.3rem;
+    flex-wrap: wrap;
+  }
+  .d-flex {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem;
+  }
+  .input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .vet-table {
+    font-size: 0.95rem;
+    overflow-x: auto;
+    display: block;
+  }
+  .vet-table th,
+  .vet-table td {
+    white-space: nowrap;
+    padding: 0.5rem;
+  }
+  .btn-vet,
+  .btn-vet-danger,
+  .btn-outline-vet {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1rem;
+  }
+  .container {
+    padding: 0.5rem;
+  }
+  .vet-table th,
+  .vet-table td {
+    font-size: 0.9rem;
+    padding: 0.3rem;
+  }
+}
+// Hover para el botón volver estilo veterinario
+.btn-outline-vet {
+  background: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #b2e2b2;
+  border-radius: 12px;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.btn-outline-vet:hover {
+  background: #388e3c;
+  color: #fff;
+  border: 1px solid #388e3c;
+}
+// Estilos veterinarios y colores cálidos
+.btn-vet {
+  background: #81c784;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #d0f5d0;
+  transition: background 0.2s;
+}
+.btn-vet:hover {
+  background: #388e3c;
+  color: #fff;
+}
+.btn-vet-danger {
+  background: #f7a3a3;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #f5d0d0;
+  transition: background 0.2s;
+}
+.btn-vet-danger:hover {
+  background: #ff6363;
+  color: #fff;
+}
+.vet-table {
+  background: #f6fff6;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #d0f5d0;
+  overflow: hidden;
+}
+.vet-input {
+  background: #e8f5e9;
+  border: 1px solid #b2e2b2;
+  color: #388e3c;
+}
+.vet-pagination .page-link {
+  background: #e8f5e9;
+  color: #388e3c;
+  border-radius: 8px;
+  margin: 0 2px;
+  border: none;
+}
+.vet-pagination .page-item.active .page-link {
+  background: #81c784;
+  color: #fff;
+}
+.vet-page-link:hover {
+  background: #388e3c;
+  color: #fff;
+}
+.vet-bg-icon {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  z-index: 0;
+}
+// Colores pasteles y estilos intuitivos
+.btn-pastel {
+  background: #a3bcf7;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #e0e7ef;
+  transition: background 0.2s;
+}
+.btn-pastel:hover {
+  background: #6c63ff;
+  color: #fff;
+}
+.btn-pastel-danger {
+  background: #f7a3a3;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #e0e7ef;
+  transition: background 0.2s;
+}
+.btn-pastel-danger:hover {
+  background: #ff6363;
+  color: #fff;
+}
+.pastel-table {
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #e0e7ef;
+  overflow: hidden;
+}
+.pastel-input {
+  background: #e0e7ef;
+  border: 1px solid #c3c7e6;
+  color: #6c63ff;
+}
+.pastel-pagination .page-link {
+  background: #e0e7ef;
+  color: #6c63ff;
+  border-radius: 8px;
+  margin: 0 2px;
+  border: none;
+}
+.pastel-pagination .page-item.active .page-link {
+  background: #a3bcf7;
+  color: #fff;
+}
+.pastel-page-link:hover {
+  background: #6c63ff;
+  color: #fff;
+}

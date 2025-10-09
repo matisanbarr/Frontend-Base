@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlertService } from '../../../../../../core/services/alert.service';
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
-  selector: 'app-alert-global-local',
+  selector: 'app-alert-global',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -19,6 +19,6 @@ import { AlertService } from '../../../../../../core/services/alert.service';
     </div>
   `,
 })
-export class AlertGlobalLocalComponent {
+export class AlertGlobalComponent {
   constructor(public alertService: AlertService) {}
 }

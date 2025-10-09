@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container paciente-responsive">
   @switch (vistaActual) { @case (0) {
   <!-- Menu principal -->
   <ng-container *ngTemplateOutlet="menuPrincipal"></ng-container>
   } @case (1) {
   <!-- Gestión de Dueños -->
-  <app-gestor-dueno></app-gestor-dueno>
+  <app-gestor-dueno (volverMenu)="cambiarVista($event)"></app-gestor-dueno>
   } @case (2) {
   <!-- Gestión de Mascotas -->
   <app-gestor-mascota></app-gestor-mascota>
@@ -16,9 +16,9 @@
 
 <ng-template #menuPrincipal>
   <!-- Menu principal -->
-  <div class="row g-0 align-items-stretch justify-content-center my-5">
+  <div class="row g-0 align-items-stretch justify-content-center my-5 paciente-menu-row">
     <div
-      class="col-12 col-md-4 col-lg-4 p-3 gap-5 d-flex align-items-center justify-content-center"
+      class="col-12 col-md-10 col-lg-8 p-3 gap-4 d-flex flex-wrap align-items-center justify-content-center paciente-menu-col"
       style="min-height: 350px"
     >
       <app-tarjeta-boton

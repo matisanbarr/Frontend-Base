@@ -1,14 +1,16 @@
-<div class="container">
+<div class="container cita-responsive">
   <!-- Menu principal -->
-  <div class="row g-0 align-items-stretch">
-    <div class="col-12 col-lg-6 d-flex align-items-start justify-content-center p-5">
+  <div class="row g-0 align-items-stretch cita-row">
+    <div class="col-12 col-lg-6 d-flex align-items-start justify-content-center cita-col">
       <app-calendar
         [calendarOptions]="calendarOptions"
         (eventCreateRequest)="abrirFormulario($event)"
         style="width: 100%"
       ></app-calendar>
     </div>
-    <div class="col-12 col-lg-6 d-flex flex-column align-items-center justify-content-center">
+    <div
+      class="col-12 col-lg-6 d-flex flex-column align-items-center justify-content-center cita-col"
+    >
       <div class="w-100 d-flex align-items-center justify-content-center">
         <app-tarjeta-boton
           [titulo]="'Gestión de Citas'"

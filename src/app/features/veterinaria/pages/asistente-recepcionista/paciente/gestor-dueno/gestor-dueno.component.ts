@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AlertGlobalLocalComponent } from './alert-global-local.component';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -12,15 +11,17 @@ import { DuenoService } from '../../../../services/dueno.service';
 import { Dueno } from '../../../../models/dueno.model';
 import { PaginacionDto, RespuestaPaginada } from '../../../../../../models';
 import { AlertService } from '../../../../../../core/services/alert.service';
+import { AlertGlobalComponent } from '../../../../../../shared/components/alert-global/alert-global.component';
 
 @Component({
   selector: 'app-gestor-dueno',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AlertGlobalLocalComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AlertGlobalComponent],
   templateUrl: './gestor-dueno.component.html',
   styleUrls: ['./gestor-dueno.component.scss'],
 })
 export class GestorDuenoComponent implements OnInit {
+  @Output() volverMenu = new EventEmitter<number>();
   cargandoLista = false;
   // Variables para la lista, paginación y búsqueda
   duenos: Dueno[] = [];
@@ -195,5 +196,8 @@ export class GestorDuenoComponent implements OnInit {
         },
       });
     }
+  }
+  volver(cambiarVista: number) {
+    this.volverMenu.emit(cambiarVista);
   }
 }
