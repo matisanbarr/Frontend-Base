@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { DuenoService } from '../../../../services/dueno.service';
 import { Dueno } from '../../../../models/dueno.model';
+import { Mascota } from '../../../../models/mascota.model';
 import { PaginacionDto, RespuestaPaginada } from '../../../../../../models';
 import { AlertService } from '../../../../../../core/services/alert.service';
 import { AlertGlobalComponent } from '../../../../../../shared/components/alert-global/alert-global.component';
@@ -21,6 +22,13 @@ import { AlertGlobalComponent } from '../../../../../../shared/components/alert-
   styleUrls: ['./gestor-dueno.component.scss'],
 })
 export class GestorDuenoComponent implements OnInit {
+  // Gestión de mascotas por dueño
+  mostrarModalMascotas = false;
+  duenoMascotas: Dueno | null = null;
+  mascotasDueno: Mascota[] = [];
+  cargandoMascotas = false;
+  mostrarFormularioMascota = false;
+  mascotaActual: Mascota | null = null;
   @Output() volverMenu = new EventEmitter<number>();
   cargandoLista = false;
   // Variables para la lista, paginación y búsqueda
@@ -199,5 +207,71 @@ export class GestorDuenoComponent implements OnInit {
   }
   volver(cambiarVista: number) {
     this.volverMenu.emit(cambiarVista);
+  }
+
+  abrirModalMascotas(dueno: Dueno) {
+    this.duenoMascotas = dueno;
+    this.mostrarModalMascotas = true;
+    this.cargarMascotasDueno(dueno.id ?? '');
+    this.mostrarFormularioMascota = false;
+    this.mascotaActual = null;
+  }
+
+  cerrarModalMascotas() {
+    this.mostrarModalMascotas = false;
+    this.duenoMascotas = null;
+    this.mascotasDueno = [];
+    this.mascotaActual = null;
+    this.mostrarFormularioMascota = false;
+  }
+
+  cargarMascotasDueno(duenoId: string) {
+    this.cargandoMascotas = true;
+    this.duenoService.duenoPorId(duenoId).subscribe({
+      next: (resp) => {
+        if (resp.codigoRespuesta === 0 && resp.respuesta) {
+          this.mascotasDueno = resp.respuesta.mascotas || [];
+        } else {
+          this.mascotasDueno = [];
+        }
+        this.cargandoMascotas = false;
+      },
+      error: () => {
+        this.mascotasDueno = [];
+        this.cargandoMascotas = false;
+      },
+    });
+  }
+
+  abrirFormularioMascota(mascota?: Mascota) {
+    this.mascotaActual = mascota || null;
+    this.mostrarFormularioMascota = true;
+    // Aquí se puede inicializar el formulario reactivo para mascota
+  }
+
+  editarMascota(mascota: Mascota) {
+    this.abrirFormularioMascota(mascota);
+  }
+
+  eliminarMascota(mascota: Mascota) {
+    if (!this.duenoMascotas?.id || !mascota.id) return;
+    this.cargandoMascotas = true;
+    this.duenoService.eliminarMascotas(this.duenoMascotas.id ?? '', [mascota.id]).subscribe({
+      next: (resp) => {
+        if (resp.codigoRespuesta === 0 && resp.respuesta) {
+          this.alertService.success('Mascota eliminada correctamente');
+          if (this.duenoMascotas?.id) {
+            this.cargarMascotasDueno(this.duenoMascotas.id);
+          }
+        } else {
+          this.alertService.info(resp.glosaRespuesta || 'No se pudo eliminar la mascota');
+        }
+        this.cargandoMascotas = false;
+      },
+      error: () => {
+        this.alertService.error('Error al eliminar la mascota');
+        this.cargandoMascotas = false;
+      },
+    });
   }
 }
