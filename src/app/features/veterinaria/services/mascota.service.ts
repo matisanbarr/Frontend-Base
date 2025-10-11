@@ -35,4 +35,8 @@ export class MascotaService {
   listarTodoPaginado(paginacion: PaginacionDto) {
     return this.http.post<Respuesta<RespuestaPaginada>>(this.apiUrl, paginacion);
   }
+
+  listarMascotasPorDueno(duenoId: string) {
+    return this.http.get<Respuesta<Mascota[]>>(this.apiUrl + `/dueno/${duenoId}`);
+  }
 }

@@ -13,6 +13,7 @@ import { Mascota } from '../../../../models/mascota.model';
 import { PaginacionDto, RespuestaPaginada } from '../../../../../../models';
 import { AlertService } from '../../../../../../core/services/alert.service';
 import { AlertGlobalComponent } from '../../../../../../shared/components/alert-global/alert-global.component';
+import { MascotaService } from '../../../../services/mascota.service';
 
 @Component({
   selector: 'app-gestor-dueno',
@@ -22,6 +23,8 @@ import { AlertGlobalComponent } from '../../../../../../shared/components/alert-
   styleUrls: ['./gestor-dueno.component.scss'],
 })
 export class GestorDuenoComponent implements OnInit {
+  mascotaForm!: FormGroup;
+  cargandoMascotaForm: boolean = false;
   // Gestión de mascotas por dueño
   mostrarModalMascotas = false;
   duenoMascotas: Dueno | null = null;
@@ -49,6 +52,7 @@ export class GestorDuenoComponent implements OnInit {
   duenoAEliminar: any = null;
 
   private readonly duenoService = inject(DuenoService);
+  private readonly mascotaService = inject(MascotaService);
   public readonly alertService = inject(AlertService);
   private fb = inject(FormBuilder);
 
@@ -227,10 +231,10 @@ export class GestorDuenoComponent implements OnInit {
 
   cargarMascotasDueno(duenoId: string) {
     this.cargandoMascotas = true;
-    this.duenoService.duenoPorId(duenoId).subscribe({
+    this.mascotaService.listarMascotasPorDueno(duenoId).subscribe({
       next: (resp) => {
         if (resp.codigoRespuesta === 0 && resp.respuesta) {
-          this.mascotasDueno = resp.respuesta.mascotas || [];
+          this.mascotasDueno = resp.respuesta || [];
         } else {
           this.mascotasDueno = [];
         }
@@ -246,7 +250,16 @@ export class GestorDuenoComponent implements OnInit {
   abrirFormularioMascota(mascota?: Mascota) {
     this.mascotaActual = mascota || null;
     this.mostrarFormularioMascota = true;
-    // Aquí se puede inicializar el formulario reactivo para mascota
+    this.mascotaForm = this.fb.group({
+      nombre: [mascota?.nombre || '', [Validators.required, Validators.minLength(2)]],
+      especie: [mascota?.especie || '', [Validators.required]],
+      raza: [mascota?.raza || ''],
+      sexo: [mascota?.sexo || '', [Validators.required]],
+      fechaNacimiento: [mascota?.fechaNacimiento || '', []],
+      color: [mascota?.color || ''],
+      observaciones: [mascota?.observaciones || ''],
+      estadoActivo: [mascota?.estadoActivo ?? true, []],
+    });
   }
 
   editarMascota(mascota: Mascota) {
@@ -273,5 +286,53 @@ export class GestorDuenoComponent implements OnInit {
         this.cargandoMascotas = false;
       },
     });
+  }
+
+  guardarMascota() {
+    if (
+      !this.mascotaForm ||
+      this.mascotaForm.invalid ||
+      !this.duenoMascotas ||
+      !this.duenoMascotas.id
+    ) {
+      this.mascotaForm?.markAllAsTouched();
+      return;
+    }
+    this.cargandoMascotaForm = true;
+    const mascotaData = {
+      ...this.mascotaActual,
+      ...this.mascotaForm.value,
+    };
+    let mascotasActualizadas = [...(this.mascotasDueno ?? [])];
+    if (this.mascotaActual) {
+      mascotasActualizadas = mascotasActualizadas.map((m) =>
+        m.id === this.mascotaActual?.id ? mascotaData : m
+      );
+    } else {
+      mascotasActualizadas.push(mascotaData);
+    }
+    this.duenoService
+      .agregarOModificarMascotas(this.duenoMascotas.id, mascotasActualizadas)
+      .subscribe({
+        next: (resp) => {
+          if (resp.codigoRespuesta === 0 && resp.respuesta) {
+            this.alertService.success(
+              this.mascotaActual ? 'Mascota modificada' : 'Mascota agregada'
+            );
+            if (this.duenoMascotas && this.duenoMascotas.id) {
+              this.cargarMascotasDueno(this.duenoMascotas.id);
+            }
+            this.mostrarFormularioMascota = false;
+            this.mascotaActual = null;
+          } else {
+            this.alertService.info(resp.glosaRespuesta || 'No se pudo guardar la mascota');
+          }
+          this.cargandoMascotaForm = false;
+        },
+        error: () => {
+          this.alertService.error('Error al guardar la mascota');
+          this.cargandoMascotaForm = false;
+        },
+      });
   }
 }

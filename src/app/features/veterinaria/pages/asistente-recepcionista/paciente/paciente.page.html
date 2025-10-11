@@ -6,9 +6,6 @@
   <!-- Gestión de Dueños -->
   <app-gestor-dueno (volverMenu)="cambiarVista($event)"></app-gestor-dueno>
   } @case (2) {
-  <!-- Gestión de Mascotas -->
-  <app-gestor-mascota></app-gestor-mascota>
-  } @case (3) {
   <!-- Historial Médico -->
   <app-historial-mascota></app-historial-mascota>
   } }
@@ -22,20 +19,12 @@
       style="min-height: 350px"
     >
       <app-tarjeta-boton
-        [titulo]="'Dueños'"
-        [icono]="'🧑'"
-        [descripcion]="'Gestiona la información de los dueños.'"
+        [titulo]="'Dueños y Mascotas'"
+        [icono]="'🐾'"
+        [descripcion]="'Gestiona la información de los dueños y mascotas.'"
         [colorFondo]="'#E0F7FA'"
         [colorBoton]="'#00796B'"
         (clickTarjeta)="cambiarVista(1)"
-      ></app-tarjeta-boton>
-      <app-tarjeta-boton
-        [titulo]="'Mascotas'"
-        [icono]="'🐶'"
-        [descripcion]="'Gestiona la información de los pacientes.'"
-        [colorFondo]="'#E0F7FA'"
-        [colorBoton]="'#00796B'"
-        (clickTarjeta)="cambiarVista(2)"
       ></app-tarjeta-boton>
       <app-tarjeta-boton
         [titulo]="'Historial Médico'"

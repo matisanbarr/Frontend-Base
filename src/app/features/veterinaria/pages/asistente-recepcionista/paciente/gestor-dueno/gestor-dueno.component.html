@@ -1,9 +1,10 @@
 <app-alert-global></app-alert-global>
+<!-- Botón volver -->
 <div class="mb-3">
-  <button class="btn btn-vet" (click)="volver(0)">
-    <i class="bi bi-arrow-left"></i> Nuevo Dueño
-  </button>
+  <button class="btn btn-vet" (click)="volver(0)"><i class="bi bi-arrow-left"></i> Volver</button>
 </div>
+
+<!-- Contenedor principal -->
 <div
   class="container py-4"
   style="
@@ -16,6 +17,7 @@
   <div class="vet-bg-icon">
     <i class="bi bi-paw" style="font-size: 5rem; color: #b2e2b2; opacity: 0.15"></i>
   </div>
+  <!-- Título y botón nuevo dueño -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold d-flex align-items-center" style="color: #4caf50; letter-spacing: 1px">
       <i class="bi bi-paw me-2" style="font-size: 2rem; color: #81c784"></i>
@@ -25,6 +27,7 @@
       <i class="bi bi-person-plus"></i> Nuevo Dueño
     </button>
   </div>
+  <!-- Buscador -->
   <div class="vet-search-flex mb-4">
     <input
       type="text"
@@ -36,11 +39,13 @@
       <i class="bi bi-search"></i> Buscar
     </button>
   </div>
+  <!-- Spinner de carga -->
   <div *ngIf="cargandoLista" class="d-flex justify-content-center align-items-center my-4">
     <div class="spinner-border" style="color: #4caf50; width: 3rem; height: 3rem">
       <span class="visually-hidden">Cargando...</span>
     </div>
   </div>
+  <!-- Tabla de dueños -->
   <div class="vet-table-responsive" *ngIf="!cargandoLista">
     <table class="table table-hover vet-table">
       <thead style="background: #e8f5e9">
@@ -79,6 +84,7 @@
       </tbody>
     </table>
   </div>
+  <!-- Paginación -->
   <nav *ngIf="totalDuenos > pageSize">
     <ul class="pagination justify-content-center vet-pagination">
       <li class="page-item" [class.disabled]="paginaActual === 1">
@@ -237,11 +243,11 @@
     </div>
   </div>
 
-  <!-- Modal Gestionar Mascotas (al final del HTML) -->
+  <!-- Modal Gestionar Mascotas -->
   <div *ngIf="mostrarModalMascotas">
     <div class="modal-backdrop fade show"></div>
     <div class="modal d-block" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content vet-modal">
           <div class="modal-header" style="background: #e8f5e9">
             <h5 class="modal-title d-flex align-items-center">
@@ -297,9 +303,130 @@
     </div>
   </div>
 
-  <!-- Aquí irá el formulario de agregar/editar mascota -->
-  <div *ngIf="mostrarFormularioMascota" class="mt-3">
-    <!-- Formulario dinámico aquí -->
-    <!-- ... -->
+  <!-- Modal Agregar/Editar Mascota -->
+  <div *ngIf="mostrarFormularioMascota">
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content vet-modal">
+          <div class="modal-header" style="background: #e8f5e9">
+            <h5 class="modal-title d-flex align-items-center">
+              <i class="bi bi-paw me-2" style="color: #6c63ff"></i>
+              {{ mascotaActual ? 'Editar Mascota' : 'Agregar Mascota' }}
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="mostrarFormularioMascota = false"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="mascotaForm" (ngSubmit)="guardarMascota()">
+              <div class="mb-3">
+                <label class="form-label"><i class="bi bi-paw me-1"></i> Nombre</label>
+                <input type="text" class="form-control vet-input" formControlName="nombre" />
+                <div
+                  *ngIf="mascotaForm.get('nombre')?.invalid && mascotaForm.get('nombre')?.touched"
+                  class="text-danger small"
+                >
+                  <span *ngIf="mascotaForm.get('nombre')?.errors?.['required']"
+                    >El nombre es obligatorio.</span
+                  >
+                  <span *ngIf="mascotaForm.get('nombre')?.errors?.['minlength']"
+                    >Mínimo 2 caracteres.</span
+                  >
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label"><i class="bi bi-bug me-1"></i> Especie</label>
+                <select class="form-control vet-input" formControlName="especie">
+                  <option value="">Selecciona especie</option>
+                  <option value="Perro">Perro</option>
+                  <option value="Gato">Gato</option>
+                  <option value="Ave">Ave</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <div
+                  *ngIf="mascotaForm.get('especie')?.invalid && mascotaForm.get('especie')?.touched"
+                  class="text-danger small"
+                >
+                  <span *ngIf="mascotaForm.get('especie')?.errors?.['required']"
+                    >La especie es obligatoria.</span
+                  >
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label"><i class="bi bi-egg me-1"></i> Raza</label>
+                <select class="form-control vet-input" formControlName="raza">
+                  <option value="">Selecciona raza</option>
+                  <option value="Labrador">Labrador</option>
+                  <option value="Pastor Alemán">Pastor Alemán</option>
+                  <option value="Siames">Siames</option>
+                  <option value="Persa">Persa</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label"><i class="bi bi-gender-ambiguous me-1"></i> Sexo</label>
+                <select class="form-control vet-input" formControlName="sexo">
+                  <option value="">Selecciona sexo</option>
+                  <option value="Macho">Macho</option>
+                  <option value="Hembra">Hembra</option>
+                </select>
+                <div
+                  *ngIf="mascotaForm.get('sexo')?.invalid && mascotaForm.get('sexo')?.touched"
+                  class="text-danger small"
+                >
+                  <span *ngIf="mascotaForm.get('sexo')?.errors?.['required']"
+                    >El sexo es obligatorio.</span
+                  >
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label"
+                  ><i class="bi bi-calendar me-1"></i> Fecha de nacimiento</label
+                >
+                <input
+                  type="date"
+                  class="form-control vet-input"
+                  formControlName="fechaNacimiento"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label"><i class="bi bi-palette me-1"></i> Color</label>
+                <input type="text" class="form-control vet-input" formControlName="color" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label"
+                  ><i class="bi bi-chat-left-text me-1"></i> Observaciones</label
+                >
+                <textarea
+                  class="form-control vet-input"
+                  formControlName="observaciones"
+                  rows="2"
+                ></textarea>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-vet me-2"
+                  (click)="mostrarFormularioMascota = false"
+                >
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-vet"
+                  [disabled]="mascotaForm.invalid || cargandoMascotaForm"
+                >
+                  <i class="bi bi-check-circle"></i>
+                  {{ mascotaActual ? 'Modificar Mascota' : 'Agregar Mascota' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
