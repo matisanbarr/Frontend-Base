@@ -23,6 +23,13 @@ import { MascotaService } from '../../../../services/mascota.service';
   styleUrls: ['./gestor-dueno.component.scss'],
 })
 export class GestorDuenoComponent implements OnInit {
+  razas: { id: string; nombre: string }[] = [
+    { id: '1', nombre: 'Labrador' },
+    { id: '2', nombre: 'Pastor Alemán' },
+    { id: '3', nombre: 'Siames' },
+    { id: '4', nombre: 'Persa' },
+    { id: '5', nombre: 'Otro' },
+  ];
   mascotaForm!: FormGroup;
   cargandoMascotaForm: boolean = false;
   // Gestión de mascotas por dueño
@@ -252,13 +259,13 @@ export class GestorDuenoComponent implements OnInit {
     this.mostrarFormularioMascota = true;
     this.mascotaForm = this.fb.group({
       nombre: [mascota?.nombre || '', [Validators.required, Validators.minLength(2)]],
-      especie: [mascota?.especie || '', [Validators.required]],
-      raza: [mascota?.raza || ''],
       sexo: [mascota?.sexo || '', [Validators.required]],
       fechaNacimiento: [mascota?.fechaNacimiento || '', []],
       color: [mascota?.color || ''],
       observaciones: [mascota?.observaciones || ''],
-      estadoActivo: [mascota?.estadoActivo ?? true, []],
+      razaId: [mascota?.razaId || '', [Validators.required]],
+      historialesMedicos: [mascota?.historialesMedicos || []],
+      citas: [mascota?.citas || []],
     });
   }
 

@@ -10,8 +10,6 @@ export interface Mascota {
   fechaNacimiento?: string | Date;
   color: string;
   observaciones: string;
-  duenoId: string;
-  dueno?: Dueno;
   razaId: string;
   raza?: Raza;
   historialesMedicos: HistorialMedico[];
