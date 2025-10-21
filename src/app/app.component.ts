@@ -13,7 +13,7 @@ import { AlertGlobalComponent } from './shared/components/alert-global.component
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'Grimat Labs';
+  title = 'Vía Nexo';
   isLoggedIn: boolean = false;
   hasAdminRole: boolean = false;
   hasUserRole: boolean = false;

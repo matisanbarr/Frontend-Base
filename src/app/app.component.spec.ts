@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'Grimat Labs' title`, () => {
+  it(`should have the 'Vía Nexo' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Grimat Labs');
+    expect(app.title).toEqual('Vía Nexo');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Grimat Labs');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Vía Nexo');
   });
 });

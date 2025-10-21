@@ -16,8 +16,8 @@ export const environment = {
   production: false,
   apiUrl: 'https://localhost:7001/api', // Tu URL local específica
   apiKey: 'tu-api-key-local',
-  appName: 'Grimat Labs - Local',
-  version: '1.0.0-dev'
+  appName: 'Vía Nexo - Local',
+  version: '1.0.0-dev',
 };
 ```
 
@@ -40,7 +40,8 @@ Asegúrate de agregar la configuración local en `angular.json` si necesitas un 
 
 ## Seguridad
 
-⚠️ **IMPORTANTE**: 
+⚠️ **IMPORTANTE**:
+
 - Nunca subas API keys reales al repositorio
 - Usa variables de environment para configuración sensible
 - Los archivos `.local.ts` y `.staging.ts` están en `.gitignore`
