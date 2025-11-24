@@ -64,7 +64,6 @@ export class TenantProyectoPlanFormComponent implements OnInit, OnChanges {
   }
 
   setFormFromInput() {
-    debugger;
     if (this.initialData && this.initialData.id) {
       this.isEdit = true;
       const { id, ...rest } = this.initialData;

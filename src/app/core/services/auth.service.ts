@@ -135,7 +135,7 @@ export class AuthService {
     localStorage.setItem(this.EXPIRATION_KEY, tokenResponse.expiration);
     try {
       const decoded: any = jwtDecode(tokenResponse.accessToken);
-      // Extraer claims tal como vienen
+
       const usuarioId = decoded['nameidentifier'] || decoded['NameIdentifier'];
       const nombreUsuario = decoded['NombreUsuario'];
       const primerNombre = decoded['PrimerNombre'];
@@ -143,10 +143,55 @@ export class AuthService {
       const primerApellido = decoded['PrimerApellido'];
       const segundoApellido = decoded['SegundoApellido'];
       const email = decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
-      const isGlobal = decoded['IsGlobal'] === 'True';
+      const isGlobal = decoded['IsGlobal'] === 'True' || decoded['IsGlobal'] === true;
       const tenantId = decoded['TenantId'];
 
-      let user: any = {
+      // Obtener proyectos si vienen como JSON string
+      let proyectos;
+      if (decoded['Proyectos']) {
+        try {
+          proyectos = JSON.parse(decoded['Proyectos']);
+        } catch (e) {
+          proyectos = decoded['Proyectos'];
+        }
+      }
+
+      // Intentar leer roles desde varias posibles claim keys
+      const rolesClaim =
+        decoded['role'] ||
+        decoded['roles'] ||
+        decoded['Role'] ||
+        decoded['Roles'] ||
+        decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+      let roles: string[] = [];
+
+      if (rolesClaim) {
+        if (Array.isArray(rolesClaim)) {
+          roles = rolesClaim.map((r) => String(r));
+        } else if (typeof rolesClaim === 'string') {
+          // puede venir como JSON array string, CSV o single value
+          try {
+            const parsed = JSON.parse(rolesClaim);
+            if (Array.isArray(parsed)) roles = parsed.map((r) => String(r));
+            else roles = [String(parsed)];
+          } catch {
+            roles = rolesClaim
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean);
+          }
+        } else {
+          roles = [String(rolesClaim)];
+        }
+      }
+
+      // Fallback: si backend no envía roles pero IsGlobal=true, asignar Admin Global
+      if (roles.length === 0 && isGlobal) {
+        roles = ['Admin Global'];
+      }
+
+      const user: any = {
         usuarioId,
         nombreUsuario,
         primerNombre,
@@ -157,13 +202,16 @@ export class AuthService {
         isGlobal,
         tenantId,
       };
-      if (decoded['Proyectos']) {
-        try {
-          user.proyectos = JSON.parse(decoded['Proyectos']);
-        } catch (e) {
-          // Si falla el parseo, no agregar la propiedad
-        }
+
+      if (proyectos) user.proyectos = proyectos;
+
+      if (roles.length) {
+        user.roles = roles;
+        localStorage.setItem(this.USER_ROLES_KEY, JSON.stringify(roles));
+      } else {
+        localStorage.removeItem(this.USER_ROLES_KEY);
       }
+
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
       this.currentUserSubject.next(user);
       this.isAuthenticatedSubject.next(true);
@@ -181,6 +229,7 @@ export class AuthService {
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     localStorage.removeItem(this.EXPIRATION_KEY);
     localStorage.removeItem(this.USER_KEY);
+    localStorage.removeItem(this.USER_ROLES_KEY);
     localStorage.removeItem('sidebar-menu-state');
     localStorage.removeItem('sidebar-selection');
     localStorage.removeItem('sidebarMenusState');

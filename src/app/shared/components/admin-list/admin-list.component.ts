@@ -13,7 +13,6 @@ export class AdminListComponent<T = any> {
   @Input() emptyText = 'No hay registros.';
   @Input() loading = false;
   @Input() itemKey: string = 'id';
-  @Input() mostrarRoles: boolean = false;
 
   // Nuevos inputs opcionales para visualización rica
   @Input() nombreFn?: (item: T) => string | null;
