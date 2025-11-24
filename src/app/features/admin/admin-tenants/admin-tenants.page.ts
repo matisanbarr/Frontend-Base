@@ -8,7 +8,6 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
-import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
 import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
@@ -25,7 +24,6 @@ import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
     ReactiveFormsModule,
     FormsModule,
     ConfirmModalComponent,
-    ToastAlertsComponent,
     AdminListComponent,
     FormButtonsComponent,
     AdminFormHeaderComponent,

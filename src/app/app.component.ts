@@ -3,12 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 import { MainNavbarComponent } from './shared/components/layout/main-navbar.component';
 import { MainFooterComponent } from './shared/components/layout/main-footer.component';
-import { AlertGlobalComponent } from './shared/components/alert-global.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MainNavbarComponent, MainFooterComponent, AlertGlobalComponent],
+  imports: [RouterOutlet, MainNavbarComponent, MainFooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

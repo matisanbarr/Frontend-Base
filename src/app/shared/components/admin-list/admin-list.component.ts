@@ -1,12 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoleColorPipe } from '../../../features/admin/pipes/role-color.pipe';
 import { Rol } from '../../../models';
 
 @Component({
   selector: 'app-admin-list',
   standalone: true,
-  imports: [CommonModule, RoleColorPipe],
+  imports: [CommonModule],
   templateUrl: './admin-list.component.html',
   styleUrls: ['./admin-list.component.scss'],
 })

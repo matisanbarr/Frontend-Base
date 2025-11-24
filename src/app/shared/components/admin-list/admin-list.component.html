@@ -28,16 +28,6 @@
             <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
               Correo: {{ correoFn(item) }}
             </div>
-            <!-- Roles como pastillas de colores -->
-            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1 mb-2">
-              <ng-container *ngFor="let rol of rolesFn(item)">
-                <span
-                  class="badge me-1 mb-1 text-white adminlist-role-pill"
-                  [ngClass]="rol.nombre | roleColor: rolesDisponiblesInput || []"
-                  >{{ rol.nombre }}</span
-                >
-              </ng-container>
-            </div>
             <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
               Teléfono: {{ telefonoFn(item) }}
             </div>
@@ -129,16 +119,6 @@
             </div>
             <div *ngIf="correoFn && correoFn(item)" class="text-muted small text-truncate">
               Correo: {{ correoFn(item) }}
-            </div>
-            <!-- Roles como pastillas de colores (mobile) -->
-            <div *ngIf="rolesFn && rolesFn(item)?.length" class="mt-1 mb-2">
-              <ng-container *ngFor="let rol of rolesFn(item)">
-                <span
-                  class="badge me-1 mb-1 text-white adminlist-role-pill"
-                  [ngClass]="rol.nombre | roleColor: rolesDisponiblesInput || []"
-                  >{{ rol.nombre }}</span
-                >
-              </ng-container>
             </div>
             <div *ngIf="telefonoFn && telefonoFn(item)" class="text-muted small">
               Teléfono: {{ telefonoFn(item) }}

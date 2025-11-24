@@ -10,7 +10,6 @@ import {
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
 import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
 import { RouterModule } from '@angular/router';
-import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
 import { ProyectoService } from '../../../core/services/proyecto.service';
 import { Proyecto } from '../../../models/proyecto.model';
@@ -27,7 +26,6 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     FormsModule,
     ConfirmModalComponent,
     RouterModule,
-    ToastAlertsComponent,
     AdminListComponent,
     FormButtonsComponent,
     AdminFormHeaderComponent,

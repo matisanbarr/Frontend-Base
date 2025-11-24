@@ -8,7 +8,6 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components';
-import { ToastAlertsComponent } from '../../../shared/components/toast-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
 import { Usuario } from '../../../models/usuario.model';
 import { Tenant } from '../../../models/tenant.model';
@@ -30,7 +29,6 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     ReactiveFormsModule,
     FormsModule,
     ConfirmModalComponent,
-    ToastAlertsComponent,
     AdminListComponent,
     FormButtonsComponent,
     AdminFormHeaderComponent,

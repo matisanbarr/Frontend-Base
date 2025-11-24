@@ -10,10 +10,6 @@
   ></app-confirm-modal>
 </ng-template>
 
-<ng-template #alertas>
-  <app-toast-alerts [alerts]="alertService.getAlerts()"></app-toast-alerts>
-</ng-template>
-
 <ng-template #buscador>
   <input
     type="text"
@@ -168,7 +164,6 @@
 </ng-template>
 
 <div class="container py-4">
-  <ng-container *ngTemplateOutlet="alertas"></ng-container>
   <div class="row">
     <div class="col-12 col-md-6 col-lg-6 mb-4">
       <div class="card border-0 shadow-sm rounded-3">

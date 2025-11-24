@@ -1,7 +1,6 @@
 export * from './confirm-modal';
 export * from './loading.component';
 export * from './sidebar.component';
-export * from './toast-alerts.component';
 // Access Denied
 export * from './access-denied/access-denied.component';
 // Layout
