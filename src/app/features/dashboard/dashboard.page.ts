@@ -41,15 +41,13 @@ export class DashboardPage implements OnInit, OnDestroy {
     private proyectoService: ProyectoService,
     private router: Router
   ) {
-    this.userRoles = this.authService.getCurrentUserRoles();
     this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   ngOnInit(): void {
     this.userSub = this.authService.currentUser$.subscribe((user) => {
       this.userName = (user as any)?.nombre || (user as any)?.name || '';
-      const roles = (user as any)?.roles || [];
-      this.isAdminGlobal = Array.isArray(roles) && roles.includes('Admin Global');
+      this.isAdminGlobal = (user as any)?.isGlobal || false;
     });
   }
 

@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Rol } from '../../../models';
 
 @Component({
   selector: 'app-admin-list',
@@ -20,7 +19,6 @@ export class AdminListComponent<T = any> {
   @Input() nombreFn?: (item: T) => string | null;
   @Input() descriptionFn?: (item: T) => string | null;
   @Input() correoFn?: (item: T) => string | null;
-  @Input() rolesFn?: (item: T) => Rol[] | null;
   @Input() estadoFn?: (item: T) => boolean | null;
   @Input() telefonoFn?: (item: T) => string | null;
   @Input() direccionFn?: (item: T) => string | null;

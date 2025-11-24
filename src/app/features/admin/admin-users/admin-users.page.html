@@ -26,13 +26,11 @@
       [items]="usuarios"
       [nombreFn]="usuarioNombreFn"
       [correoFn]="usuarioCorreoFn"
-      [rolesFn]="usuarioRolFn"
       [estadoFn]="usuarioEstadoActivoFn"
       [loading]="loading"
       [emptyText]="'No hay usuarios registrados.'"
       (edit)="editarUsuario($event)"
       (remove)="eliminarUsuario($event)"
-      (roles)="abrirModalRoles($event)"
       [mostrarRoles]="true"
     ></app-admin-list>
     <!-- Modal Bootstrap para seleccionar roles -->
@@ -80,9 +78,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Cancelar
             </button>
-            <button type="button" class="btn btn-primary" (click)="guardarRolesUsuario()">
-              Guardar
-            </button>
+            <button type="button" class="btn btn-primary">Guardar</button>
           </div>
         </div>
       </div>

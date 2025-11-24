@@ -104,12 +104,6 @@ export class AuthService {
     }
   }
 
-  getCurrentUserRoles(): string[] {
-    // Obtener roles directamente desde currentUser
-    const user = this.getCurrentUser();
-    return user && Array.isArray(user.roles) ? user.roles : [];
-  }
-
   // --- Métodos de verificación ---
 
   isAuthenticated(): boolean {
@@ -118,16 +112,6 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.isAuthenticated() && !!this.getCurrentUser();
-  }
-
-  hasRole(role: string): boolean {
-    // Verifica si el usuario tiene el rol, aunque tenga más de uno
-    return this.getCurrentUserRoles().some((r) => r === role);
-  }
-
-  hasAnyRole(roles: string[]): boolean {
-    const userRoles = this.getCurrentUserRoles();
-    return roles.some((role) => userRoles.includes(role));
   }
 
   isTokenExpired(): boolean {
@@ -162,19 +146,6 @@ export class AuthService {
       const isGlobal = decoded['IsGlobal'] === 'True';
       const tenantId = decoded['TenantId'];
 
-      // Capturar roles únicamente desde el claim estándar
-      let roles: string[] = [];
-      const claim = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      if (Array.isArray(claim)) {
-        roles = claim.filter((r) => typeof r === 'string');
-      } else if (typeof claim === 'string') {
-        roles = [claim];
-      }
-      // Si el usuario tiene 'Admin Global', dejar solo ese rol
-      if (roles.length > 0 && roles.indexOf('Admin Global') !== -1) {
-        roles = ['Admin Global'];
-      }
-
       let user: any = {
         usuarioId,
         nombreUsuario,
@@ -185,7 +156,6 @@ export class AuthService {
         email,
         isGlobal,
         tenantId,
-        roles,
       };
       if (decoded['Proyectos']) {
         try {

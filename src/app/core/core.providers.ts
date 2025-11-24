@@ -6,13 +6,11 @@ import { AlertService } from './services/alert.service';
 import { HttpConfigService } from './services/http-config.service';
 import { LoadingService } from './services/loading.service';
 import { PlanService } from './services/plan.service';
-import { RolService } from './services/rol.service';
 import { TenantService } from './services/tenant.service';
 import { UsuarioService } from './services/usuario.service';
 
 // Guards
 import { LoginGuard } from './guards/login.guard';
-import { RoleGuard } from './guards/role.guard';
 import { TokenGuard } from './guards/token.guard';
 
 // Interceptores
@@ -26,11 +24,9 @@ export const CORE_PROVIDERS = [
   HttpConfigService,
   LoadingService,
   PlanService,
-  RolService,
   TenantService,
   UsuarioService,
   LoginGuard,
-  RoleGuard,
   TokenGuard,
   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

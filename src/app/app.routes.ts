@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, RoleGuard, LoginGuard, TokenGuard } from './core/guards';
+import { authGuard, LoginGuard, TokenGuard } from './core/guards';
 
 export const routes: Routes = [
   // Ruta de testing
@@ -36,7 +36,6 @@ export const routes: Routes = [
       // Rutas de administración (requieren rol admin)
       {
         path: 'admin',
-        canActivate: [RoleGuard],
         data: { roles: ['Admin Global', 'Usuario'] },
         children: [
           {

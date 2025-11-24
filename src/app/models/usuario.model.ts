@@ -1,5 +1,3 @@
-import { Rol } from './rol.model';
-
 export interface Usuario {
   id?: string | null;
   primerNombre: string;
@@ -14,5 +12,4 @@ export interface Usuario {
   estadoActivo?: boolean;
   isGlobal?: boolean;
   tenantId?: string | null;
-  roles?: Rol[];
 }
