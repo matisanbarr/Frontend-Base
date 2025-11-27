@@ -14,10 +14,10 @@ import { Tenant } from '../../../models/tenant.model';
 import { TenantService } from '../../../core/services/tenant.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { PaginacionDto } from '../../../models/compartidos';
-import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
+import { ListComponent } from '../../../shared/components/list/list.component';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
 
-import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
+import { FormHeaderComponent } from '../../../shared/components/form-header/form-header.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -27,9 +27,9 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     ReactiveFormsModule,
     FormsModule,
     ConfirmModalComponent,
-    AdminListComponent,
+    ListComponent,
     FormButtonsComponent,
-    AdminFormHeaderComponent,
+    FormHeaderComponent,
   ],
   templateUrl: './admin-users.page.html',
   styleUrls: ['./admin-users.page.scss'],

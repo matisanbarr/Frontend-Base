@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-admin-form-header',
+  selector: 'app-form-header',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './admin-form-header.component.html',
-  styleUrls: ['./admin-form-header.component.scss'],
+  templateUrl: './form-header.component.html',
+  styleUrls: ['./form-header.component.scss'],
 })
-export class AdminFormHeaderComponent {
+export class FormHeaderComponent {
   @Input() icon: string = '';
   @Input() titulo: string = '';
   @Input() modoEdicion: boolean = false;

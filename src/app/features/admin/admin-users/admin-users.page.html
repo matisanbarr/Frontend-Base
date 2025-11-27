@@ -22,7 +22,7 @@
 
 <ng-template #listaUsuarios>
   <div class="planes-scroll">
-    <app-admin-list
+    <app-list
       [items]="usuarios"
       [nombreFn]="usuarioNombreFn"
       [correoFn]="usuarioCorreoFn"
@@ -31,7 +31,7 @@
       [emptyText]="'No hay usuarios registrados.'"
       (edit)="editarUsuario($event)"
       (remove)="eliminarUsuario($event)"
-    ></app-admin-list>
+    ></app-list>
     <!-- Modal Bootstrap para seleccionar roles -->
     <div
       class="modal fade"
@@ -347,7 +347,7 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
-        <app-admin-form-header
+        <app-form-header
           icon="bi bi-person-plus"
           [titulo]="'Usuario'"
           [modoEdicion]="modoEdicion"
@@ -355,7 +355,7 @@
           [labelEditar]="'Modificar'"
           [mostrarEstado]="true"
           [estadoControl]="estadoActivoControl"
-        ></app-admin-form-header>
+        ></app-form-header>
         <div class="card-body bg-light">
           <ng-container *ngTemplateOutlet="formularioUsuario"></ng-container>
         </div>

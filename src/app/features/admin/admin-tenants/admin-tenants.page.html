@@ -22,7 +22,7 @@
 
 <ng-template #listaTenants>
   <div class="tenants-scroll">
-    <app-admin-list
+    <app-list
       [items]="tenants"
       [nombreFn]="tenantNombreFn"
       [estadoFn]="tenantEstadoActivoFn"
@@ -33,7 +33,7 @@
       [emptyText]="'No hay empresas registradas.'"
       (edit)="editarTenant($event)"
       (remove)="eliminarTenant($event)"
-    ></app-admin-list>
+    ></app-list>
   </div>
   <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
     <button
@@ -189,7 +189,7 @@
     </div>
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
-        <app-admin-form-header
+        <app-form-header
           icon="bi bi-building"
           [titulo]="'Empresa'"
           [modoEdicion]="modoEdicion"
@@ -197,7 +197,7 @@
           [labelEditar]="'Modificar'"
           [mostrarEstado]="true"
           [estadoControl]="activoControl"
-        ></app-admin-form-header>
+        ></app-form-header>
         <div class="card-body bg-light">
           <ng-container *ngTemplateOutlet="formularioTenant"></ng-container>
         </div>

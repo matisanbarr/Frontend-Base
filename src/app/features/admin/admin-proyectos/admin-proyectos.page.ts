@@ -8,14 +8,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/confirm-modal.component';
-import { AdminListComponent } from '../../../shared/components/admin-list/admin-list.component';
+import { ListComponent } from '../../../shared/components/list/list.component';
 import { RouterModule } from '@angular/router';
 import { AlertService } from '../../../core/services/alert.service';
 import { ProyectoService } from '../../../core/services/proyecto.service';
 import { Proyecto } from '../../../models/proyecto.model';
 import { PaginacionDto } from '../../../models/compartidos/paginadoDto.model';
 import { FormButtonsComponent } from '../../../shared/components/form-buttons/form-buttons.component';
-import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-header/admin-form-header.component';
+import { FormHeaderComponent } from '../../../shared/components/form-header/form-header.component';
 
 @Component({
   selector: 'app-admin-proyectos',
@@ -26,15 +26,15 @@ import { AdminFormHeaderComponent } from '../../../shared/components/admin-form-
     FormsModule,
     ConfirmModalComponent,
     RouterModule,
-    AdminListComponent,
+    ListComponent,
     FormButtonsComponent,
-    AdminFormHeaderComponent,
+    FormHeaderComponent,
   ],
   templateUrl: './admin-proyectos.page.html',
   styleUrls: ['./admin-proyectos.page.scss'],
 })
 export class AdminProyectosPage {
-  // Funciones para AdminListComponent
+  // Funciones para ListComponent
   proyectoNombreFn = (p: Proyecto) => p.nombre ?? null;
   proyectoDescripcionFn = (p: Proyecto) => p.descripcion ?? 'Sin descripción';
   proyectoEstadoActivoFn = (p: Proyecto) => p.estadoActivo ?? null;

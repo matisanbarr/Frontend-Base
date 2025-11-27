@@ -34,7 +34,7 @@
           </ng-container>
           <ng-template #listaPlanes>
             <div class="planes-scroll">
-              <app-admin-list
+              <app-list
                 [items]="planes"
                 [nombreFn]="planNombreFn"
                 [descriptionFn]="descripcionFn"
@@ -46,7 +46,7 @@
                 (edit)="editarPlan($event)"
                 (remove)="eliminarPlan($event)"
               >
-              </app-admin-list>
+              </app-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
@@ -74,7 +74,7 @@
     <div class="col-12 col-md-6 col-lg-6">
       <div class="card border-0 shadow-sm rounded-3">
         <form [formGroup]="planForm" (ngSubmit)="modoEdicion ? actualizarPlan() : registrarPlan()">
-          <app-admin-form-header
+          <app-form-header
             icon="bi bi-box-seam"
             [titulo]="'Plan'"
             [modoEdicion]="modoEdicion"
@@ -82,7 +82,7 @@
             [labelEditar]="'Modificar'"
             [estadoControl]="estadoActivoControl"
             [mostrarEstado]="true"
-          ></app-admin-form-header>
+          ></app-form-header>
           <div class="card-body bg-light">
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre</label>

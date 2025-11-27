@@ -1,0 +1,40 @@
+<button
+  [attr.type]="type"
+  [disabled]="disabled || loading || internalLocked"
+  [attr.aria-label]="ariaLabel || null"
+  [attr.title]="title || null"
+  [attr.aria-busy]="loading ? 'true' : null"
+  [attr.data-bs-toggle]="dataBsToggle || null"
+  [attr.data-bs-target]="dataBsTarget || null"
+  [attr.data-bs-dismiss]="dataBsDismiss || null"
+  [ngClass]="classList"
+  (click)="handleClick($event)"
+>
+  <!-- Spinner de carga -->
+  <span
+    *ngIf="loading"
+    class="spinner-border spinner-border-sm me-1"
+    role="status"
+    aria-hidden="true"
+  ></span>
+
+  <!-- Ícono a la izquierda -->
+  <ng-container *ngIf="icon && !loading && iconPosition === 'left'">
+    <i [class]="icon + (iconOnly ? '' : ' me-1')" aria-hidden="true"></i>
+  </ng-container>
+
+  <!-- Texto (solo si no es icon-only) -->
+  <span *ngIf="!iconOnly">
+    <ng-content></ng-content>
+  </span>
+
+  <!-- Ícono a la derecha -->
+  <ng-container *ngIf="icon && !loading && iconPosition === 'right'">
+    <i [class]="icon + ' ms-1'" aria-hidden="true"></i>
+  </ng-container>
+
+  <!-- Sólo ícono (centrado) -->
+  <ng-container *ngIf="icon && !loading && iconOnly">
+    <i [class]="icon" aria-hidden="true"></i>
+  </ng-container>
+</button>

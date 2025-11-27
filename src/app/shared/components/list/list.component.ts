@@ -2,13 +2,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-admin-list',
+  selector: 'app-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './admin-list.component.html',
-  styleUrls: ['./admin-list.component.scss'],
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
 })
-export class AdminListComponent<T = any> {
+export class ListComponent<T = any> {
   @Input() items: T[] = [];
   @Input() emptyText = 'No hay registros.';
   @Input() loading = false;

@@ -34,7 +34,7 @@
           </ng-container>
           <ng-template #listaProyectos>
             <div style="max-height: 400px; overflow-y: auto">
-              <app-admin-list
+              <app-list
                 [items]="proyectos"
                 [nombreFn]="proyectoNombreFn"
                 [descriptionFn]="proyectoDescripcionFn"
@@ -44,7 +44,7 @@
                 (edit)="editarProyecto($event)"
                 (remove)="eliminarProyecto($event)"
               >
-              </app-admin-list>
+              </app-list>
             </div>
             <div *ngIf="totalPaginas > 1" class="d-flex align-items-center p-2">
               <button
@@ -75,7 +75,7 @@
           [formGroup]="proyectoForm"
           (ngSubmit)="modoEdicion ? actualizarProyecto() : registrarProyecto()"
         >
-          <app-admin-form-header
+          <app-form-header
             icon="bi bi-kanban"
             [titulo]="'Proyecto'"
             [modoEdicion]="modoEdicion"
@@ -83,7 +83,7 @@
             [labelEditar]="'Modificar'"
             [mostrarEstado]="true"
             [estadoControl]="estadoActivoControl"
-          ></app-admin-form-header>
+          ></app-form-header>
           <div class="card-body">
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre</label>
